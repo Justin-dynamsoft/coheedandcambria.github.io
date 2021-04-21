@@ -5,8 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Dynamsoft Barcode Reader Sample - Using Runtime Settings</title>
-    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@8.2.1/dist/dbr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@8.2.3/dist/dbr.js"></script>
     <link rel="stylesheet" href="settings-css.css">
+    <link rel="stylesheet" href="https://unpkg.com/balloon-css/balloon.min.css"> <!-- Used for tooltip styling -->
+
 </head>
 
 <!-- This sample demonstrates the minimum necessary JavaScript code to get the BarcodeScanner (video) up and running. The BarcodeScanner object is initialized with its default UI once the user clicks the 'Read Barcode via Camera' button. Any unique barcode results that are found are then displayed in an alert box to the user. 
@@ -26,9 +28,7 @@ Please note that the organizationID '200001' corresponds to Dynamsoft's public l
     <div id="settingsModal" class="modal">
         <div id="settingsContent" class="modal-content">
             <span id="closeModalBtn" class="closeModal"></span>
-            <div class="tooltip">Set the Localization Modes in Decreasing Priority Order (Highest to Lowest)
-                <span class="tooltiptext">Selecting the approporiate localization mode priority order depending on the user scenario or the barcode format can help improve the SDK's speed and accuracy.</span>
-            </div>
+            <div class="tooltip" aria-label="Selecting the approporiate localization mode priority order depending on the user scenario or the barcode format can help improve the SDK's speed and accuracy" data-balloon-pos="down" data-balloon-length="medium">Set the Localization Modes in Decreasing Priority Order (Highest to Lowest)</div>
 
             <form id="localizationMode">
                 <input type="checkbox" id="connectedBlocks" name="locMode" value="LM_CONNECTED_BLOCKS">
@@ -47,32 +47,28 @@ Please note that the organizationID '200001' corresponds to Dynamsoft's public l
                 <label for="skip"> Skip </label> <br>
             </form><br>
 
-            <div class="tooltip">Set the Binarization Modes in Decreasing Priority Order (Highest to Lowest)
-                <span class="tooltiptext">Selecting the approporiate binarization mode can help inclrease teh accuracy of barcode locaization by providing the SDK with the best quality binary image.</span>
+            <div class="tooltip" aria-label="Selecting the approporiate binarization mode can help increase the accuracy of barcode localization by providing the SDK with the best quality binary image." data-balloon-pos="down" data-balloon-length="medium">Set the Binarization Modes in Decreasing Priority Order (Highest to Lowest)
             </div>
+
             <form id="binarizationMode">
                 <input type="checkbox" id="localBlock" name="binMode" value="BM_LOCAL_BLOCK">
                 <label for="localBlock"> Local Block </label><br>
 
                 <!-- Mode Arguments for the local block binarization mode-->
                 <div class="localBlockForm">
-                    <label for="blockSizeX" class="tooltip">Horizontal Block Size  
-                        <span class="tooltiptext">Sets the horizontal block size [0-1000] for the binarization process. Please see documentation on what the values represent.</span>
+                    <label for="blockSizeX" class="tooltip" aria-label="Sets the horizontal block size [0-1000] for the binarization process. Please see documentation on what the values represent." data-balloon-pos="down" data-balloon-length="medium">Horizontal Block Size  
                     </label>
                     <input type="range" id="blockSizeX" name="blockSizeX" data-require-pair="#localBlock" min="0" max="1000" value="0"><span id="blockSizeXDisplay"></span></br>
 
-                    <label for="blockSizeY" class="tooltip">Vertical Block Size  
-                        <span class="tooltiptext">Sets the vertical block size [0-1000] for the binarization process. Please see documentation on what the values represent.</span>
+                    <label for="blockSizeY" class="tooltip" aria-label="Sets the vertical block size [0-1000] for the binarization process. Please see documentation on what the values represent." data-balloon-pos="down" data-balloon-length="medium">Vertical Block Size  
                     </label>
                     <input type="range" id="blockSizeY" name="blockSizeY" data-require-pair="#localBlock" min="0" max="1000" value="0"><span id="blockSizeYDisplay"></span></br>
 
-                    <label for="enableFillBinary" class="tooltip">Enable Fill Binary Vacancy
-                        <span class="tooltiptext">For barcodes of a large module size, it is recommended to set this property to true. Please see documentation for more info.</span>
+                    <label for="enableFillBinary" class="tooltip" aria-label="For barcodes of a large module size, it is recommended to set this property to true. Please see documentation for more info." data-balloon-pos="down" data-balloon-length="medium">Enable Fill Binary Vacancy
                     </label>
                     <input type="checkbox" id="enableFillBinary" name="enableFillBinary" data-require-pair="#localBlock"><br>
 
-                    <label for="imagePreModes" class="tooltip">Image Pre-processing Modes Index 
-                        <span class="tooltiptext"> If the image preprocessing modes are being used, the following property specifies which index in the modes array the local block binarization will be applied to. By default, it is applied to all the modes.</span>
+                    <label for="imagePreModes" class="tooltip" aria-label="If the image preprocessing modes are being used, the following property specifies which index in the modes array the local block binarization will be applied to. By default, it is applied to all the modes." data-balloon-pos="down" data-balloon-length="medium">Image Pre-processing Modes Index 
                     </label>
                     <input type="range" id="imagePreModes" name="imagePreModes" data-require-pair="#localBlock" min="-1" max="3" value="-1"><span id="imagePreModesDisplay"></span></br>
 
@@ -83,21 +79,17 @@ Please note that the organizationID '200001' corresponds to Dynamsoft's public l
                 <label for="threshold"> Threshold </label><br>
 
                 <div class="thresholdForm">
-                    <label for="binThreshold" class="tooltip">Binarization Threshold
-                        <span class="tooltiptext"> This threshold is used to classify the pixel values for the binarization process.</span>
+                    <label for="binThreshold" class="tooltip" aria-label="This threshold is used to classify the pixel values for the binarization process." data-balloon-pos="down" data-balloon-length="medium">Binarization Threshold
                     </label>
                     <input type="range" id="binThreshold" name="binThreshold" data-require-pair="#localBlock" min="-1" max="255" value="-1"><span id="binThresholdDisplay"></span></br>
 
-                    <label for="imagePreModesThres" class="tooltip">Image Pre-processing Modes Index 
-                        <span class="tooltiptext"> If the image preprocessing modes are being used, the following property specifies which index in the modes array the threshold binarization will be applied to. By default, it is applied to all the modes.</span>
+                    <label for="imagePreModesThres" class="tooltip" aria-label="If the image preprocessing modes are being used, the following property specifies which index in the modes array the threshold binarization will be applied to. By default, it is applied to all the modes." data-balloon-pos="down" data-balloon-length="medium">Image Pre-processing Modes Index 
                     </label>
                     <input type="range" id="imagePreModesThres" name="imagePreModesThres" data-require-pair="#threshold" min="-1" max="3" value="-1"><span id="imagePreModesThresDisplay"></span></br>
                 </div>
 
                 <input type="checkbox" id="skipBin" name="binMode" value="BM_SKIP">
-                <label for="threshold" class="tooltip"> Skip 
-                    <span class="tooltiptext">Skips the binarization process.</span>
-                </label></br>
+                <label for="threshold"> Skip</label></br>
 
             </form><br>
             
@@ -258,7 +250,7 @@ Please note that the organizationID '200001' corresponds to Dynamsoft's public l
 
         // Set the mode argument vertical block size of the local block binarization mode
         blockSizeY.onchange = async function() {
-            document.getElementById("blockSizeYDisplay").innerHTML = blockSizeX.value.toString(); // display the slider value next to it
+            document.getElementById("blockSizeYDisplay").innerHTML = blockSizeY.value.toString(); // display the slider value next to it
             // Get the index of the local block binarization mode in the binarization modes array
             for(var i = 0; i <= binModeCount; i++){
                 let settings = await scanner.getRuntimeSettings();
