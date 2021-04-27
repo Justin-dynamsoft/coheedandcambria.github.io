@@ -28,7 +28,7 @@ Please note that the organizationID '200001' corresponds to Dynamsoft's public l
     <!-- Settings Menu displayed in a modal -->
     <div id="settingsModal" class="modal">
         <div id="settingsContent" class="modal-content">
-            <span id="closeModalBtn" class="closeModal"></span>
+            <span id="closeModalBtn" class="closeModal">&times;</span>
 
             <!-- Dealing with blurry barcodes through Deblur Modes -->
             <div class="tooltip" aria-label="To define the region of interest, the top-most, left-most, right-most, and bottom-most coordinate or percentage of the region must be defined. Whether coordinate or percentage is used is defined by regionMeasuredByPercentage. In most cases, percentage is easier to use." data-balloon-pos="down" data-balloon-length="medium">Manually Define a Region of Interest</div><br><br>
@@ -103,8 +103,6 @@ Please note that the organizationID '200001' corresponds to Dynamsoft's public l
     roiFormInputs.forEach(element => {
         element.addEventListener("input", async function () {
             try{
-                console.log(this.value);
-                console.log(this.id);
                 let settings = await scanner.getRuntimeSettings();
 
                 // If regionMeasuredByPercentage is checked, update the corresponding property in region definition
