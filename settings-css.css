@@ -41,15 +41,10 @@
     border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
 }
 
-/* localBlockForm stays hidden until the user includes Local Block in the binzarization modes */
-.localBlockForm {
+/* All of the mode arguments of these options stay hidden until the user includes the option in its corresponding array/modes */
+.localBlockForm, .thresholdForm, .liForm, .nniForm, .rgbContrastForm, .grayContrastForm {
     display: none;
-    padding-left: 50px;
-}
-
-.thresholdForm{
-    display: none;
-    padding-left: 50px;
+    padding-left: 5px;
 }
 
 /* CSS for slider input types, which are best for ranged values and properties */
