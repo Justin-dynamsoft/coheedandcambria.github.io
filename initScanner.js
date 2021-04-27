@@ -49,9 +49,12 @@ readBtn.onclick = async function () {
 }
 
 /* The following defines an onclick event for all the tooltip elements. This trigger is being added to take into account that there is no 'hover' event when using a mobile browser. Therefore, this event will be added so that the tooltip appears whenever it is tapped on a mobile browser */
-let tooltips = document.getElementsByClassName("tooltip");
-tooltips.forEach(tooltip =>{
-    tooltip.addEventListener('click', function(){
-        tooltip.setAttribute('data-balloon-visible', '');
+const tooltips = document.getElementsByClassName("tooltip");
+for(let i = 0; i < tooltips.length; i++){
+    tooltips[i].addEventListener('click', function(){
+        if(tooltips[i].hasAttribute('data-balloon-visible'))
+            tooltips[i].removeAttribute('data-balloon-visible');
+        else
+            tooltips[i].setAttribute('data-balloon-visible', '');
     })
-})
+}
