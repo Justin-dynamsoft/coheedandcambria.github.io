@@ -53,7 +53,7 @@ const tooltips = document.getElementsByClassName("tooltip");
 for(let i = 0; i < tooltips.length; i++){
     tooltips[i].addEventListener('click', function(){
         tooltips[i].setAttribute('data-balloon-visible', '');
-        setTimeout( async function(){
+        setTimeout(function(){
             tooltips[i].removeAttribute('data-balloon-visible');
         }, 3000);
     })
