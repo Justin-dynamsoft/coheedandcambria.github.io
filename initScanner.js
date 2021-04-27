@@ -48,13 +48,24 @@ readBtn.onclick = async function () {
     }
 }
 
+// This is a prototype function that can simulate an event. This will be used to simulate a click to implement the workaround to the 'hover' tooltip issue for mobile browsers
+function eventFire(el, etype){
+    if (el.fireEvent) {
+      el.fireEvent('on' + etype);
+    } else {
+      var evObj = document.createEvent('Events');
+      evObj.initEvent(etype, true, false);
+      el.dispatchEvent(evObj);
+    }
+  }
+
 /* The following defines an onclick event for all the tooltip elements. This trigger is being added to take into account that there is no 'hover' event when using a mobile browser. Therefore, this event will be added so that the tooltip appears whenever it is tapped on a mobile browser */
 const tooltips = document.getElementsByClassName("tooltip");
 for(let i = 0; i < tooltips.length; i++){
     tooltips[i].addEventListener('click', function(){
-        if(tooltips[i].hasAttribute('data-balloon-visible'))
+        tooltips[i].setAttribute('data-balloon-visible', '');
+        setTimeout(function(){
             tooltips[i].removeAttribute('data-balloon-visible');
-        else
-            tooltips[i].setAttribute('data-balloon-visible', '');
+        }, 3000);
     })
 }
