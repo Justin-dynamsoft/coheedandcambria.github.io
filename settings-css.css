@@ -47,7 +47,11 @@
     padding-left: 5px;
 }
 
-/* CSS for slider input types, which are best for ranged values and properties */
+#openSimpleSettingsMenu{
+    margin-bottom: 20%;
+}
+
+/* CSS for the video viewer so that it is limited within the width of the screen size */
 #div-video-container{
     width: 100%;
     overflow: hidden;
