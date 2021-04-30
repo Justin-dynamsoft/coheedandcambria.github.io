@@ -31,7 +31,7 @@ Please note that the organizationID '200001' corresponds to Dynamsoft's public l
             <span id="closeModalBtn" class="closeModal">&times;</span>
 
             <!-- Dealing with large images using ScaleDownThreshold -->
-            <div class="tooltip" aria-label="If the shorter side length of the image is larger than this value, the library will shrink the image by half until the shorter side is less than the threshold." data-balloon-pos="down" data-balloon-length="medium">Setting the Scaledown Threshold</div><br><br>
+            <div class="tooltip" aria-label="If the shorter side length of the image is larger than this value, the library will shrink the image by half until the shorter side is less than the threshold." data-balloon-pos="right" data-balloon-length="medium">Setting the Scaledown Threshold</div><br><br>
 
             <form id="scaledownForm">
                 <label for="scaledownThresh"> Scaledown Threshold </label>
@@ -39,23 +39,23 @@ Please note that the organizationID '200001' corresponds to Dynamsoft's public l
             </form><br>
 
             <!-- Colour Conversion Modes -->
-            <div class="tooltip" aria-label="When working with colour images, DBR first converts the image to grayscale before further processing. The general conversion mode comes with three mode arguments that define the three main colour channels, blue, red, and green." data-balloon-pos="down" data-balloon-length="large">Select the Colour Conversion Modes in Decreasing Priority Order (Highest to Lowest)</div><br><br>
+            <div class="tooltip" aria-label="When working with colour images, DBR first converts the image to grayscale before further processing. The general conversion mode comes with three mode arguments that define the three main colour channels, blue, red, and green." data-balloon-pos="right" data-balloon-length="large">Select the Colour Conversion Modes in Decreasing Priority Order (Highest to Lowest)</div><br><br>
 
             <form id="ccModesForm">
 
                 <!-- General colour conversion mode-->
 
                 <input type="checkbox" id="generalCC" name="ccMode" value="CICM_GENERAL">
-                <label for="generalCC" class="tooltip" aria-label="Converts a colour image to a grayscale image using the general algorithm." data-balloon-pos="down" data-balloon-length="small"> General Colour Conversion Mode </label><br><br>
+                <label for="generalCC" class="tooltip" aria-label="Converts a colour image to a grayscale image using the general algorithm." data-balloon-pos="right" data-balloon-length="small"> General </label><br>
 
                 <div class="modeArgsForm" id="generalCCForm">
-                    <label for="blueChannel" class="tooltip" aria-label="Sets the weight value of Blue Colour Channel used for converting a colour image to a grayscale image. If the value is -1, the weight is automatically set by the SDK." data-balloon-pos="down" data-balloon-length="medium">Blue Channel Weight</label>
+                    <label for="blueChannel" class="tooltip" aria-label="Sets the weight value of Blue Colour Channel used for converting a colour image to a grayscale image. If the value is -1, the weight is automatically set by the SDK." data-balloon-pos="right" data-balloon-length="medium">Blue Channel Weight</label>
                     <input type="range" id="blueChannel" name="gccModeArgs" data-require-pair="#generalCC" min="-1" max="1000" value="-1"><span id="blueChannelDisplay"></span></br>
 
-                    <label for="greenChannel" class="tooltip" aria-label="Sets the weight value of Green Colour Channel used for converting a colour image to a grayscale image.  If the value is -1, the weight is automatically set by the SDK." data-balloon-pos="down" data-balloon-length="medium">Green Channel Weight</label>
+                    <label for="greenChannel" class="tooltip" aria-label="Sets the weight value of Green Colour Channel used for converting a colour image to a grayscale image.  If the value is -1, the weight is automatically set by the SDK." data-balloon-pos="right" data-balloon-length="medium">Green Channel Weight</label>
                     <input type="range" id="greenChannel" name="gccModeArgs" data-require-pair="#generalCC" min="-1" max="1000" value="-1"><span id="greenChannelDisplay"></span></br>
 
-                    <label for="redChannel" class="tooltip" aria-label="Sets the weight value of Red Colour Channel used for converting a colour image to a grayscale image.  If the value is -1, the weight is automatically set by the SDK." data-balloon-pos="down" data-balloon-length="medium">Red Channel Weight</label>
+                    <label for="redChannel" class="tooltip" aria-label="Sets the weight value of Red Colour Channel used for converting a colour image to a grayscale image.  If the value is -1, the weight is automatically set by the SDK." data-balloon-pos="right" data-balloon-length="medium">Red Channel Weight</label>
                     <input type="range" id="redChannel" name="gccModeArgs" data-require-pair="#generalCC" min="-1" max="1000" value="-1"><span id="redChannelDisplay"></span></br><br>
                 </div>
 
@@ -64,65 +64,64 @@ Please note that the organizationID '200001' corresponds to Dynamsoft's public l
                 <label for="skipCC"> Skip</label></br>
             </form><br><br>
 
-            <!-- Now for the Image Preprocessing Modes -->
-            <div class="tooltip" aria-label="Every now and then, you might encounter a scenario where the default configuration of DBR cannot locate the code area. DBR can vastly improve the success rate  in those situations by applying a variety of image preprocessing algorithms, which are configured via this parameter." data-balloon-pos="down" data-balloon-length="large">Select the Image Preprocessing Modes in Decreasing Priority Order (Highest to Lowest)</div><br><br>
-            
+            <!-- Image Preprocessing Modes -->
+            <div class="tooltip" aria-label="Every now and then, you might encounter a scenario where the default configuration of DBR cannot locate the code area. DBR can vastly improve the success rate  in those situations by applying a variety of image preprocessing algorithms, which are configured via this parameter." data-balloon-pos="right" data-balloon-length="large">Select the Image Preprocessing Modes in Decreasing Priority Order (Highest to Lowest)</div><br><br>
             
 
             <form id="ipModesForm">
                 <!-- General Mode -->
                 <input type="checkbox" id="generalIP" name="ipMode" value="IPM_GENERAL">
-                <label for="generalIP" class="tooltip" aria-label="Does not apply any preprocessing algorithms and simply uses the unprocessed image." data-balloon-pos="down" data-balloon-length="small"> General </label><br>
+                <label for="generalIP" class="tooltip" aria-label="Does not apply any preprocessing algorithms and simply uses the unprocessed image." data-balloon-pos="right" data-balloon-length="medium"> General </label><br>
 
                 <!-- Gray Equalize preprocessing mode-->
 
                 <input type="checkbox" id="grayEqualizeIP" name="ipMode" value="IPM_GRAY_EQUALIZE">
-                <label for="grayEqualizeIP" class="tooltip" aria-label="Preprocesses the image using the gray equalization algorithm." data-balloon-pos="down" data-balloon-length="small"> Gray Equalize </label><br>
+                <label for="grayEqualizeIP" class="tooltip" aria-label="Preprocesses the image using the gray equalization algorithm." data-balloon-pos="right" data-balloon-length="medium"> Gray Equalize </label><br>
 
                 <div class="modeArgsForm" id="grayEqualizeIPForm">
-                    <label for="sensitivityGE" class="tooltip" aria-label="If you have an image with a low level of contrast, you can set the property to a larger value. A larger value means a higher possibility that gray equalization will be activated. This may cause adverse effect on images with a high level of contrast." data-balloon-pos="down" data-balloon-length="medium">Sensitivity</label>
+                    <label for="sensitivityGE" class="tooltip" aria-label="If you have an image with a low level of contrast, you can set the property to a larger value. A larger value means a higher possibility that gray equalization will be activated. This may cause adverse effect on images with a high level of contrast." data-balloon-pos="right" data-balloon-length="medium">Sensitivity</label>
                     <input type="range" id="sensitivityGE" name="geFormArgs" data-require-pair="#grayEqualizeIP" min="1" max="9" value="5"><span id="sensitivityGEDisplay"></span></br>
                 </div>
 
                 <!-- Gray Smooth pre-detection mode-->
 
                 <input type="checkbox" id="graySmoothIP" name="ipMode" value="IPM_GRAY_SMOOTH">
-                <label for="graySmoothIP" class="tooltip" aria-label="Preprocesses the image using the gray equalization algorithm." data-balloon-pos="down" data-balloon-length="small"> Gray Equalize </label><br>
+                <label for="graySmoothIP" class="tooltip" aria-label="Preprocesses the image using the gray equalization algorithm." data-balloon-pos="right" data-balloon-length="fit"> Gray Smooth </label><br>
                 
                 <div class="modeArgsForm" id="graySmoothIPForm">
-                    <label for="smoothBlockSizeXGS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="down" data-balloon-length="small">Horizontal Block Size</label>
+                    <label for="smoothBlockSizeXGS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="right" data-balloon-length="small">Horizontal Block Size</label>
                     <input type="range" id="smoothBlockSizeXGS" name="gsFormArgs" data-require-pair="#graySmoothIP" min="3" max="1000" value="3"><span id="smoothBlockSizeXDisplayGS"></span></br>
 
-                    <label for="smoothBlockSizeYGS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="down" data-balloon-length="small">Vertical Block Size</label>
+                    <label for="smoothBlockSizeYGS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="right" data-balloon-length="small">Vertical Block Size</label>
                     <input type="range" id="smoothBlockSizeYGS" name="gsFormArgs" data-require-pair="#graySmoothIP" min="3" max="1000" value="3"><span id="smoothBlockSizeYDisplayGS"></span></br>
                 </div>
 
                 <!-- Sharpen Smooth preprocessing mode and its mode arguments-->
 
                 <input type="checkbox" id="sharpenSmoothIP" name="ipMode" value="IPM_SHARPEN_SMOOTH">
-                <label for="sharpenSmoothIP" class="tooltip" aria-label="Preprocesses the image using the sharpening and smoothing algorithm." data-balloon-pos="down" data-balloon-length="small"> Sharpen Smooth </label><br>
+                <label for="sharpenSmoothIP" class="tooltip" aria-label="Preprocesses the image using the sharpening and smoothing algorithm." data-balloon-pos="right" data-balloon-length="fit"> Sharpen Smooth </label><br>
 
                 <div class="modeArgsForm" id="sharpenSmoothIPForm">
-                    <label for="smoothBlockSizeXSS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="down" data-balloon-length="small">Horizontal Block Size Smoothing</label>
+                    <label for="smoothBlockSizeXSS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="right" data-balloon-length="small">Horizontal Block Size Smoothing</label>
                     <input type="range" id="smoothBlockSizeXSS" name="ssFormArgs" data-require-pair="#sharpenSmoothIP" min="3" max="1000" value="3"><span id="smoothBlockSizeXDisplaySS"></span></br>
 
-                    <label for="smoothBlockSizeYSS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="down" data-balloon-length="small">Vertical Block Size Smoothing</label>
+                    <label for="smoothBlockSizeYSS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="right" data-balloon-length="small">Vertical Block Size Smoothing</label>
                     <input type="range" id="smoothBlockSizeYSS" name="ssFormArgs" data-require-pair="#sharpenSmoothIP" min="3" max="1000" value="3"><span id="smoothBlockSizeYDisplaySS"></span></br>
 
-                    <label for="sharpenBlockSizeXSS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="down" data-balloon-length="small">Horizontal Block Size Smoothing</label>
+                    <label for="sharpenBlockSizeXSS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="right" data-balloon-length="small">Horizontal Block Size Smoothing</label>
                     <input type="range" id="sharpenBlockSizeXSS" name="ssFormArgs" data-require-pair="#sharpenSmoothIP" min="3" max="1000" value="3"><span id="sharpenBlockSizeXDisplaySS"></span></br>
 
-                    <label for="sharpenBlockSizeYSS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="down" data-balloon-length="small">Vertical Block Size Smoothing</label>
+                    <label for="sharpenBlockSizeYSS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="right" data-balloon-length="small">Vertical Block Size Smoothing</label>
                     <input type="range" id="sharpenBlockSizeYSS" name="ssFormArgs" data-require-pair="#sharpenSmoothIP" min="3" max="1000" value="3"><span id="sharpenBlockSizeYDisplaySS"></span></br>
                 </div>
 
                 <!-- Morphology preprocessing mode and its mode arguments-->
 
                 <input type="checkbox" id="morphIP" name="ipMode" value="IPM_MORPHOLOGY">
-                <label for="morphIP" class="tooltip" aria-label="Preprocesses the image using the morphology algorithm." data-balloon-pos="down" data-balloon-length="small"> Morphology </label><br>
+                <label for="morphIP" class="tooltip" aria-label="Preprocesses the image using the morphology algorithm." data-balloon-pos="right" data-balloon-length="fit"> Morphology </label><br>
 
                 <div class="modeArgsForm" id="morphIPForm">
-                    <label for="morphOperation" class="tooltip" aria-label="The operations include erosion, dilation, open (erosion then dilation), and close (dilation then erosion)." data-balloon-pos="down" data-balloon-length="small">Morphology Operation</label>
+                    <label for="morphOperation" class="tooltip" aria-label="The operations include erosion, dilation, open (erosion then dilation), and close (dilation then erosion)." data-balloon-pos="right" data-balloon-length="small">Morphology Operation</label>
                     <select id="morphOperation" name="morphFormArgs" data-require-pair="#morphIP">
                         <option value="Erode">Erosion</option>
                         <option value="Dilate">Dilation</option>
@@ -130,17 +129,17 @@ Please note that the organizationID '200001' corresponds to Dynamsoft's public l
                         <option value="Close">Close</option>
                     </select></br>
 
-                    <label for="morphShape" class="tooltip" aria-label="Sets the morph shape (rectangle, cross, or ellipse) for the morphology process." data-balloon-pos="down" data-balloon-length="small">Morphology Shape</label>
+                    <label for="morphShape" class="tooltip" aria-label="Sets the morph shape (rectangle, cross, or ellipse) for the morphology process." data-balloon-pos="right" data-balloon-length="small">Morphology Shape</label>
                     <select id="morphShape" name="morphFormArgs" data-require-pair="#morphIP">
                         <option value="Rectangle">Rectangle</option>
                         <option value="Cross">Cross</option>
                         <option value="Ellipse">Ellipse</option>
                     </select></br>
 
-                    <label for="morphOpKernelSizeX" class="tooltip" aria-label="Sets the horizontal kernel size for the morphology process." data-balloon-pos="down" data-balloon-length="small">Horizontal Kernel Size</label>
+                    <label for="morphOpKernelSizeX" class="tooltip" aria-label="Sets the horizontal kernel size for the morphology process." data-balloon-pos="right" data-balloon-length="small">Horizontal Kernel Size</label>
                     <input type="range" id="morphOpKernelSizeX" name="morphFormArgs" data-require-pair="#morphIP" min="0" max="1000" value="0"><span id="morphOpKernelSizeXDisplay"></span></br>
 
-                    <label for="morphOpKernelSizeY" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="down" data-balloon-length="small">Vertical Kernel Size</label>
+                    <label for="morphOpKernelSizeY" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="right" data-balloon-length="small">Vertical Kernel Size</label>
                     <input type="range" id="morphOpKernelSizeY" name="morphFormArgs" data-require-pair="#morphIP" min="0" max="1000" value="0"><span id="morphOpKernelSizeYDisplay"></span></br>
                 </div>
 

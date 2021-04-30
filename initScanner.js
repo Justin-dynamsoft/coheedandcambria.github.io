@@ -10,6 +10,7 @@ let closeModalBtn = document.getElementById('closeModalBtn');
 window.onload = async function () {
     try {
         Dynamsoft.DBR.BarcodeScanner.organizationID = "200001";
+        Dynamsoft.DBR.BarcodeScanner.productKeys = "t0068MgAAAJklpcNKRg9XPkS2e43qvcTckDZdzmXeinHQTeVGFVCugPeKPosG4bqXKnatHxYoq54UAhWLL1kPSdMhVPpYThI="
         scanner = scanner || await Dynamsoft.DBR.BarcodeScanner.createInstance();
         await scanner.setUIElement(document.getElementById('div-video-container'));
     } catch (ex) {
