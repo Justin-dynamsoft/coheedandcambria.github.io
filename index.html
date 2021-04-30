@@ -11,7 +11,7 @@
 
 </head>
 
-<!-- Usually, DBR will traverse the entire area of an image or frame to locate and decode any barcodes that are there. However, there are some situations where the user is only concerned about a specific area of an image or want to restrict the video view to a specific region. This sample demonstrates how to manually define a region of interest, ROI for short. Once the region is defined, DBR will only decode barcodes that are within that region.
+<!-- This sample will focus on how DBR can utilize image scaling, colour conversion, and various image preprocessing modes to help improve the library's performance in certain scenarios.
 
 Please note that the organizationID '200001' corresponds to Dynamsoft's public license which is reserved for public samples. When hosting the sample in your own environment, please obtain a private trial by contacting the Dynamsoft Support Team via support@dynamsoft.com -->
 
@@ -22,7 +22,7 @@ Please note that the organizationID '200001' corresponds to Dynamsoft's public l
 
     <!-- Manually defining the div that will contain the video so that the UI doesn't take up the full screen, hiding the  -->
     <div id="div-video-container">
-        <video class="dbrScanner-video"></video>
+        <video class="dbrScanner-video" playsinline="true"></video>
     </div>
 
     <!-- Settings Menu displayed in a modal -->
@@ -30,63 +30,126 @@ Please note that the organizationID '200001' corresponds to Dynamsoft's public l
         <div id="settingsContent" class="modal-content">
             <span id="closeModalBtn" class="closeModal">&times;</span>
 
-            <!-- Dealing with blurry barcodes through Deblur Modes -->
-            <div class="tooltip" aria-label="To define the region of interest, the top-most, left-most, right-most, and bottom-most coordinate or percentage of the region must be defined. Whether coordinate or percentage is used is defined by regionMeasuredByPercentage. In most cases, percentage is easier to use." data-balloon-pos="down" data-balloon-length="medium">Manually Define a Region of Interest</div><br><br>
+            <!-- Dealing with large images using ScaleDownThreshold -->
+            <div class="tooltip" aria-label="If the shorter side length of the image is larger than this value, the library will shrink the image by half until the shorter side is less than the threshold." data-balloon-pos="down" data-balloon-length="medium">Setting the Scaledown Threshold</div><br><br>
 
-            <form id="roiForm">
-                <label for="regionTop"> Region Top </label>
-                <input type="number" id="regionTop" name="regionDef"><br>
-                <label for="regionLeft"> Region Left </label>
-                <input type="number" id="regionLeft" name="regionDef"><br>
-                <label for="regionBottom"> Region Bottom </label>
-                <input type="number" id="regionBottom" name="regionDef"><br>
-                <label for="regionRight"> Region Right </label> 
-                <input type="number" id="regionRight" name="regionDef"><br>
-                
-                <label for="regionPercentage"> Region Measured By Percentage </label>
-                <input type="checkbox" id="regionPercentage" checked><br> <!-- This should be checked by default -->
+            <form id="scaledownForm">
+                <label for="scaledownThresh"> Scaledown Threshold </label>
+                <input type="range" id="scaledownThresh" name="scaledownThreshold" min="512" max="2147483647" value="2300"><span id="scaledownDisplay"></span></br>            
             </form><br>
 
-            <!-- Dealing with barocdes that have small module sizes-->
-            <div class="tooltip" aria-label="Region detection can also be used to pre-detect the ROI of a large image to get several areas where the barcodes may exist to reduce processing time. To learn more about each mode, please refer to the documentation." data-balloon-pos="down" data-balloon-length="large">Select the Region Pre-detection Modes in Decreasing Priority Order (Highest to Lowest)</div><br><br>
+            <!-- Colour Conversion Modes -->
+            <div class="tooltip" aria-label="When working with colour images, DBR first converts the image to grayscale before further processing. The general conversion mode comes with three mode arguments that define the three main colour channels, blue, red, and green." data-balloon-pos="down" data-balloon-length="large">Select the Colour Conversion Modes in Decreasing Priority Order (Highest to Lowest)</div><br><br>
 
-            <form id="rpModesForm">
-                <input type="checkbox" id="rgbContrast" name="rpMode" value="RPM_GENERAL_RGB_CONTRAST">
-                <label for="rgbContrast" class="tooltip" aria-label="Detects region using the general algorithm based on RGB colour contrast." data-balloon-pos="down" data-balloon-length="small"> General RGB Contrast Mode </label><br>
+            <form id="ccModesForm">
 
-                <!-- Mode Arguments for the RGB Contrast pre-detection mode-->
-                <div class="rgbContrastForm">
-                    <label for="midRGB" class="tooltip" aria-label="If the image dimension is larger than the given value, the library will enable the feature of pre-detecting barcode regions. Otherwise, it will skip this step when searching for barcodes." data-balloon-pos="down" data-balloon-length="medium">Minimum Image Dimension</label>
-                    <input type="range" id="midRGB" name="minImageDim" data-require-pair="#rgbContrast" min="16384" max="2147483647" value="262144"><span id="midRGBDisplay"></span></br>
+                <!-- General colour conversion mode-->
 
-                    <label for="sensRGB" class="tooltip" aria-label="The higher the sensitivity, the more effort the library will take to detect regions." data-balloon-pos="down" data-balloon-length="medium">Sensitivity</label>
-                    <input type="range" id="sensRGB" name="sensitivity" data-require-pair="#rgbContrast" min="1" max="9" value="1"><span id="sensRGBDisplay"></span></br>
+                <input type="checkbox" id="generalCC" name="ccMode" value="CICM_GENERAL">
+                <label for="generalCC" class="tooltip" aria-label="Converts a colour image to a grayscale image using the general algorithm." data-balloon-pos="down" data-balloon-length="small"> General Colour Conversion Mode </label><br><br>
 
-                    <label for="sibRGB" class="tooltip" aria-label="The block size used for region predetection would be 2 to the power of N, with N being the SpatialIndexBlockSize" data-balloon-pos="down" data-balloon-length="medium">Spatial Index Block Size</label>
-                    <input type="range" id="sibRGB" name="SpatialIndexBlockSize" data-require-pair="#rgbContrast" min="1" max="32" value="5"><span id="sibRGBDisplay"></span></br>
+                <div class="modeArgsForm" id="generalCCForm">
+                    <label for="blueChannel" class="tooltip" aria-label="Sets the weight value of Blue Colour Channel used for converting a colour image to a grayscale image. If the value is -1, the weight is automatically set by the SDK." data-balloon-pos="down" data-balloon-length="medium">Blue Channel Weight</label>
+                    <input type="range" id="blueChannel" name="gccModeArgs" data-require-pair="#generalCC" min="-1" max="1000" value="-1"><span id="blueChannelDisplay"></span></br>
+
+                    <label for="greenChannel" class="tooltip" aria-label="Sets the weight value of Green Colour Channel used for converting a colour image to a grayscale image.  If the value is -1, the weight is automatically set by the SDK." data-balloon-pos="down" data-balloon-length="medium">Green Channel Weight</label>
+                    <input type="range" id="greenChannel" name="gccModeArgs" data-require-pair="#generalCC" min="-1" max="1000" value="-1"><span id="greenChannelDisplay"></span></br>
+
+                    <label for="redChannel" class="tooltip" aria-label="Sets the weight value of Red Colour Channel used for converting a colour image to a grayscale image.  If the value is -1, the weight is automatically set by the SDK." data-balloon-pos="down" data-balloon-length="medium">Red Channel Weight</label>
+                    <input type="range" id="redChannel" name="gccModeArgs" data-require-pair="#generalCC" min="-1" max="1000" value="-1"><span id="redChannelDisplay"></span></br><br>
                 </div>
 
-                <input type="checkbox" id="grayContrast" name="rpMode" value="RPM_GENERAL_GRAY_CONTRAST">
-                <label for="grayContrast" class="tooltip" aria-label="Detects region using the general algorithm based on gray contrast." data-balloon-pos="down" data-balloon-length="small"> General Gray Contrast Mode </label><br>
-
-                <!-- Mode Arguments for the gray contrast pre-detection mode-->
-                <div class="grayContrastForm">
-                    <label for="midGray" class="tooltip" aria-label="If the image dimension is larger than the given value, the library will enable the feature of pre-detecting barcode regions. Otherwise, it will skip this step when searching for barcodes." data-balloon-pos="down" data-balloon-length="medium">Minimum Image Dimension</label>
-                    <input type="range" id="midGray" name="minImageDim" data-require-pair="#grayContrast" min="16384" max="2147483647" value="262144"><span id="midGrayDisplay"></span></br>
-
-                    <label for="sensGray" class="tooltip" aria-label="The higher the sensitivity, the more effort the library will take to detect regions." data-balloon-pos="down" data-balloon-length="medium">Sensitivity</label>
-                    <input type="range" id="sensGray" name="sensitivity" data-require-pair="#grayContrast" min="1" max="9" value="1"><span id="sensGrayDisplay"></span></br>
-
-                    <label for="sibGray" class="tooltip" aria-label="The block size used for region predetection would be 2 to the power of N, with N being the SpatialIndexBlockSize" data-balloon-pos="down" data-balloon-length="medium">Spatial Index Block Size</label>
-                    <input type="range" id="sibGray" name="SpatialIndexBlockSize" data-require-pair="#grayContrast" min="1" max="32" value="5"><span id="sibGrayDisplay"></span></br>
-                </div>
-
-                <input type="checkbox" id="autoRPM" name="rpMode" value="RPM_AUTO">
-                <label for="autoRPM" class="tooltip" aria-label="Lets the library choose an algorithm automatically to detect region." data-balloon-pos="down" data-balloon-length="small"> Auto </label></br>
-
-                <input type="checkbox" id="skipRPM" name="rpMode" value="RPM_SKIP">
-                <label for="skipRPM"> Skip</label></br>
+                <!-- Skip Mode -->
+                <input type="checkbox" id="skipCC" name="rpMode" value="CICM_SKIP">
+                <label for="skipCC"> Skip</label></br>
             </form><br><br>
+
+            <!-- Now for the Image Preprocessing Modes -->
+            <div class="tooltip" aria-label="Every now and then, you might encounter a scenario where the default configuration of DBR cannot locate the code area. DBR can vastly improve the success rate  in those situations by applying a variety of image preprocessing algorithms, which are configured via this parameter." data-balloon-pos="down" data-balloon-length="large">Select the Image Preprocessing Modes in Decreasing Priority Order (Highest to Lowest)</div><br><br>
+            
+            
+
+            <form id="ipModesForm">
+                <!-- General Mode -->
+                <input type="checkbox" id="generalIP" name="ipMode" value="IPM_GENERAL">
+                <label for="generalIP" class="tooltip" aria-label="Does not apply any preprocessing algorithms and simply uses the unprocessed image." data-balloon-pos="down" data-balloon-length="small"> General </label><br>
+
+                <!-- Gray Equalize preprocessing mode-->
+
+                <input type="checkbox" id="grayEqualizeIP" name="ipMode" value="IPM_GRAY_EQUALIZE">
+                <label for="grayEqualizeIP" class="tooltip" aria-label="Preprocesses the image using the gray equalization algorithm." data-balloon-pos="down" data-balloon-length="small"> Gray Equalize </label><br>
+
+                <div class="modeArgsForm" id="grayEqualizeIPForm">
+                    <label for="sensitivityGE" class="tooltip" aria-label="If you have an image with a low level of contrast, you can set the property to a larger value. A larger value means a higher possibility that gray equalization will be activated. This may cause adverse effect on images with a high level of contrast." data-balloon-pos="down" data-balloon-length="medium">Sensitivity</label>
+                    <input type="range" id="sensitivityGE" name="geFormArgs" data-require-pair="#grayEqualizeIP" min="1" max="9" value="5"><span id="sensitivityGEDisplay"></span></br>
+                </div>
+
+                <!-- Gray Smooth pre-detection mode-->
+
+                <input type="checkbox" id="graySmoothIP" name="ipMode" value="IPM_GRAY_SMOOTH">
+                <label for="graySmoothIP" class="tooltip" aria-label="Preprocesses the image using the gray equalization algorithm." data-balloon-pos="down" data-balloon-length="small"> Gray Equalize </label><br>
+                
+                <div class="modeArgsForm" id="graySmoothIPForm">
+                    <label for="smoothBlockSizeXGS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="down" data-balloon-length="small">Horizontal Block Size</label>
+                    <input type="range" id="smoothBlockSizeXGS" name="gsFormArgs" data-require-pair="#graySmoothIP" min="3" max="1000" value="3"><span id="smoothBlockSizeXDisplayGS"></span></br>
+
+                    <label for="smoothBlockSizeYGS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="down" data-balloon-length="small">Vertical Block Size</label>
+                    <input type="range" id="smoothBlockSizeYGS" name="gsFormArgs" data-require-pair="#graySmoothIP" min="3" max="1000" value="3"><span id="smoothBlockSizeYDisplayGS"></span></br>
+                </div>
+
+                <!-- Sharpen Smooth preprocessing mode and its mode arguments-->
+
+                <input type="checkbox" id="sharpenSmoothIP" name="ipMode" value="IPM_SHARPEN_SMOOTH">
+                <label for="sharpenSmoothIP" class="tooltip" aria-label="Preprocesses the image using the sharpening and smoothing algorithm." data-balloon-pos="down" data-balloon-length="small"> Sharpen Smooth </label><br>
+
+                <div class="modeArgsForm" id="sharpenSmoothIPForm">
+                    <label for="smoothBlockSizeXSS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="down" data-balloon-length="small">Horizontal Block Size Smoothing</label>
+                    <input type="range" id="smoothBlockSizeXSS" name="ssFormArgs" data-require-pair="#sharpenSmoothIP" min="3" max="1000" value="3"><span id="smoothBlockSizeXDisplaySS"></span></br>
+
+                    <label for="smoothBlockSizeYSS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="down" data-balloon-length="small">Vertical Block Size Smoothing</label>
+                    <input type="range" id="smoothBlockSizeYSS" name="ssFormArgs" data-require-pair="#sharpenSmoothIP" min="3" max="1000" value="3"><span id="smoothBlockSizeYDisplaySS"></span></br>
+
+                    <label for="sharpenBlockSizeXSS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="down" data-balloon-length="small">Horizontal Block Size Smoothing</label>
+                    <input type="range" id="sharpenBlockSizeXSS" name="ssFormArgs" data-require-pair="#sharpenSmoothIP" min="3" max="1000" value="3"><span id="sharpenBlockSizeXDisplaySS"></span></br>
+
+                    <label for="sharpenBlockSizeYSS" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="down" data-balloon-length="small">Vertical Block Size Smoothing</label>
+                    <input type="range" id="sharpenBlockSizeYSS" name="ssFormArgs" data-require-pair="#sharpenSmoothIP" min="3" max="1000" value="3"><span id="sharpenBlockSizeYDisplaySS"></span></br>
+                </div>
+
+                <!-- Morphology preprocessing mode and its mode arguments-->
+
+                <input type="checkbox" id="morphIP" name="ipMode" value="IPM_MORPHOLOGY">
+                <label for="morphIP" class="tooltip" aria-label="Preprocesses the image using the morphology algorithm." data-balloon-pos="down" data-balloon-length="small"> Morphology </label><br>
+
+                <div class="modeArgsForm" id="morphIPForm">
+                    <label for="morphOperation" class="tooltip" aria-label="The operations include erosion, dilation, open (erosion then dilation), and close (dilation then erosion)." data-balloon-pos="down" data-balloon-length="small">Morphology Operation</label>
+                    <select id="morphOperation" name="morphFormArgs" data-require-pair="#morphIP">
+                        <option value="Erode">Erosion</option>
+                        <option value="Dilate">Dilation</option>
+                        <option value="Open">Open</option>
+                        <option value="Close">Close</option>
+                    </select></br>
+
+                    <label for="morphShape" class="tooltip" aria-label="Sets the morph shape (rectangle, cross, or ellipse) for the morphology process." data-balloon-pos="down" data-balloon-length="small">Morphology Shape</label>
+                    <select id="morphShape" name="morphFormArgs" data-require-pair="#morphIP">
+                        <option value="Rectangle">Rectangle</option>
+                        <option value="Cross">Cross</option>
+                        <option value="Ellipse">Ellipse</option>
+                    </select></br>
+
+                    <label for="morphOpKernelSizeX" class="tooltip" aria-label="Sets the horizontal kernel size for the morphology process." data-balloon-pos="down" data-balloon-length="small">Horizontal Kernel Size</label>
+                    <input type="range" id="morphOpKernelSizeX" name="morphFormArgs" data-require-pair="#morphIP" min="0" max="1000" value="0"><span id="morphOpKernelSizeXDisplay"></span></br>
+
+                    <label for="morphOpKernelSizeY" class="tooltip" aria-label="Block size refers to the size of a pixel neighborhood used to calculate the threshold for the pixel. An appropriate value can help increase the accuracy of barcode localization." data-balloon-pos="down" data-balloon-length="small">Vertical Kernel Size</label>
+                    <input type="range" id="morphOpKernelSizeY" name="morphFormArgs" data-require-pair="#morphIP" min="0" max="1000" value="0"><span id="morphOpKernelSizeYDisplay"></span></br>
+                </div>
+
+
+                <!-- Skip Mode -->
+                <input type="checkbox" id="skipIP" name="ipMode" value="IPM_SKIP">
+                <label for="skipIP"> Skip</label></br>
+            </form><br><br>
+
             <div id="placeholderClick" style="visibility: hidden;">Placeholder Click</div> 
         </div>
     </div>
@@ -95,85 +158,47 @@ Please note that the organizationID '200001' corresponds to Dynamsoft's public l
     <script src="initScanner.js"></script> <!-- To initialize the barcode scanner -->
 
     <script>
-    /* First thing that must be done is to lay out the operation of defining a region of interest, per the user's input */    
-    
-    // Should the Region of Interest form change (as in the user inputted a value for regionTop, regionLeft, regionBottom, or regionRight) update the runtime settings to reflect this change
-    const roiFormInputs = document.querySelectorAll('input[name="regionDef"]');
-    roiFormInputs.forEach(element => {
-        element.addEventListener("input", async function () {
-            try{
-                let settings = await scanner.getRuntimeSettings();
 
-                // If regionMeasuredByPercentage is checked, update the corresponding property in region definition
-                let usePercentage = document.getElementById("regionPercentage").value;
-                console.log(usePercentage);
-                if(usePercentage)
-                    settings.region.regionMeasuredByPercentage = true;
-                else
-                    settings.region.regionMeasuredByPercentage = false;
+    /* First, to deal with the ScaleDownThreshold input */
+    let scaledownThresh = document.getElementById("scaledownThresh")
+    scaledownThresh.onchange = async function (){
+        try{
+            let settings = await scanner.getRuntimeSettings();
+            settings.scaleDownThreshold = scaledownThresh.value;
+            await scanner.updateRuntimeSettings(settings);
+        } catch (ex){
+            console.log(ex.message);
+        }
+    }
+    /* Done dealing with the ScaleDownThreshold input */
 
-                switch(this.id){
-                    case "regionTop":
-                    settings.region.regionTop = this.value;
-                    break;
-                    case "regionBottom":
-                    settings.region.regionBottom = this.value;
-                    break;
-                    case "regionLeft":
-                    settings.region.regionLeft = this.value;
-                    break;
-                    case "regionRight":
-                    settings.region.regionRight = this.value;
-                    break;
-                }
-                await scanner.updateRuntimeSettings(settings);
-            } catch (ex){
-                console.log(ex.message);
-            }
-        })      
-    })
-
-    /* Done with defining the region of interest per the user's input */
-
-    /* Now to set the Region Pre-detection modes should the user select at least one mode */
-    const checkboxesRPM = document.querySelectorAll('input[name="rpMode"]');
-    let rpmCount = 0; // Used to track the current index of the region pre-detection modes array
-    for(var i = 0; i < checkboxesRPM.length; i++){
-        checkboxesRPM[i].addEventListener('click', async function(){
+    /* Now for the ColourConversionModes input and its mode arguments */
+    const checkboxesCC = document.querySelectorAll('input[name="ccMode"]');
+    let ccCount = 0; // Used to track the current index of the modes array
+    for(var i = 0; i < checkboxesCC.length; i++){
+        checkboxesCC[i].addEventListener('click', async function(){
             try{
                 let settings = await scanner.getRuntimeSettings();
                 if(this.checked){
                     switch(this.value){
-                        case "RPM_GENERAL_RGB_CONTRAST":
-                        // First, display the mode arguments form for RGB Contrast mode the update the settings
-                        let rgbContrastForm = document.getElementsByClassName("rgbContrastForm");
-                        rgbContrastForm[0].style.display = "block";
-                        settings.furtherModes.regionPredetectionModes[rpmCount] = Dynamsoft.DBR.EnumRegionPredetectionMode.RPM_GENERAL_RGB_CONTRAST;
+                        case "CICM_GENERAL":
+                        // First, display the mode arguments form for RGB Contrast mode then update the settings
+                        let generalCCForm = document.getElementById("generalCCForm");
+                        generalCCForm.style.display = "block";
+                        settings.furtherModes.colourConversionModes[ccCount] = Dynamsoft.DBR.EnumColourConversionMode.CICM_GENERAL;
                         break;
-                        case "RPM_GENERAL_GRAY_CONTRAST":
-                        // First, we display the mode arguments form then update the settings
-                        let grayContrastForm = document.getElementsByClassName("grayContrastForm");
-                        grayContrastForm[0].style.display = "block";
-                        settings.furtherModes.regionPredetectionModes[rpmCount] = Dynamsoft.DBR.EnumRegionPredetectionMode.RPM_GENERAL_GRAY_CONTRAST;
-                        break;
-                        case "RPM_GENERAL":
-                        settings.furtherModes.regionPredetectionModes[rpmCount] = Dynamsoft.DBR.EnumRegionPredetectionMode.RPM_GENERAL;
-                        break;
-                        case "RPM_AUTO":
-                        settings.furtherModes.regionPredetectionModes[rpmCount] = Dynamsoft.DBR.EnumRegionPredetectionMode.RPM_AUTO;
-                        break;
-                        case "RPM_SKIP":
-                        settings.furtherModes.regionPredetectionModes[rpmCount] = Dynamsoft.DBR.EnumRegionPredetectionMode.RPM_SKIP;
+                        case "CICM_SKIP":
+                        settings.furtherModes.colourConversionModes[ccCount] = Dynamsoft.DBR.EnumColourConversionMode.CICM_SKIP;
                         break;
                     }
                 }
-                // The region pre-detection modes array has a max length of 8 so the following ensures that the rpmCount index loops around
-                if(rpmCount == 7)
-                    rpmCount = 0;
+                // The region pre-detection modes array has a max length of 8 so the following ensures that the ccCount index loops around
+                if(ccCount == 7)
+                    ccCount = 0;
                 else
-                    rpmCount++;
+                    ccCount++;
 
-                console.log(settings.furtherModes.regionPredetectionModes); // check that the array is correct
+                console.log(settings.furtherModes.colourConversionModes); // check that the array is correct
                 await scanner.updateRuntimeSettings(settings);
             } 
             catch(ex) {
@@ -182,124 +207,330 @@ Please note that the organizationID '200001' corresponds to Dynamsoft's public l
         })
     }
 
-    /* Next, should any of the mode arguments for RGB Contrast mode change, then set the mode argument.  */  
-    // Starting with the minimum image dimension
-    let midRGB = document.getElementById("midRGB");
-    midRGB.onchange = async function(){
-        document.getElementById("midRGBDisplay").innerHTML = midRGB.value.toString();
+    // Now for the mode arguments
+    // Starting with the blue channel weight
+    let blueChannel = document.getElementById("blueChannel");
+    blueChannel.onchange = async function(){
+        document.getElementById("blueChannelDisplay").innerHTML = blueChannel.value.toString();
         let settings = await scanner.getRuntimeSettings();
-        // Get the index of the RGB Contrast mode in the scale up modes array
+        // Get the index of the General mode in the scale up modes array
         for(var i = 0; i <= 8; i++){
             try{
-                if(settings.scaleUpModes[i] == Dynamsoft.DBR.EnumRegionPredetectionMode.RPM_GENERAL_RGB_CONTRAST)
+                if(settings.furtherModes.colourConversionModes[i] == Dynamsoft.DBR.EnumColourConversionMode.CICM_GENERAL)
                     //once the index is found, use the index to set the mode argument.
-                    await scanner.setModeArgument("RegionPredetectionMode", i, "MinImageDimension", midRGB.value.toString()); // set the min image dimension 
+                    await scanner.setModeArgument("ColourConversionMode", i, "BlueChannelWeight", blueChannel.value.toString());
                 else
-                    continue; // if not RGB contrast, skip to next iteration
+                    continue;
             } catch(ex) {
                 console.log(ex.message);
             }
         }
     }
 
-    // Then, the sensitivity
-    let sensitivityRGB = document.getElementById("sensRGB");
-    sensitivityRGB.onchange = async function(){
-        document.getElementById("sensRGBDisplay").innerHTML = sensitivityRGB.value.toString();
+    // Then the green channel weight
+    let greenChannel = document.getElementById("greenChannel");
+    greenChannel.onchange = async function(){
+        document.getElementById("greenChannelDisplay").innerHTML = greenChannel.value.toString();
         let settings = await scanner.getRuntimeSettings();
-        // Get the index of the RGB Contrast mode in the scale up modes array
+        // Get the index of the General mode in the scale up modes array
         for(var i = 0; i <= 8; i++){
             try{
-                if(settings.scaleUpModes[i] == Dynamsoft.DBR.EnumRegionPredetectionMode.RPM_GENERAL_RGB_CONTRAST)
+                if(settings.furtherModes.colourConversionModes[i] == Dynamsoft.DBR.EnumColourConversionMode.CICM_GENERAL)
                     //once the index is found, use the index to set the mode argument.
-                    await scanner.setModeArgument("RegionPredetectionMode", i, "Sensitivity", sensitivityRGB.value.toString()); // set the min image dimension 
+                    await scanner.setModeArgument("ColourConversionMode", i, "GreenChannelWeight", greenChannel.value.toString());
                 else
-                    continue; // if not RGB contrast, skip to next iteration
-            } catch(ex) {
-                console.log(ex.message);
-            }
-        }
-    } 
-
-    // Now for the spatial index block size
-    let sibRGB = document.getElementById("sibRGB");
-    sibRGB.onchange = async function(){
-        document.getElementById("sibRGBDisplay").innerHTML = sibRGB.value.toString();
-        let settings = await scanner.getRuntimeSettings();
-        // Get the index of the RGB Contrast mode in the scale up modes array
-        for(var i = 0; i <= 8; i++){
-            try{
-                if(settings.scaleUpModes[i] == Dynamsoft.DBR.EnumRegionPredetectionMode.RPM_GENERAL_RGB_CONTRAST)
-                    //once the index is found, use the index to set the mode argument.
-                    await scanner.setModeArgument("RegionPredetectionMode", i, "SpatialIndexBlockSize", sibRGB.value.toString()); // set the min image dimension 
-                else
-                    continue; // if not RGB contrast, skip to next iteration
+                    continue;
             } catch(ex) {
                 console.log(ex.message);
             }
         }
     }
 
-    /* Done with mode arguments for the RGB Contrast mode */
-
-    /* Now for the mode arguments of the Gray contrast mode, which are the same as the RGB contrast mode */
-    // Starting with the minimum image dimension
-    let midGray = document.getElementById("midGray");
-    midGray.onchange = async function(){
-        document.getElementById("midGrayDisplay").innerHTML = midGray.value.toString();
+    //Lastly, the red channel weight
+    let redChannel = document.getElementById("redChannel");
+    redChannel.onchange = async function(){
+        document.getElementById("redChannelDisplay").innerHTML = redChannel.value.toString();
         let settings = await scanner.getRuntimeSettings();
-        // Get the index of the Gray Contrast mode in the scale up modes array
+        // Get the index of the General mode in the scale up modes array
         for(var i = 0; i <= 8; i++){
             try{
-                if(settings.scaleUpModes[i] == Dynamsoft.DBR.EnumRegionPredetectionMode.RPM_GENERAL_GRAY_CONTRAST)
+                if(settings.furtherModes.colourConversionModes[i] == Dynamsoft.DBR.EnumColourConversionMode.CICM_GENERAL)
                     //once the index is found, use the index to set the mode argument.
-                    await scanner.setModeArgument("RegionPredetectionMode", i, "MinImageDimension", midGray.value.toString()); // set the min image dimension 
+                    await scanner.setModeArgument("ColourConversionMode", i, "RedChannelWeight", redChannel.value.toString());
                 else
-                    continue; // if not gray contrast, skip to next iteration
+                    continue;
+            } catch(ex) {
+                console.log(ex.message);
+            }
+        }
+    }
+    /* Done with ColourConversionModes mode args */
+
+    /* Now to handle the ImagePreprocessingModes input */
+    const checkboxesIP = document.querySelectorAll('input[name="ipMode"]');
+    let ipCount = 0; // Used to track the current index of the modes array
+    for(var i = 0; i < checkboxesIP.length; i++){
+        checkboxesIP[i].addEventListener('click', async function(){
+            try{
+                let settings = await scanner.getRuntimeSettings();
+                if(this.checked){
+                    switch(this.value){
+                        case "IPM_GENERAL":
+                        settings.furtherModes.imagePreprocessingModes[ipCount] = Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_GENERAL;
+                        break;
+                        case "IPM_GRAY_EQUALIZE":
+                        // First, we display the mode arguments form then update the settings
+                        let grayEqualizeForm = document.getElementById("grayEqualizeIPForm");
+                        grayEqualizeForm.style.display = "block";
+                        settings.furtherModes.imagePreprocessingModes[ipCount] = Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_GRAY_EQUALIZE;
+                        break;
+                        case "IPM_GRAY_SMOOTH":
+                        let graySmoothForm = document.getElementById("graySmoothIPForm");
+                        graySmoothForm.style.display = "block";
+                        settings.furtherModes.imagePreprocessingModes[ipCount] = Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_GRAY_SMOOTH;
+                        break;
+                        case "IPM_SHARPEN_SMOOTH":
+                        let sharpenSmoothForm = document.getElementById("sharpenSmoothIPForm");
+                        sharpenSmoothForm.style.display = "block";
+                        settings.furtherModes.imagePreprocessingModes[ipCount] = Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_SHARPEN_SMOOTH;
+                        break;
+                        case "IPM_MORPHOLOGY":
+                        let morphForm = document.getElementById("morphIPForm");
+                        morphForm.style.display = "block";
+                        settings.furtherModes.imagePreprocessingModes[ipCount] = Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_MORPHOLOGY;
+                        break;
+                        case "IPM_SKIP":
+                        settings.furtherModes.imagePreprocessingModes[ipCount] = Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_SKIP;
+                        break;
+                    }
+                }
+                // The region pre-detection modes array has a max length of 8 so the following ensures that the ipCount index loops around
+                if(ipCount == 7)
+                    ipCount = 0;
+                else
+                    ipCount++;
+
+                console.log(settings.furtherModes.imagePreprocessingModes); // check that the array is correct
+                await scanner.updateRuntimeSettings(settings);
+            } 
+            catch(ex) {
+                console.log(ex.message);
+            }
+        })
+    }
+    
+    /* Now for the mode arguments for ImagePreprocessingModes */
+
+    // Starting with sensitivity of the gray equalize mode
+    let sensitivity_GE = document.getElementById("sensitivityGE");
+    sensitivity_GE.onchange = async function(){
+        document.getElementById("sensitivityGEDisplay").innerHTML = sensitivity_GE.value.toString();
+        let settings = await scanner.getRuntimeSettings();
+        // Get the index of the General mode
+        for(var i = 0; i <= 8; i++){
+            try{
+                if(settings.furtherModes.imagePreprocessingModes[i] == Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_GRAY_EQUALIZE)
+                    //once the index is found, use the index to set the mode argument.
+                    await scanner.setModeArgument("ImagePreprocessingMode", i, "Sensitivity", sensitivity_GE.value.toString());
+                else
+                    continue; // if not general, skip to next iteration
             } catch(ex) {
                 console.log(ex.message);
             }
         }
     }
 
-    // Then, the sensitivity
-    let sensitivityGray = document.getElementById("sensGray");
-    sensitivityGray.onchange = async function(){
-        document.getElementById("sensGrayDisplay").innerHTML = sensitivityGray.value.toString();
+    // Now for the SmoothBlockSizeX of Gray smooth mode
+    let smoothBlockSizeX_GS = document.getElementById("smoothBlockSizeXGS");
+    smoothBlockSizeX_GS.onchange = async function(){
+        document.getElementById("smoothBlockSizeXDisplayGS").innerHTML = smoothBlockSizeX_GS.value.toString();
         let settings = await scanner.getRuntimeSettings();
-        // Get the index of the RGB Contrast mode in the scale up modes array
+        // Get the index of the Gray smooth mode
         for(var i = 0; i <= 8; i++){
             try{
-                if(settings.scaleUpModes[i] == Dynamsoft.DBR.EnumRegionPredetectionMode.RPM_GENERAL_GRAY_CONTRAST)
+                if(settings.furtherModes.imagePreprocessingModes[i] == Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_GRAY_SMOOTH)
                     //once the index is found, use the index to set the mode argument.
-                    await scanner.setModeArgument("RegionPredetectionMode", i, "Sensitivity", sensitivityGray.value.toString()); // set the min image dimension 
+                    await scanner.setModeArgument("ImagePreprocessingMode", i, "SmoothBlockSizeX", smoothBlockSizeX_GS.value.toString());
                 else
-                    continue; // if not nearest neighbour, skip to next iteration
-            } catch(ex) {
-                console.log(ex.message);
-            }
-        }
-    } 
-
-    // Lastly, the spatial index block size
-    let sibGray = document.getElementById("sibGray");
-    sibGray.onchange = async function(){
-        document.getElementById("sibGrayDisplay").innerHTML = sibGray.value.toString();
-        let settings = await scanner.getRuntimeSettings();
-        // Get the index of the RGB Contrast mode in the scale up modes array
-        for(var i = 0; i <= 8; i++){
-            try{
-                if(settings.scaleUpModes[i] == Dynamsoft.DBR.EnumRegionPredetectionMode.RPM_GENERAL_GRAY_CONTRAST)
-                    //once the index is found, use the index to set the mode argument.
-                    await scanner.setModeArgument("RegionPredetectionMode", i, "SpatialIndexBlockSize", sibGray.value.toString()); // set the min image dimension 
-                else
-                    continue; // if not nearest neighbour, skip to next iteration
+                    continue; // if not mode, skip to next iteration
             } catch(ex) {
                 console.log(ex.message);
             }
         }
     }
-    /* Done with the mode arguments for the gray contrast pre-detection mode */
+
+    // Now for the SmoothBlockSizeY of Gray smooth mode
+    let smoothBlockSizeY_GS = document.getElementById("smoothBlockSizeYGS");
+    smoothBlockSizeY_GS.onchange = async function(){
+        document.getElementById("smoothBlockSizeYDisplayGS").innerHTML = smoothBlockSizeY_GS.value.toString();
+        let settings = await scanner.getRuntimeSettings();
+        // Get the index of the Gray smooth mode
+        for(var i = 0; i <= 8; i++){
+            try{
+                if(settings.furtherModes.imagePreprocessingModes[i] == Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_GRAY_SMOOTH)
+                    //once the index is found, use the index to set the mode argument.
+                    await scanner.setModeArgument("ImagePreprocessingMode", i, "SmoothBlockSizeY", smoothBlockSizeY_GS.value.toString());
+                else
+                    continue; // if not mode, skip to next iteration
+            } catch(ex) {
+                console.log(ex.message);
+            }
+        }
+    }
+
+    // Now for the SmoothBlockSizeX of sharpen smooth mode
+    let smoothBlockSizeX_SS = document.getElementById("smoothBlockSizeXSS");
+    smoothBlockSizeX_SS.onchange = async function(){
+        document.getElementById("smoothBlockSizeXDisplaySS").innerHTML = smoothBlockSizeX_SS.value.toString();
+        let settings = await scanner.getRuntimeSettings();
+        // Get the index of the Shapren Smooth mode
+        for(var i = 0; i <= 8; i++){
+            try{
+                if(settings.furtherModes.imagePreprocessingModes[i] == Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_SHARPEN_SMOOTH)
+                    //once the index is found, use the index to set the mode argument.
+                    await scanner.setModeArgument("ImagePreprocessingMode", i, "SmoothBlockSizeX", smoothBlockSizeX_SS.value.toString());
+                else
+                    continue; // if not mode, skip to next iteration
+            } catch(ex) {
+                console.log(ex.message);
+            }
+        }
+    }
+
+    // Now for the SmoothBlockSizeY of sharpen smooth mode
+    let smoothBlockSizeY_SS = document.getElementById("smoothBlockSizeYSS");
+    smoothBlockSizeY_SS.onchange = async function(){
+        document.getElementById("smoothBlockSizeYDisplaySS").innerHTML = smoothBlockSizeY_SS.value.toString();
+        let settings = await scanner.getRuntimeSettings();
+        // Get the index of the Shapren Smooth mode
+        for(var i = 0; i <= 8; i++){
+            try{
+                if(settings.furtherModes.imagePreprocessingModes[i] == Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_SHARPEN_SMOOTH)
+                    //once the index is found, use the index to set the mode argument.
+                    await scanner.setModeArgument("ImagePreprocessingMode", i, "SmoothBlockSizeY", smoothBlockSizeY_SS.value.toString());
+                else
+                    continue; // if not mode, skip to next iteration
+            } catch(ex) {
+                console.log(ex.message);
+            }
+        }
+    }
+   
+    // Now for the SharpenBlockSizeX of sharpen smooth mode
+    let sharpenBlockSizeX_SS = document.getElementById("sharpenBlockSizeXSS");
+    sharpenBlockSizeX_SS.onchange = async function(){
+        document.getElementById("sharpenBlockSizeXDisplaySS").innerHTML = sharpenBlockSizeX_SS.value.toString();
+        let settings = await scanner.getRuntimeSettings();
+        // Get the index of the Shapren Smooth mode
+        for(var i = 0; i <= 8; i++){
+            try{
+                if(settings.furtherModes.imagePreprocessingModes[i] == Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_SHARPEN_SMOOTH)
+                    //once the index is found, use the index to set the mode argument.
+                    await scanner.setModeArgument("ImagePreprocessingMode", i, "SharpenBlockSizeX", sharpenBlockSizeX_SS.value.toString());
+                else
+                    continue;
+            } catch(ex) {
+                console.log(ex.message);
+            }
+        }
+    }
+
+    // Now for the SharpenBlockSizeY of sharpen smooth mode
+    let sharpenBlockSizeY_SS = document.getElementById("sharpenBlockSizeXSS");
+    sharpenBlockSizeY_SS.onchange = async function(){
+        document.getElementById("sharpenBlockSizeYDisplaySS").innerHTML = sharpenBlockSizeY_SS.value.toString();
+        let settings = await scanner.getRuntimeSettings();
+        // Get the index of the Shapren Smooth mode
+        for(var i = 0; i <= 8; i++){
+            try{
+                if(settings.furtherModes.imagePreprocessingModes[i] == Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_SHARPEN_SMOOTH)
+                    //once the index is found, use the index to set the mode argument.
+                    await scanner.setModeArgument("ImagePreprocessingMode", i, "SharpenBlockSizeY", sharpenBlockSizeY_SS.value.toString());
+                else
+                    continue;
+            } catch(ex) {
+                console.log(ex.message);
+            }
+        }
+    }
+
+    // Now for the Morph Operation of morphology mode
+    let morphOperation = document.getElementById("morphOperation");
+    morphOperation.onchange = async function(){
+        let settings = await scanner.getRuntimeSettings();
+        let val = morphOperation.options[morphOperation.selectedIndex].value;
+        // Get the index of the Morphology mode
+        for(var i = 0; i <= 8; i++){
+            try{
+                if(settings.furtherModes.imagePreprocessingModes[i] == Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_MORPHOLOGY)
+                    //once the index is found, use the index to set the mode argument.
+                    await scanner.setModeArgument("ImagePreprocessingMode", i, "MorphOperation", val);
+                else
+                    continue;
+            } catch(ex) {
+                console.log(ex.message);
+            }
+        }
+    }
+
+    // Now for the Morph Shape of morphology mode
+    let morphShape = document.getElementById("morphShape");
+    morphShape.onchange = async function(){
+        let settings = await scanner.getRuntimeSettings();
+        let val = morphShape.options[morphShape.selectedIndex].value;
+        // Get the index of the Morphology mode
+        for(var i = 0; i <= 8; i++){
+            try{
+                if(settings.furtherModes.imagePreprocessingModes[i] == Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_MORPHOLOGY)
+                    //once the index is found, use the index to set the mode argument.
+                    await scanner.setModeArgument("ImagePreprocessingMode", i, "MorphShape", val);
+                else
+                    continue;
+            } catch(ex) {
+                console.log(ex.message);
+            }
+        }
+    }
+
+    // Now for the MorphOperationKernelSizeX of morphology mode
+    let morphOpKernelSizeX = document.getElementById("morphOpKernelSizeX");
+    morphOpKernelSizeX.onchange = async function(){
+        document.getElementById("morphOpKernelSizeXDisplay").innerHTML = morphOpKernelSizeX.value.toString();
+        let settings = await scanner.getRuntimeSettings();
+        // Get the index of the Morphology mode
+        for(var i = 0; i <= 8; i++){
+            try{
+                if(settings.furtherModes.imagePreprocessingModes[i] == Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_MORPHOLOGY)
+                    //once the index is found, use the index to set the mode argument.
+                    await scanner.setModeArgument("ImagePreprocessingMode", i, "MorphOperationKernelSizeX", morphOpKernelSizeX.value.toString());
+                else
+                    continue;
+            } catch(ex) {
+                console.log(ex.message);
+            }
+        }
+    }
+
+    // Now for the MorphOperationKernelSizeY of morphology mode
+    let morphOpKernelSizeY = document.getElementById("morphOpKernelSizeY");
+    morphOpKernelSizeY.onchange = async function(){
+        document.getElementById("morphOpKernelSizeYDisplay").innerHTML = morphOpKernelSizeY.value.toString();
+        let settings = await scanner.getRuntimeSettings();
+        // Get the index of the Morphology mode
+        for(var i = 0; i <= 8; i++){
+            try{
+                if(settings.furtherModes.imagePreprocessingModes[i] == Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_MORPHOLOGY)
+                    //once the index is found, use the index to set the mode argument.
+                    await scanner.setModeArgument("ImagePreprocessingMode", i, "MorphOperationKernelSizeY", morphOpKernelSizeY.value.toString());
+                else
+                    continue;
+            } catch(ex) {
+                console.log(ex.message);
+            }
+        }
+    }
+
+    /* Done with the mode arguments of ImagePreprocessingModes */
 
     </script>
 </body>

@@ -9,7 +9,7 @@ let closeModalBtn = document.getElementById('closeModalBtn');
 // Create a BarcodeScanner instance on page load to speed things up.
 window.onload = async function () {
     try {
-        Dynamsoft.DBR.BarcodeReader.organizationID = "200001";
+        Dynamsoft.DBR.BarcodeScanner.organizationID = "200001";
         scanner = scanner || await Dynamsoft.DBR.BarcodeScanner.createInstance();
         await scanner.setUIElement(document.getElementById('div-video-container'));
     } catch (ex) {
@@ -48,18 +48,13 @@ readBtn.onclick = async function () {
     }
 }
 
-/* The following defines an onclick event for all the tooltip elements. This trigger is being added to take into account that there is no 'hover' event when using a mobile browser. Therefore, this event will be added so that the tooltip appears whenever it is tapped on a mobile browser */
+/* The following defines an ontouchstart event for all the tooltip elements. This trigger is being added to take into account that there is no 'hover' event when using a mobile browser. Therefore, this event will be added so that the tooltip appears whenever it is tapped on a mobile browser */
 const tooltips = document.getElementsByClassName("tooltip");
 for(let i = 0; i < tooltips.length; i++){
     tooltips[i].addEventListener('touchstart', function(){
         tooltips[i].setAttribute('data-balloon-visible', '');
         setTimeout(function(){
             tooltips[i].removeAttribute('data-balloon-visible');
-            //let placeholderClick = document.getElementById("placeholderClick");
-            //placeholderClick.click();
-            //placeholderClick.
-            //let closeBtn = document.createElement("button");
-            //tooltips[i].appendChild(closeBtn);
         }, 3000);
     })
 }
