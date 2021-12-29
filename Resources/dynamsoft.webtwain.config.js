@@ -25,8 +25,7 @@ Dynamsoft.DWT.Containers = [{ContainerId:'dwtcontrolContainer', Width:270, Heigh
 /////////////////////////////////////////////////////////////////////////////////////
 /// If you need to use multiple keys on the same server, you can combine keys and write like this 
 /// Dynamsoft.DWT.ProductKey = 'key1;key2;key3';
-Dynamsoft.DWT.ProductKey = 't01004wAAAKiK7jdZkDbWYWf7e6IYyHC4FjZQyKBsFshNjCMIiGLd6lv+Q/F4QXrp2s3NmFPGlL2VbNEqt4xykNxV6edQBoc59Ui9+tZu/2Z8JIjm26ibNYxNt2EzgrpIkXIC26Eupw==';
-
+Dynamsoft.DWT.ProductKey = "t0152KQMAACCa0w5SWEa+gXAVIYRcVUR/LLfnWnoW5XA/whae9RkP+GgQ2jJUipmPsoYNn0EYyXBcElhniX7v18NEIksbsYWGom8YhkGqIpZOuayd4d28q5FmcNPnNHXWnflg/xj06QxPGPFN3c/YmJmPHbKduTc8YcQ3ZubO2HuOecj6E9DWMtPI8IQR37TMVyPQEKLoH65KolY=";
 ///
 // Dynamsoft.DWT.ResourcesPath = 'Resources';
 
