@@ -10,6 +10,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@8.8.3/dist/dbr.js"></script>
 	<script>
 		(async()=>{
+			Dynamsoft.DBR.BarcodeScanner.productKeys = "t0068MgAAAEe3O6a8bNKcx8+bjATgPjGFBUWPSOFzpw+LW9lRrvJI/N3+4HQRGLqSiSSVY3Nk+Fj0waIvOkdbcZJNm2FzonA=";
 			let scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
 			await scanner.updateRuntimeSettings("coverage");
 			/*let settings = await scanner.getRuntimeSettings();
