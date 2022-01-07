@@ -3,35 +3,26 @@
 
 <head>
     <title>Hello World</title>
-    <script type="text/javascript" src="Resources/dynamsoft.webtwain.initiate.js"></script>
-    <script type="text/javascript" src="Resources/dynamsoft.webtwain.config.js"></script>
 </head>
 
 <body>
-    <div id="dwtcontrolContainer"></div>
-    <input type="button" value="Acquire" onclick="AcquireImage();" />
-    <script type="text/javascript">
-        function AcquireImage() {
-			var DWObject = Dynamsoft.DWT.GetWebTwain('dwtcontrolContainer');
-            if (DWObject) {
-                if(DWObject.UseLocalService) {
-					DWObject.SelectSource(function () {
-							var OnAcquireImageSuccess, OnAcquireImageFailure;
-							OnAcquireImageSuccess = OnAcquireImageFailure = function () {
-								DWObject.CloseSource();
-							};
-							DWObject.OpenSource();
-							DWObject.IfDisableSourceAfterAcquire = true;
-							DWObject.AcquireImage(OnAcquireImageSuccess, OnAcquireImageFailure);
-						}, function () {
-							console.log('SelectSource failed!');
-						});
-				} else {
-					DWObject.LoadImageEx("", -1);
-				}
-            }
-        }
-    </script>
+
+	<script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@8.8.3/dist/dbr.js"></script>
+	<script>
+		(async()=>{
+			let scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
+			await scanner.updateRuntimeSettings("coverage");
+			let settings = await scanner.getRuntimeSettings();
+			settings.barcodeFormatIds = Dynamsoft.DBR.EnumBarcodeFormat.BF_PDF417;
+			await scanner.updateRuntimeSettings(settings);
+
+			scanner.onUnduplicatedRead = (txt, result) => {
+				// Do somthing with the "txt" found in the barcode
+				alert(txt);
+			};
+			await scanner.show();
+		})();
+	</script>
 </body>
 
 </html>
