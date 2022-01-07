@@ -12,9 +12,9 @@
 		(async()=>{
 			let scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
 			await scanner.updateRuntimeSettings("coverage");
-			let settings = await scanner.getRuntimeSettings();
+			/*let settings = await scanner.getRuntimeSettings();
 			settings.barcodeFormatIds = Dynamsoft.DBR.EnumBarcodeFormat.BF_PDF417;
-			await scanner.updateRuntimeSettings(settings);
+			await scanner.updateRuntimeSettings(settings);*/
 
 			scanner.onUnduplicatedRead = (txt, result) => {
 				// Do somthing with the "txt" found in the barcode
