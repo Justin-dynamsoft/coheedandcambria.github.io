@@ -86,7 +86,7 @@
 					await scanner.updateRuntimeSettings('coverage');
                     scanner.getRuntimeSettings()
                     .then(settings => {
-                        //settings.barcodeFormatIds = Dynamsoft.DBR.EnumBarcodeFormat.BF_PDF417;
+                        settings.barcodeFormatIds = Dynamsoft.DBR.EnumBarcodeFormat.BF_PDF417;
 						settings.furtherModes.imagePreprocessingModes[3] = DBR.EnumImagePreprocessingMode.IPM_SHARPEN_SMOOTH;
 						settings.furtherModes.imagePreprocessingModes[2] = DBR.EnumImagePreprocessingMode.IPM_GRAY_SMOOTH;
 						settings.furtherModes.imagePreprocessingModes[1] = DBR.EnumImagePreprocessingMode.IPM_GRAY_EQUALIZE;
@@ -95,7 +95,7 @@
     					settings.localizationModes[5] = DBR.EnumLocalizationMode.LM_STATISTICS_POSTAL_CODE;
 						
 						settings.furtherModes.deformationResistingModes[1] = DBR.EnumDeformationResistingMode.DRM_GENERAL;
-						
+
 						settings.region = {
                             regionLeft: 5,
                             regionTop: 5,
@@ -105,6 +105,8 @@
                         };
                         scanner.updateRuntimeSettings(settings);
                     });
+					console.log(settings);
+					
                 document.getElementById('lib-load').hidden = true;
                 scanner.onUnduplicatedRead = (txt, result) => {
                     extractInformation(txt);
