@@ -3,74 +3,83 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Quickly read barcodes with Dynamsoft Barcode Reader from a live camera stream.">
-    <meta name="keywords" content="camera based barcode reading">
-    <title>Dynamsoft Barcode Reader Sample - Hello World (Decoding via Camera)</title>
-    <!--
-      This sample makes use of the library hosted by the CDN jsDelivr. If you would rather use the
-      library offline. Please see the guide on how to host the library: 
-      https://www.dynamsoft.com/barcode-reader/programming/javascript/user-guide/?ver=latest#host-the-library-yourself-recommended
-    -->
-    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@8.8.3/dist/dbr.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Quickly recognize labels with Dynamsoft Label Recognizer from a live camera stream.">
+    <meta name="keywords" content="camera based label recognizing">
+    <title>use-templates</title>
 </head>
 
 <body>
-    <h1>Read Barcodes from a Camera</h1>
-    <button id="btn-show-scanner">Show Barcode Scanner</button>
-    <script>
-        /** LICENSE ALERT - README
-         * The library requires a license to work, you use the API organizationID to tell the program where to fetch your license.
-         * If the Organizaion ID is not specified, a 7-day (public) trial license will be used by default which is the case in this sample.
-         * Note that network connection is required for this license to work.
-         */
+    <h1 style="font-size: 1.5em;">Recognize Label from a Camera</h1>
+    <select id="select-tpl">
+        <option value="video-passportMRZ">passportMRZ</option>
+        <option value="video-visaMRZ_A">visaMRZ_A</option>
+        <option value="video-VIN_NA">VIN_NA</option>
+        <option value="video-VIN">VIN</option>
+        <option value="video-numberLetter">numberLetter</option>
+        <option value="video-number">number</option>
+        <option value="video-numberUpperCase">numberUpperCase</option>
+        <option value="video-letter">letter</option>
+    </select>
+    <button id="btn-open-recognizer">Open Label Recognizer</button>
+    <div id="div-video-container" style="margin-top: 50px; height: 700px;"></div>
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@2.0.3/dist/dce.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.0/dist/dlr.js" data-license="Product-Keys"></script>
+    <script>       
+        let recognizer = null;
+        let promiseDlrReady;
 
-        /* When using your own license, uncomment the following line and specify your Organization ID. */
 
-        // Dynamsoft.DBR.organizationID = "YOUR-ORGANIZATION-ID";
+        document.getElementById('select-tpl').addEventListener('change', async function() {
+            // Loading settings is expensive, so we check `isOpen` to lazy load settings.
+            // Change to `if(recognizer)` if you want to load settings immediately.
+            if(recognizer && recognizer.cameraEnhancer && recognizer.cameraEnhancer.isOpen()) {
+                await recognizer.updateRuntimeSettingsFromString(this.value);
+            }
+        });
 
-        /* If you don't have a license yet, you can request a trial on this page: https://www.dynamsoft.com/customer/license/trialLicense?product=dbr&package=js&utm_source=samples */
-        /* For more information, please refer to https://www.dynamsoft.com/license-server/docs/about/licensefaq.html?ver=latest#how-to-use-a-trackable-license. */
+        document.getElementById('btn-open-recognizer').addEventListener('click', async ()=>{
+            try{
+                const selectTpl = document.getElementById('select-tpl');
 
-        /* The API "productKeys" is an alternative way to license the library, the major difference is that it does not require a network. Contact support@dynamsoft.com for more information. */
+                // create an instance only once
+                await (promiseDlrReady = promiseDlrReady || (async() => {
+                            
+                    recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance({
+                        runtimeSettings: selectTpl.value
+                    });
 
-        Dynamsoft.DBR.productKeys = "t0068MgAAAEe3O6a8bNKcx8+bjATgPjGFBUWPSOFzpw+LW9lRrvJI/N3+4HQRGLqSiSSVY3Nk+Fj0waIvOkdbcZJNm2FzonA=";
+                    let cameraEnhancer = await Dynamsoft.DCE.CameraEnhancer.createInstance();
+                    await cameraEnhancer.setUIElement(Dynamsoft.DLR.LabelRecognizer.defaultUIElementURL);
+                    document.getElementById('div-video-container').append(cameraEnhancer.getUIElement());
+                    recognizer.cameraEnhancer = cameraEnhancer;
+                    
+                    recognizer.onFrameRead = async results => {
+                        for (let result of results) {
+                            for (let lineResult of result.lineResults) {
+                                console.log(lineResult.text);
+                            }
+                        }
+                    };
+                        
+                    recognizer.onUniqueRead = (txt) => {
+                        alert(txt);
+                        console.log("Unique Code Found: " + txt);
+                    }
 
-        /** LICENSE ALERT - THE END */
+                })());
+            
 
-        let pScanner = null;
-        document.getElementById('btn-show-scanner').onclick = async function() {
-            try {
-                pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance();
-                let scanner = await pScanner;
+                await recognizer.updateRuntimeSettingsFromString(selectTpl.value);
+                await recognizer.startScanning(true);
 
-                let cameras = await scanner.getAllCameras();
-                console.log(cameras);
-                /* 
-                 * onFrameRead is triggered after the library finishes reading a frame.
-                 * There can be one or multiple barcodes on each frame.
-                 */
-                scanner.onFrameRead = results => {
-                    /*console.log("Barcodes on one frame:");
-                    for (let result of results) {
-                        console.log(result.barcodeFormatString + ": " + result.barcodeText);
-                    }*/
-                };
-                /*
-                 * onUnduplicatdRead is triggered only when a 'new' barcode is found.
-                 * The amount of time that the library 'remembers' a barcode is defined by 
-                 * "duplicateForgetTime" in "ScanSettings". By default it is set to 3000 ms.
-                 */
-                scanner.onUnduplicatedRead = (txt, result) => {
-                    alert(txt);
-                    console.log("Unique Code Found: " + result);
-                }
-                await scanner.show();
-            } catch (ex) {
+            }catch(ex) {
                 alert(ex.message);
                 throw ex;
             }
-        };
+        })
+
     </script>
 </body>
 
