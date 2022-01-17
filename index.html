@@ -48,6 +48,16 @@
                 console.log(cameras);
 
                 await scanner.updateRuntimeSettings("coverage");
+
+                let settings = scanner.getRuntimeSettings();
+                settings.barcodeFormatIds = Dynamsoft.DBR.EnumBarcodeFormat.BF_PDF417;
+                settings.deblurLevel = 7;
+
+                await scanner.updateRuntimeSettings(settings);
+
+                await scanner.updateVideoSettings({
+                    video: { width: 1920, height: 1080, facingMode: "environment"}
+                });
                 
                 /* 
                  * onFrameRead is triggered after the library finishes reading a frame.
