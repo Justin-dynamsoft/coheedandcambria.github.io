@@ -43,11 +43,12 @@
             try {
                 pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance();
                 let scanner = await pScanner;
+                scanner.singleFrameMode = bSingleFrameMode;
 
                 let cameras = await scanner.getAllCameras();
                 console.log(cameras);
 
-                await scanner.updateRuntimeSettings("coverage");
+                //await scanner.updateRuntimeSettings("coverage");
 
                 let settings = scanner.getRuntimeSettings();
                 settings.barcodeFormatIds = Dynamsoft.DBR.EnumBarcodeFormat.BF_PDF417;
@@ -56,9 +57,9 @@
                 await scanner.updateRuntimeSettings(settings);
 
                 await scanner.updateVideoSettings({
-                    video: { width: 1920, height: 1080, facingMode: "environment"}
+                    video: { width: 1920, height: 1080, facingMode: "environment"},
                 });
-                
+
                 /* 
                  * onFrameRead is triggered after the library finishes reading a frame.
                  * There can be one or multiple barcodes on each frame.
