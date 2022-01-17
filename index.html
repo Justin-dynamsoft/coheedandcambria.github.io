@@ -43,7 +43,7 @@
             try {
                 pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance();
                 let scanner = await pScanner;
-                scanner.singleFrameMode = bSingleFrameMode;
+                scanner.singleFrameMode = false;
 
                 let cameras = await scanner.getAllCameras();
                 console.log(cameras);
