@@ -59,8 +59,8 @@
                 //await scanner.updateRuntimeSettings("coverage");
 
                 let settings = await scanner.getRuntimeSettings();
-                settings.barcodeFormatIds = Dynamsoft.DBR.EnumBarcodeFormat.BF_PDF417;
-                settings.deblurLevel = 7;
+                //settings.barcodeFormatIds = Dynamsoft.DBR.EnumBarcodeFormat.BF_PDF417;
+                //settings.deblurLevel = 7;
                 settings.intermediateResultTypes = Dynamsoft.DBR.EnumIntermediateResultType.IRT_ORIGINAL_IMAGE;
 
                 await scanner.updateRuntimeSettings(settings);
