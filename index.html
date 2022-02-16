@@ -12,12 +12,15 @@
       library offline. Please see the guide on how to host the library: 
       https://www.dynamsoft.com/barcode-reader/programming/javascript/user-guide/?ver=latest#host-the-library-yourself-recommended
     -->
-    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@8.8.3/dist/dbr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@8.8.7/dist/dbr.js"></script>
 </head>
 
 <body>
     <h1>Read Barcodes from a Camera</h1>
     <button id="btn-show-scanner">Show Barcode Scanner</button>
+    <div id='scannerV' style="width:50vw;height:50vh"></div>
+    <div id='cvses'></div>
+
     <script>
         /** LICENSE ALERT - README
          * The library requires a license to work, you use the API organizationID to tell the program where to fetch your license.
@@ -47,6 +50,8 @@
                 pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance();
                 let scanner = await pScanner;
                 scanner.singleFrameMode = false;
+                scanner._bUseWebgl = false;
+                document.getElementById('scannerV').appendChild(scanner.getUIElement());
 
                 let cameras = await scanner.getAllCameras();
                 console.log(cameras);
@@ -56,6 +61,7 @@
                 let settings = await scanner.getRuntimeSettings();
                 settings.barcodeFormatIds = Dynamsoft.DBR.EnumBarcodeFormat.BF_PDF417;
                 settings.deblurLevel = 7;
+                settings.intermediateResultTypes = Dynamsoft.DBR.EnumIntermediateResultType.IRT_ORIGINAL_IMAGE;
 
                 await scanner.updateRuntimeSettings(settings);
 
@@ -79,8 +85,15 @@
                  * "duplicateForgetTime" in "ScanSettings". By default it is set to 3000 ms.
                  */
                 scanner.onUnduplicatedRead = (txt, result) => {
-                    alert(txt);
                     console.log("Unique Code Found: " + result);
+                    try{
+                        let cvss = await scanner.getIntermediateCanvas();
+                        for (let cvs of cvss) {
+                            document.getElementById('cvses').appendChild(cvs);
+                        }
+                    } catch (ex){ 
+                        console.error(ex);
+                    }
                 }
                 await scanner.show();
             } catch (ex) {
