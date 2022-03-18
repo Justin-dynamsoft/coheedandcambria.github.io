@@ -59,9 +59,9 @@
                     let cameraEnhancer = await Dynamsoft.DCE.CameraEnhancer.createInstance();
                     let cameras = await cameraEnhancer.getAllCameras();
                     console.log(cameras);
-                    if (cameras.length) {
+                    /*if (cameras.length) {
                         await cameraEnhancer.selectCamera(cameras[1]);
-                    }
+                    }*/
 
                     let region = {
                         regionLeft: 25,
