@@ -26,7 +26,7 @@
     <button id="choosePictureBtn">Choose Picture from Disk</button>
     <div id="div-video-container" style="margin-top: 50px; height: 700px;"></div>
     <img></img>
-    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@2.1.0/dist/dce.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@2.0.3/dist/dce.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.2/dist/dlr.js" data-license="Product-Keys"></script>
     <script>       
         let recognizer = null;
@@ -63,14 +63,14 @@
                         await cameraEnhancer.selectCamera(cameras[1]);
                     }*/
 
-                    let region = {
+                    /*let region = {
                         regionLeft: 25,
                         regionTop: 25, 
                         regionRight: 75, 
                         regionBottom: 75, 
                         regionMeasuredByPercentage: true
                     };
-                    cameraEnhancer.setScanRegion(region);
+                    cameraEnhancer.setScanRegion(region);*/
 
                     await cameraEnhancer.setUIElement(Dynamsoft.DLR.LabelRecognizer.defaultUIElementURL);
                     document.getElementById('div-video-container').append(cameraEnhancer.getUIElement());
