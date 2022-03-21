@@ -49,10 +49,10 @@
                 // create an instance only once
                 await (promiseDlrReady = promiseDlrReady || (async() => {
                             
-                    /*recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance({
+                    recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance({
                         runtimeSettings: selectTpl.value
-                    });*/
-                    recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance();
+                    });
+                    //recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance();
 
                     console.log(await recognizer.outputRuntimeSettingsToString());
 
