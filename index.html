@@ -26,7 +26,7 @@
     <button id="choosePictureBtn">Choose Picture from Disk</button>
     <div id="div-video-container" style="margin-top: 50px; height: 700px;"></div>
     <img></img>
-    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@2.1.0/dist/dce.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@2.3.1/dist/dce.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.2/dist/dlr.js" data-license="Product-Keys"></script>
     <script>       
         let recognizer = null;
@@ -57,11 +57,8 @@
                     console.log(await recognizer.outputRuntimeSettingsToString());
 
                     let cameraEnhancer = await Dynamsoft.DCE.CameraEnhancer.createInstance();
-                    let cameras = await cameraEnhancer.getAllCameras();
-                    console.log(cameras);
-                    /*if (cameras.length) {
-                        await cameraEnhancer.selectCamera(cameras[1]);
-                    }*/
+                    /*let cameras = await cameraEnhancer.getAllCameras();
+                    console.log(cameras);*/
 
                     /*let region = {
                         regionLeft: 25,
