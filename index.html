@@ -93,6 +93,7 @@
             
 
                 //await recognizer.updateRuntimeSettingsFromString(selectTpl.value);
+                await recognizer.cameraEnhancer.open();
                 await recognizer.startScanning(true);
 
             }catch(ex) {
