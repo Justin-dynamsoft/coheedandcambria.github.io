@@ -4,11 +4,11 @@ let latestResult = null;
 
 btn.addEventListener('click', async function() {
   //setTitleContent('666');
-  Notification.requestPermission().then((result) => {
+  /*Notification.requestPermission().then((result) => {
     if (result === 'granted') {
         startNotificationLoop();
     }
-  });
+  });*/
   try {
       Dynamsoft.DBR.BarcodeScanner.license = "t0068MgAAAJr6FVw3baM97AhZuRLqhIL/aolgMrOAmsvBswNvQsJkSpR7iuf3cVaCZi1dXUd46krxcp5a7/jh+P2rswVJLZM=";
       const scanner = await (pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance());
@@ -29,7 +29,7 @@ btn.addEventListener('click', async function() {
   }
 });
 
-function startNotificationLoop() {
+/*function startNotificationLoop() {
   if (latestResult != null) {
       const title = "New Barcode Found!";
       const notifBody = `Barcode Text: ${latestResult}.`;
@@ -40,7 +40,7 @@ function startNotificationLoop() {
       latestResult = null;
   }
   setTimeout(startNotificationLoop, 100);
-}
+}*/
 
 
 /*function setTitleContent(value) {
