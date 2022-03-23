@@ -1,139 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Quickly recognize labels with Dynamsoft Label Recognizer from a live camera stream.">
-    <meta name="keywords" content="camera based label recognizing">
-    <title>use-templates</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="keywords" content="read barcode from camera in PWA">
+    <link rel="manifest" href="./helloworld-pwa.json">
+    <link rel="stylesheet" href="./helloworld-pwa-v5.css">
+    <script src="https://cdn.jsdelivr.net/npm/eruda@2.4.1/eruda.min.js"></script>
+    <title>PWA Test</title>
 </head>
 
 <body>
-    <h1 style="font-size: 1.5em;">Recognize Label from a Camera</h1>
-    <select id="select-tpl">
-        <option value="video-passportMRZ">passportMRZ</option>
-        <option value="video-visaMRZ_A">visaMRZ_A</option>
-        <option value="video-VIN_NA">VIN_NA</option>
-        <option value="video-VIN">VIN</option>
-        <option value="video-numberLetter">numberLetter</option>
-        <option value="video-number">number</option>
-        <option value="video-numberUpperCase">numberUpperCase</option>
-        <option value="video-letter">letter</option>
-    </select>
-    <button id="btn-open-recognizer">Open Label Recognizer</button>
-    <button id="choosePictureBtn">Choose Picture from Disk</button>
-    <div id="div-video-container" style="margin-top: 50px; height: 700px;"></div>
-    <img></img>
-    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@2.0.3/dist/dce.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.2/dist/dlr.js" data-license="Product-Keys"></script>
-    <script>       
-        let recognizer = null;
-        let promiseDlrReady;
-        
-        Dynamsoft.DLR.LabelRecognizer.initLicense("DLS2eyJvcmdhbml6YXRpb25JRCI6IjMxNDU0MCJ9");
-
-        document.getElementById('select-tpl').addEventListener('change', async function() {
-            // Loading settings is expensive, so we check `isOpen` to lazy load settings.
-            // Change to `if(recognizer)` if you want to load settings immediately.
-            if(recognizer && recognizer.cameraEnhancer && recognizer.cameraEnhancer.isOpen()) {
-                await recognizer.updateRuntimeSettingsFromString(this.value);
-            }
-        });
-
-        document.getElementById('btn-open-recognizer').addEventListener('click', async ()=>{
-            try{
-                const selectTpl = document.getElementById('select-tpl');
-
-                // create an instance only once
-                await (promiseDlrReady = promiseDlrReady || (async() => {
-                            
-                    recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance({
-                        runtimeSettings: selectTpl.value
-                    });
-                    //recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance();
-
-                    console.log(await recognizer.outputRuntimeSettingsToString());
-
-                    let cameraEnhancer = await Dynamsoft.DCE.CameraEnhancer.createInstance();
-                    /*let cameras = await cameraEnhancer.getAllCameras();
-                    console.log(cameras);*/
-
-                    /*let region = {
-                        regionLeft: 25,
-                        regionTop: 25, 
-                        regionRight: 75, 
-                        regionBottom: 75, 
-                        regionMeasuredByPercentage: true
-                    };
-                    cameraEnhancer.setScanRegion(region);*/
-
-                    await cameraEnhancer.setUIElement(Dynamsoft.DLR.LabelRecognizer.defaultUIElementURL);
-                    document.getElementById('div-video-container').append(cameraEnhancer.getUIElement());
-                    recognizer.cameraEnhancer = cameraEnhancer;
-                    
-                    /*recognizer.onFrameRead = async results => {
-                        for (let result of results) {
-                            for (let lineResult of result.lineResults) {
-                                console.log(lineResult.text);
-                            }
-                        }
-                    };*/
-                        
-                    recognizer.onUniqueRead = (txt) => {
-                        alert(txt);
-                        console.log("Unique Code Found: " + txt);
-                    }
-
-                })());
-            
-
-                //await recognizer.updateRuntimeSettingsFromString(selectTpl.value);
-                await recognizer.cameraEnhancer.open();
-                await recognizer.startScanning(true);
-
-            }catch(ex) {
-                alert(ex.message);
-                throw ex;
-            }
-        })
-
-        document.getElementById("choosePictureBtn").addEventListener('click', async (evt)=>{
-            try{
-                const selectTpl = document.getElementById('select-tpl');
-                // create an instance only once
-                await (promiseDlrReady = promiseDlrReady || (async() => {
-                            
-                    recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance({
-                        runtimeSettings: selectTpl.value
-                    });
-
-                    /*let tgt = evt.target || window.event.srcElement;
-                    let files = tgt.files;
-                    if (FileReader && files && files.length) {
-                        var fr = new FileReader();
-                        fr.onload = function () {
-                            document.getElementById(outImage).src = fr.result;
-                        }
-                        fr.readAsDataURL(files[0]);
-                    } else {
-                        return;
-                    }*/
-                    let testImage = new Image();
-                    testImage.src = "/Users/amroibrahim/Documents/work/barcode_samples/pccomponents-min.jpeg";
-                    let results1 = recognizer.recognize(testImage);
-                    console.log(results1);
-
-                })());
-                await recognizer.updateRuntimeSettingsFromString(selectTpl.value);
-            }catch(ex) {
-                alert(ex.message);
-                throw ex;
-            }
-        })
-
+    <h1>123213</h1>
+    <button>PWA Button</button>
+    <h2>please click button</h2>
+    <script>
+    eruda.init();
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register("service-worker-v2.js").then(function (registration) {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          }, function (err) {
+            console.log('ServiceWorker registration failed: ', err);
+          }).catch(function (err) {
+              console.log(err);
+          });
+        } else {
+          console.log('service worker is not supported');
+        }
     </script>
+    <script src="./helloworld-pwa-v1.js"></script>
 </body>
 
 </html>
