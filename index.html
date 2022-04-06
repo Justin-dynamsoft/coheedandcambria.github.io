@@ -279,8 +279,22 @@
                 scanner.onUniqueRead = (txt, result) => { alert(txt); };
 
                 let settings = await scanner.getRuntimeSettings();
+                settings.barcodeFormatIds = Dynamsoft.DBR.EnumBarcodeFormat.BF_PDF417;
+                settings.expectedBarcodesCount = 999;
+
+                settings.furtherModes.imagePreprocessingModes[1] = Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_GRAY_EQUALIZE;
+                settings.furtherModes.imagePreprocessingModes[2] = Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_GRAY_SMOOTH;
+                settings.furtherModes.imagePreprocessingModes[3] = Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_SHARPEN_SMOOTH;
+
+                settings.furtherModes.deformationResistingModes[0] = Dynamsoft.DBR.EnumDeformationResistingMode.DRM_GENERAL;
+                settings.localizationModes[0] = Dynamsoft.DBR.EnumLocalizationMode.LM_CONNECTED_BLOCKS;
+                settings.localizationModes[1] = Dynamsoft.DBR.EnumLocalizationMode.LM_SCAN_DIRECTLY;
+                settings.localizationModes[2] = Dynamsoft.DBR.EnumLocalizationMode.LM_STATISTICS;
+                settings.localizationModes[3] = Dynamsoft.DBR.EnumLocalizationMode.LM_LINES;
+
+                await scanner.updateRuntimeSettings(settings);
                 console.log(settings);
-                
+
                 await scanner.show();
                 updateOptions();
             } catch (ex) {
