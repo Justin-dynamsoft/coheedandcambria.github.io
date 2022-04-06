@@ -277,6 +277,10 @@
                 let scanner = await (pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance());
                 await scanner.setUIElement(document.getElementById('div-ui-container'));
                 scanner.onUniqueRead = (txt, result) => { alert(txt); };
+
+                let settings = await scanner.getRuntimeSettings();
+                console.log(settings);
+                
                 await scanner.show();
                 updateOptions();
             } catch (ex) {
