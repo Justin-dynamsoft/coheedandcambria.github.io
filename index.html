@@ -4,44 +4,71 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Read the PDF417 barcode on Driver's Licenses instantly with this barcode reader.">
-    <meta name="keywords" content="read driver's license barcode">
-    <title>Dynamsoft Barcode Reader Simple Sample - Read Video - No Extra Control</title>
+    <meta name="description" content="Read barcodes from camera and with rich UI control. You can change settings such as Toggle Search Area, Laser, and Sound.">
+    <meta name="keywords" content="read barcodes from camera, customzied ui">
+    <title>Dynamsoft Barcode Reader Simple Sample - Read Video - External Control</title>
 </head>
 
 <body>
-    <span id="hintMSG" class="hintMSG" hidden>Aim at the barcode on the driver's license</span>
-    <h1 id='header'>Read A Driver's License <a href="#" id='readAgain' hidden onclick="backToHome()">Retry</a></h1>
+    <h1>Customized UI</h1>
+    <button id="btn-show-scanner">Start Barcode Scanner</button>
+    <button id="btn-hide-scanner" hidden>Hide Barcode Scanner</button>
+    <div id="externalControls" class="externalControls">
+        <div class="selector_container">
+            <div class="selector">
+                <div id="cam_selector_switch" class="selector_switch">
+                    <input id="selector_input_camera" class="selector_input" type="text" readonly autocomplete="off" placeholder="Select">
+                    <svg id="arrow_camera" class="arrow" viewBox="0 0 1024 1024" p-id="3019" width="13" height="13">
+                        <path d="M517.688889 796.444444c-45.511111 0-85.333333-17.066667-119.466667-51.2L73.955556 381.155556c-22.755556-22.755556-17.066667-56.888889 5.688888-79.644445 22.755556-22.755556 56.888889-17.066667 79.644445 5.688889l329.955555 364.088889c5.688889 5.688889 17.066667 11.377778 28.444445 11.377778s22.755556-5.688889 34.133333-17.066667l312.888889-364.088889c22.755556-22.755556 56.888889-28.444444 79.644445-5.688889 22.755556 22.755556 28.444444 56.888889 5.688888 79.644445L637.155556 739.555556c-28.444444 39.822222-68.266667 56.888889-119.466667 56.888888 5.688889 0 0 0 0 0z" p-id="3020" fill="#cccccc"></path>
+                    </svg>
+                </div>
+                <div id="options_camera" class="options unshow noheight">
+                    <ul id="ul_options_camera">
+                    </ul>
+                </div>
+            </div>
+            <div class="selector">
+                <div id="res_selector_switch" class="selector_switch">
+                    <input id="selector_input_resolution" class="selector_input" type="text" readonly autocomplete="off" placeholder="Select">
+                    <svg id="arrow_resolution" class="arrow" viewBox="0 0 1024 1024" p-id="3019" width="13" height="13">
+                        <path d="M517.688889 796.444444c-45.511111 0-85.333333-17.066667-119.466667-51.2L73.955556 381.155556c-22.755556-22.755556-17.066667-56.888889 5.688888-79.644445 22.755556-22.755556 56.888889-17.066667 79.644445 5.688889l329.955555 364.088889c5.688889 5.688889 17.066667 11.377778 28.444445 11.377778s22.755556-5.688889 34.133333-17.066667l312.888889-364.088889c22.755556-22.755556 56.888889-28.444444 79.644445-5.688889 22.755556 22.755556 28.444444 56.888889 5.688888 79.644445L637.155556 739.555556c-28.444444 39.822222-68.266667 56.888889-119.466667 56.888888 5.688889 0 0 0 0 0z" p-id="3020" fill="#cccccc"></path>
+                    </svg>
+                </div>
+                <div id="options_resolution" class="options unshow noheight">
+                    <ul id="ul_options_resolution">
+                        <li id="gotResolution"><span></span></li>
+                        <li><span id="1920x1080">ask 1920 x 1080</span></li>
+                        <li><span id="1280x720">ask 1280 x 720</span></li>
+                        <li><span id="720x576">ask 720 x 576</span></li>
+                        <li><span id="640x480">ask 640 x 480</span></li>
+                        <li><span id="480x360">ask 480 x 360</span></li>
+                        <li><span id="320x240">ask 320 x 240</span></li>
+                        <li><span id="176x144">ask 176 x 144</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="toggleScanRect">Toggle Search Area</button>
+    <div>
+        <label class="switch">
+            <input id="toggleScanLight" type="checkbox" checked>
+            <span class="slider round"></span>
+        </label> Toggle Laser
+        <label class="switch">
+            <input id="toggleSound" type="checkbox">
+            <span class="slider round"></span>
+        </label> Toggle Sound
+    </div>
+    
     <div id="UIElement" class="UIElement">
-        <img id="btn-show-scanner" alt="show-scanner" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAFb0lEQVR4Xu2ad8j1YxjHP6+ZlZEZRVayV9krsmXzh6wSUWSGhIxCiCgh2d7skS0ysv6wV8mIJDMjK1uf97kP5/05v+dc9/37/Z6n933OVeevc83vue/rvu7vfaYxxWXaFK+fEQCjFTDFEZjoLbAGsBawTN/Hn+Czvs+bwNsT9bt0DcBcwHbAbsAuwPLBwj4GHgTuBx4H/gjaZat1BcAcwAHAmcBK2VnNbPA+cBYwHfiroa//mXcBwK7ABcDqLSf7DnAy8ECbftsEwOVu4ce3meAAXxcDp7S1LdoCYGngNmDLjovvuX8G2A/4omm8NgCw+BeAFZomk2n/EbAJ8Hmm3UzqTQFYEHgaWL9JEg1sXwG2An4s9dEEAPe8DWmH0uAt2T2Sjtmio7IJAKcDZ7dURFM3ZwDnlDgpBcD97rE0X0nQDmx+SceufSFLSgG4F9g9K9KY8g/ALWnKe7Wviy8FrJemRQeohQp8m9OeuXYlAGwNPJkZ6E/girRMvxpiuwTg9joKmDMzjrnZlMNSAsDNacyNBvkO2B94LGqQ9GyutwKLZNiZ24EZ+tmEiEvTc3f+YJCfgM2B14L6VbV1gWeBBYL2PwNup/CxmLsCDgWuDSajmtPaHRn6g1T3BW7P8GGO10f1cwG4O6PRPArsWJPIYsAhfQOUA41Jf1Ojr6/tg0XdA+wV1M3eAu8CqwadbwBYWFV2Bq5JhEj/d5IihwEPDbBx0nw5GNccVwvqZgEwD+Aei3TmN4B1BiSxIfDiOD48LTaqKfZ1YO1AYU6E9qjfA7pZAEhnvRVxClwKHFfRlSQRGP2MJ9JhFlolPy4Bjg3GN4aD2lDJ6QESHVJUETkCuLqi6JZ4KWIMuFKqS/5w4KqgvRRciDjJAWCfjI7uuV/t3HsDdwYLMNZdFV1PFDmHiHhyhGLlALAHYIeNyMHAjRXFbRPBGbGXSH2iongQcEPEOJ1UjsZDJQeAnBFYMrR6U5Q7cIgaNtQ4PEmyVIcZb3ySoxHZBngqopgDwIrABxGnQN0McGS6E4znRp0rByh4749yDzLRH0ZyzQFAf3JwSwYc/wYsC3xd0TWexdnQBolNTgD+rny5OPAp4FE8TL5M4/AwvRnf5wJgD7AXROQi4KQaRU+U0yqT4LnpmjzIRF8nRIKmPtXZJHgicGEwkV/TmR/dNnVuXc7OBvMG45qj1HlIcleAA4oTWVR859s053ZWcezt83lgzWjANIE6cIUkFwCdyslvEfI+pmQ3dgaou+jUufLC5Czg6RMVc5MlDksJANJO3gpzxPc9b3/PBY02S7fDlYP6PTVzC53/PYMSAJzp3wM8FnPlPuCytIqqNLY0uy9LxxTyjR57q+Q+oJYAYNElq6AfLIcc+0PvaUsWx/8NOCyVSvavb6BSALR11M3i30orC9iZi+N3tjQBYOF0PV4uO2q7Bp+k1fN9idsmABjPI86xt8nSLcm7Z+NWkirzcbZImgJgUFnfhycBBIvfKbHGRcU37QH9QScahFaKbxMAfUlD3ZSeuIp/kYChT2o231b+SdbGFujPee70xyj/whIhTwP1/qsiYXp+4gRChGfEedsA9GLK/52abo5NgbBwp7vzMqjxSO0zdLoCoJeAz+hHA77WLBrOakzxW+A64HIg+9k7GqtrAHp5OD7bI/xPj0enrK2XnX7xsiTr7O3Pj7R26/8LrAIzUQBU48rYekPsF29+ssETKiMAJhTu/4KNVsBoC8zmPUAG145fJxsn2rz/e2lvX47rxAtPmOyMbu2umuCgPR7NqU6vk1NiBEDTn6XGfrQCBnT5pljPUltgWBMsAWOWaoIlBU6KTVdNcFKKKQk6AqAEtdnJZsqvgH8Apk7nQRizxhgAAAAASUVORK5CYII="/>
-        <!-- <img id="btn-open-image" alt="open-image" hidden src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAADU0lEQVR4Xu2bSchOURjHfx8bw8IQygZZkUQkFBYkhVggKxk3LMxLkZKyMEUW5iFK2JCFDCXKFBFiZ1grdoYy9Nd96/Z2733P+d57zj33e89ZvX33OcP/d54zPM93bxcdXro6XD8RQPQAewJ9gE3ATEC/XZSfwCXgoovG023aLoERwC1gjOuBJe1vB/a77MsWwF1gtssBZbTtFIINgEnAc8/iG905g2ADYAlw1QOAR8D0jH62AQfK7t8GwFLgStkDyGhvLrAA2OwDQqgA7gAHfUAIGYAcIA/C1uRZ2w4ZOgDnEOoAwCmEugBwBqFOAIogbAEOdWdDqBuA0iHUEUCpEOoKoDQIIQJYDFw3XM9Z94S/wHjgrUkbIQK4DSwEfpkIyLks6dp+zaR+2QCeAReAL0nOYAMwxGQgTTYfgBcW9eYDfVP2y0wDtzIB7AL2AH9SAxmWBFCzLMSUYeodwA1gUc7IhyfrcVAZygzb8A5A8fvjgsEpjtdlxVfxDmBosu7zBK4HjvlSD3gHoGPnTYHA3cDOngzgCLAxR2A/4DUwuicD0M6vTfBmk8jewHFgjUfx6sr7ElCnuoGdAM6l7gE7gCmexVcGoAKduV1W4gERQEAEogdUEQsE5ADVnAIRQEAE4h4Qyh7wCdA7Be+AUcAMYEILT3kFPAQ+AmOBOcBIS++q3AN0K1S+TjfB76nBKwGjLNE+oH+GKP33eXlyq2w8VqZHiRaF06YJnEoBKC5YB5wpmDV5wn2gV4aNgioFV81F8cRJQwiVAZD4tcBZA5ddkcQNWbOaB2F1AiELXLrLSgBIvGZJwZBpEQTN9oCMCtOAJxl/XwWcyvGehrl3ABKv2Tlvqjxlp03xHjC4qW7RKzErgdMFELwD0MwXrflWXCYmp0UawlTgaUFFAReErOIdgDK+31qpbPF8HLA38YSjwOUW9gOBrz0JgC2/CCB6QFwCcQ8IZhN8Cfy23cXatFfKXcdnEMdgm1pKr+79HlC6gjYbjABcJER8vS7f5uT/r+7kFZkqP5iwhTLZ9BUb0wxLYwBVfDJjK16RpdJoRsUWgO+PpoxEpIzeA/OAz6YVbQGoXR+fzZmOv2H3A3gAHAb027h0B4Bx43UwjADqMEsux9jxHvAPwx/cQdZmcYgAAAAASUVORK5CYII="/> -->
-        <div id="div-ui-container" class="div-ui-container" hidden>
-	        <div class="dce-video-container"></div>
-        </div>
-    </div>
-    <div class="dialog" id="dialog" hidden>
-        <div class="message_box">
-            <div class="message_box_header">
-                <div class="message_box_title">
-                    <span id="msg_tittle"></span>
-                </div>
-            </div>
-            <div class="message_box_content">
-                <div class="message_box_container">
-                    <div class="message_box_message"><p id="msg_content"></p></div>
-                </div>
-            </div>
-            <div class="message_box_btns">
-                <button type="button" class="message_box_btn message_box_btn--default message_box_btn--small">
-                    <span id="cancel_btn">Cancel</span>
-                </button>
-                <button type="button" class="message_box_btn message_box_btn--default message_box_btn--small message_box_btn_color ">
-                    <span id="confirm_btn">Confirm</span>
-                </button>
+        <div id="div-ui-container" class="div-ui-container">
+            <div class="dce-video-container"></div>
+            <div class="dce-scanarea">
+                <div class="dce-scanlight" hidden></div>
             </div>
         </div>
     </div>
-    <div id="divNoteMessage" class="divNoteMessage" hidden></div>
     <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.0.0/dist/dbr.js"></script>
     <script>
         /** LICENSE ALERT - README 
@@ -57,376 +84,230 @@
          * LICENSE ALERT - THE END 
          */
 
-        const showScannerBtn = document.getElementById('btn-show-scanner');
-        const openImageBtn = document.getElementById('btn-open-image');
-        const UIElement = document.getElementById('UIElement');
+        // define html elements needed
+        const camOptions = document.getElementById("options_camera");
+        const camArrow = document.getElementById("arrow_camera");
+        const camSelectorInput = document.getElementById("selector_input_camera");
+        const cameraUL = document.getElementById("ul_options_camera");
+        const resOptions = document.getElementById("options_resolution");
+        const resArrow = document.getElementById("arrow_resolution");
+        const resSelectorInput = document.getElementById("selector_input_resolution");
+        const gotResolution = document.querySelector("#gotResolution span");
+        const scanlight = document.querySelector('.dce-scanlight');
+        // define some required variables
+        let camOptionsViewable = false;
+        let resOptionsViewable = false;
+        let camAnimateTimer = null;
+        let cresAnimateTimer = null;
+        let cameras = {};
+        let currentCamera = null;
+        let currentResolution = null;
         // scanner for decoding video
         let pScanner = null;
+        let scanRegions = [[5, 5, 95, 95], [25, 25, 75, 75], [10, 33, 90, 66], [33, 10, 66, 90], [0, 0, 100, 100]], regionIndex = 0;
         (async () => {
             //Load the library on page load to speed things up.
             try {
-                await Dynamsoft.DBR.BarcodeScanner.loadWasm();
+                await Dynamsoft.DBR.BarcodeReader.loadWasm();
             } catch (ex) {
                 alert(ex.message);
                 throw ex;
             }
         })();
-        // decode video from camera
-        showScannerBtn.addEventListener('click', () => {
-            showScannerBtn.hidden = true;
-            startScanning(false);
-        });
-        function backToHome() {
-            showScannerBtn.hidden = false;
-            document.getElementById('hintMSG').hidden = true;
-            document.getElementById('header').hidden = false;
-            document.getElementById('readAgain').hidden = true;
-            document.getElementById('divNoteMessage').hidden = true;
-            document.getElementById('div-ui-container').hidden = true;
-            UIElement.classList.remove("show");
-            UIElement.style.display = "flex";
-            document.getElementById('divNoteMessage').innerHTML = "";
+        function toggleBtnView(boolean) {
+            document.getElementById('btn-hide-scanner').hidden = boolean;
+            document.getElementById('btn-show-scanner').hidden = !boolean;
         }
-        async function startScanning(bSingleFrameMode) {
-            let timer = null;
+        function setScanLightView(boolean) {
+            if (scanlight) {
+                scanlight.hidden = !boolean;
+            }
+        }
+        // when the selector is clicked
+        function toggleCamView(e) {
+            // expanding and collapsing control options by changing the classList
+            clearTimeout(camAnimateTimer);
+            camOptions.classList.toggle("noheight");
+            camArrow.classList.toggle("trans");
+            if (!camOptionsViewable) {
+                camOptions.classList.replace("unshow", "show");
+                document.addEventListener("click", clickToHidden);
+            }
+            else {
+                // remove styles such as shadows after the transition ends
+                camAnimateTimer = setTimeout(() => {
+                    camOptions.classList.replace("show", "unshow");
+                }, 200);
+            }
+            camOptionsViewable = !camOptionsViewable
+        }
+        function toggleResView(e) {
+            clearTimeout(cresAnimateTimer);
+            resOptions.classList.toggle("noheight");
+            resArrow.classList.toggle("trans")
+            if (!resOptionsViewable) {
+                resOptions.classList.replace("unshow", "show");
+                document.addEventListener("click", clickToHidden);
+            }
+            else {
+                cresAnimateTimer = setTimeout(() => {
+                    resOptions.classList.replace("show", "unshow");
+                }, 200);
+            }
+            resOptionsViewable = !resOptionsViewable
+        }
+        // when option is selected
+        async function camOptionSelected(e) {
+            if (currentCamera.deviceId === e.target.id) {
+                return;
+            }
+            setScanLightView(false);
+            camSelectorInput.value = e.target.innerText;
+            let scanner = await pScanner;
+            cameras.forEach(async item => {
+                if (item.deviceId === e.target.id) {
+                    try {
+                        let resolution = await scanner.setCurrentCamera(item);
+                        currentResolution = [resolution.width, resolution.height];
+                    } catch (ex) {
+                        alert('Play video failed: ' + (ex.message || ex));
+                    }
+                    updateOptions();
+                }
+            });
+        }
+        async function resOptionSelected(e) {
+            const data = e.target.id.split("x");
+            if (currentResolution[0] == data[0] && currentResolution[1] == data[1]) {
+                return;
+            }
+            setScanLightView(false);
+            resSelectorInput.value = e.target.innerText;
+            let targetResolution = [parseInt(data[0]), parseInt(data[1])];
+            let scanner = await pScanner
+            currentResolution = await scanner.setResolution(targetResolution);
+            currentResolution = [currentResolution.width, currentResolution.height];
+            updateCurrentResolution();
+        }
+        // update and re-render options
+        async function updateOptions() {
+            let scanner = await pScanner;
+            cameras = await scanner.getAllCameras();
+            cameraUL.innerHTML = "";
+            cameras.forEach(item => {
+                let li = document.createElement("li");
+                let span = document.createElement("span");
+                span.setAttribute("id", item.deviceId);
+                span.innerText = item.label;
+                li.appendChild(span);
+                cameraUL.appendChild(li);
+            });
+            currentCamera = await scanner.getCurrentCamera();
+            const camOption = document.querySelectorAll("#ul_options_camera span");
+            camOption.forEach(item => {
+                item.addEventListener("click", camOptionSelected);
+                if (item.id === currentCamera.deviceId) {
+                    camSelectorInput.value = item.innerText;
+                    item.classList.add("selected");
+                }
+                else {
+                    item.classList.remove("selected");
+                }
+            })
+            const resOption = document.querySelectorAll("#ul_options_resolution span");
+            for (let i = 0; i < resOption.length; i++) {
+                resOption[i].addEventListener("click", resOptionSelected);
+            };
+            currentResolution = await scanner.getResolution();
+            updateCurrentResolution();
+        }
+        function updateCurrentResolution(res) {
+            gotResolution.innerText = 'got ' + currentResolution[0] + ' x ' + currentResolution[1];
+            gotResolution.id = currentResolution[0] + 'x' + currentResolution[1];
+            gotResolution.classList.add("selected");
+            resSelectorInput.value = gotResolution.innerText;
+            let checked = document.getElementById("toggleScanLight").checked;
+            setScanLightView(checked);
+        }
+        function clickToHidden(e) {
+            if (camOptionsViewable && e.target.id != "selector_input_camera" && e.target.id != "arrow_camera" && e.target.parentNode.id != "arrow_camera") {
+                toggleCamView();
+            }
+            if (resOptionsViewable && e.target.id != "selector_input_resolution" && e.target.id != "arrow_resolution" && e.target.parentNode.id != "arrow_resolution") {
+                toggleResView();
+            }
+            if (!camOptionsViewable && !resOptionsViewable) {
+                // trigger only once
+                document.removeEventListener("click", arguments.callee)
+            }
+        }
+        // add the corresponding event to the controllers
+        document.getElementById('toggleSound').addEventListener("click", async () => {
+            if (pScanner) {
+                (await pScanner).bPlaySoundOnSuccessfulRead = this.checked;
+            }
+        });
+        document.getElementById('toggleScanLight').addEventListener("click", () => {
+            let checked = document.getElementById("toggleScanLight").checked;
+            setScanLightView(checked);
+        });
+        document.getElementById('toggleScanRect').addEventListener("click", async () => {
+            if (pScanner) {
+                let scanner = await pScanner;
+                let region = scanRegions[regionIndex];
+                regionIndex++;
+                if (regionIndex === scanRegions.length) regionIndex = 0;
+                let settings = await scanner.getRuntimeSettings()
+                settings.region = {
+                    regionLeft: region[0],
+                    regionTop: region[1],
+                    regionRight: region[2],
+                    regionBottom: region[3],
+                    regionMeasuredByPercentage: 1
+                };
+                await scanner.updateRuntimeSettings(settings);
+            }
+        });
+        document.getElementById("cam_selector_switch").addEventListener("click", toggleCamView);
+        document.getElementById("res_selector_switch").addEventListener("click", toggleResView);
+        document.getElementById('btn-show-scanner').addEventListener('click', async () => {
+            toggleBtnView(false);
+            // decode video from camera
             try {
                 let scanner = await (pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance());
-                if (scanner.singleFrameMode !== bSingleFrameMode) {
-                    scanner.hide();
-                    scanner.singleFrameMode = bSingleFrameMode;
-                }
                 await scanner.setUIElement(document.getElementById('div-ui-container'));
-                if (!bSingleFrameMode) {
-                    let settings = await scanner.getRuntimeSettings();
-                    settings.barcodeFormatIds = Dynamsoft.DBR.EnumBarcodeFormat.BF_PDF417;
-                    settings.localizationModes = [16, 8, 2, 0, 0, 0, 0, 0];
-                    settings.deblurLevel = 9;
-                    await scanner.updateRuntimeSettings(settings);
-                    document.getElementById('header').hidden = true;
-                    UIElement.classList.add("show");
-                }
-                scanner.onUniqueRead = (txt, result) => {
-                    document.getElementById("dialog").hidden = true;
-                    clearTimeout(timer);
-                    extractInformation(txt);
-                };
+                scanner.onUniqueRead = (txt, result) => { alert(txt); };
+
+                let settings = await scanner.getRuntimeSettings();
+                settings.barcodeFormatIds = Dynamsoft.DBR.EnumBarcodeFormat.BF_PDF417;
+                settings.expectedBarcodesCount = 999;
+                settings.deblurLevel = 9;
+
+                settings.furtherModes.imagePreprocessingModes[1] = Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_GRAY_EQUALIZE;
+                settings.furtherModes.imagePreprocessingModes[2] = Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_GRAY_SMOOTH;
+                settings.furtherModes.imagePreprocessingModes[3] = Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_SHARPEN_SMOOTH;
+
+                settings.furtherModes.deformationResistingModes[0] = Dynamsoft.DBR.EnumDeformationResistingMode.DRM_GENERAL;
+                settings.localizationModes[0] = Dynamsoft.DBR.EnumLocalizationMode.LM_CONNECTED_BLOCKS;
+                settings.localizationModes[1] = Dynamsoft.DBR.EnumLocalizationMode.LM_SCAN_DIRECTLY;
+                settings.localizationModes[2] = Dynamsoft.DBR.EnumLocalizationMode.LM_STATISTICS;
+                settings.localizationModes[3] = Dynamsoft.DBR.EnumLocalizationMode.LM_LINES;
+
+                await scanner.updateRuntimeSettings(settings);
+                console.log(settings);
+
                 await scanner.show();
-                if (!bSingleFrameMode) {
-                    document.getElementById('hintMSG').hidden = false;
-                    document.getElementById('div-ui-container').hidden = false;
-                    timer = setTimeout(() => {
-                        alertMsg("Tips:", "Can't scan results for a long time? Try to use the single frame mode to upload high-definition picture for recognition.");
-                    }, 10000);
-                }
+                updateOptions();
             } catch (ex) {
                 alert(ex.message);
                 throw ex;
             }
-        }
-        document.getElementById("confirm_btn").addEventListener("click", () => {
-            backToHome();
-            showScannerBtn.hidden = false;
-            startScanning(true);
-            document.getElementById("dialog").hidden = true;
         });
-        document.getElementById("cancel_btn").addEventListener("click", () => {
-            document.getElementById("dialog").hidden = true;
+        document.getElementById('btn-hide-scanner').addEventListener('click', async () => {
+            toggleBtnView(true);
+            let scanner = await pScanner;
+            scanner && scanner.hide();
         });
-        function getField(keyword, barcode_text) {
-            const k = barcode_text.search("\n" + keyword);
-            if (k == -1)
-                return false;
-            const m = barcode_text.indexOf("\n", k + 1);
-            const subtext = barcode_text.substring(k + 4, m);
-            return subtext;
-        }
-        function createNode(type, text) {
-            let node = document.createElement(type);
-            if (text)
-                node.innerText = text;
-            return node;
-        }
-        function alertMsg(title, content, confirmCB) {
-            document.getElementById("msg_tittle").innerText = title;
-            document.getElementById("msg_content").innerText = content;
-            document.getElementById("dialog").hidden = false;
-        }
-        async function extractInformation(text) {
-            let resultShowNode = document.createElement("p");
-            (await pScanner).hide();
-            document.getElementById('hintMSG').hidden = true;
-            document.getElementById('header').hidden = false;
-            document.getElementById('readAgain').hidden = false;
-            document.getElementById('divNoteMessage').hidden = false;
-            UIElement.style.display = "none";
-            for (let i = 0; i < driverLicenseFields.length; i++) {
-                const item = driverLicenseFields[i];
-                const fieldValue = getField(item.abbreviation, text);
-                if (fieldValue != false) {
-                    resultShowNode.appendChild(createNode("span", item.description));
-                    resultShowNode.appendChild(createNode("br"));
-                    resultShowNode.appendChild(createNode("strong", fieldValue));
-                    resultShowNode.appendChild(createNode("br"));
-                    resultShowNode.appendChild(createNode("span", "------------------------------"));
-                    resultShowNode.appendChild(createNode("br"));
-                }
-            }
-            document.getElementById('divNoteMessage').appendChild(resultShowNode);
-        }
-
-        var driverLicenseFields = [{
-            'abbreviation': 'DAA',
-            'description': 'Full Name'
-        }, {
-            'abbreviation': 'DAB',
-            'description': 'Last Name'
-        }, {
-            'abbreviation': 'DAC',
-            'description': 'First Name'
-        }, {
-            'abbreviation': 'DAD',
-            'description': 'Middle Name'
-        }, {
-            'abbreviation': 'DAE',
-            'description': 'Name Suffix'
-        }, {
-            'abbreviation': 'DAF',
-            'description': 'Name Prefix'
-        }, {
-            'abbreviation': 'DAG',
-            'description': 'Mailing Street Address1'
-        }, {
-            'abbreviation': 'DAH',
-            'description': 'Mailing Street Address2'
-        }, {
-            'abbreviation': 'DAI',
-            'description': 'Mailing City'
-        }, {
-            'abbreviation': 'DAJ',
-            'description': 'Mailing Jurisdiction Code'
-        }, {
-            'abbreviation': 'DAK',
-            'description': 'Mailing Postal Code'
-        }, {
-            'abbreviation': 'DAL',
-            'description': 'Residence Street Address1'
-        }, {
-            'abbreviation': 'DAM',
-            'description': 'Residence Street Address2'
-        }, {
-            'abbreviation': 'DAN',
-            'description': 'Residence City'
-        }, {
-            'abbreviation': 'DAO',
-            'description': 'Residence Jurisdiction Code'
-        }, {
-            'abbreviation': 'DAP',
-            'description': 'Residence Postal Code'
-        }, {
-            'abbreviation': 'DAQ',
-            'description': 'License or ID Number'
-        }, {
-            'abbreviation': 'DAR',
-            'description': 'License Classification Code'
-        }, {
-            'abbreviation': 'DAS',
-            'description': 'License Restriction Code'
-        }, {
-            'abbreviation': 'DAT',
-            'description': 'License Endorsements Code'
-        }, {
-            'abbreviation': 'DAU',
-            'description': 'Height in FT_IN'
-        }, {
-            'abbreviation': 'DAV',
-            'description': 'Height in CM'
-        }, {
-            'abbreviation': 'DAW',
-            'description': 'Weight in LBS'
-        }, {
-            'abbreviation': 'DAX',
-            'description': 'Weight in KG'
-        }, {
-            'abbreviation': 'DAY',
-            'description': 'Eye Color'
-        }, {
-            'abbreviation': 'DAZ',
-            'description': 'Hair Color'
-        }, {
-            'abbreviation': 'DBA',
-            'description': 'License Expiration Date'
-        }, {
-            'abbreviation': 'DBB',
-            'description': 'Date of Birth'
-        }, {
-            'abbreviation': 'DBC',
-            'description': 'Sex'
-        }, {
-            'abbreviation': 'DBD',
-            'description': 'License or ID Document Issue Date'
-        }, {
-            'abbreviation': 'DBE',
-            'description': 'Issue Timestamp'
-        }, {
-            'abbreviation': 'DBF',
-            'description': 'Number of Duplicates'
-        }, {
-            'abbreviation': 'DBG',
-            'description': 'Medical Indicator Codes'
-        }, {
-            'abbreviation': 'DBH',
-            'description': 'Organ Donor'
-        }, {
-            'abbreviation': 'DBI',
-            'description': 'Non-Resident Indicator'
-        }, {
-            'abbreviation': 'DBJ',
-            'description': 'Unique Customer Identifier'
-        }, {
-            'abbreviation': 'DBK',
-            'description': 'Social Security Number'
-        }, {
-            'abbreviation': 'DBL',
-            'description': 'Date Of Birth'
-        }, {
-            'abbreviation': 'DBM',
-            'description': 'Social Security Number'
-        }, {
-            'abbreviation': 'DBN',
-            'description': 'Full Name'
-        }, {
-            'abbreviation': 'DBO',
-            'description': 'Last Name'
-        }, {
-            'abbreviation': 'DBP',
-            'description': 'First Name'
-        }, {
-            'abbreviation': 'DBQ',
-            'description': 'Middle Name'
-        }, {
-            'abbreviation': 'DBR',
-            'description': 'Suffix'
-        }, {
-            'abbreviation': 'DBS',
-            'description': 'Prefix'
-        }, {
-            'abbreviation': 'DCA',
-            'description': 'Virginia Specific Class'
-        }, {
-            'abbreviation': 'DCB',
-            'description': 'Virginia Specific Restrictions'
-        }, {
-            'abbreviation': 'DCD',
-            'description': 'Virginia Specific Endorsements'
-        }, {
-            'abbreviation': 'DCE',
-            'description': 'Physical Description Weight Range'
-        }, {
-            'abbreviation': 'DCF',
-            'description': 'Document Discriminator'
-        }, {
-            'abbreviation': 'DCG',
-            'description': 'Country territory of issuance'
-        }, {
-            'abbreviation': 'DCH',
-            'description': 'Federal Commercial Vehicle Codes'
-        }, {
-            'abbreviation': 'DCI',
-            'description': 'Place of birth'
-        }, {
-            'abbreviation': 'DCJ',
-            'description': 'Audit information'
-        }, {
-            'abbreviation': 'DCK',
-            'description': 'Inventory Control Number'
-        }, {
-            'abbreviation': 'DCL',
-            'description': 'Race Ethnicity'
-        }, {
-            'abbreviation': 'DCM',
-            'description': 'Standard vehicle classification'
-        }, {
-            'abbreviation': 'DCN',
-            'description': 'Standard endorsement code'
-        }, {
-            'abbreviation': 'DCO',
-            'description': 'Standard restriction code'
-        }, {
-            'abbreviation': 'DCP',
-            'description': 'Jurisdiction specific vehicle classification description'
-        }, {
-            'abbreviation': 'DCQ',
-            'description': 'Jurisdiction-specific'
-        }, {
-            'abbreviation': 'DCR',
-            'description': 'Jurisdiction specific restriction code description'
-        }, {
-            'abbreviation': 'DCS',
-            'description': 'Last Name'
-        }, {
-            'abbreviation': 'DCT',
-            'description': 'First Name'
-        }, {
-            'abbreviation': 'DCU',
-            'description': 'Suffix'
-        }, {
-            'abbreviation': 'DDA',
-            'description': 'Compliance Type'
-        }, {
-            'abbreviation': 'DDB',
-            'description': 'Card Revision Date'
-        }, {
-            'abbreviation': 'DDC',
-            'description': 'HazMat Endorsement Expiry Date'
-        }, {
-            'abbreviation': 'DDD',
-            'description': 'Limited Duration Document Indicator'
-        }, {
-            'abbreviation': 'DDE',
-            'description': 'Family Name Truncation'
-        }, {
-            'abbreviation': 'DDF',
-            'description': 'First Names Truncation'
-        }, {
-            'abbreviation': 'DDG',
-            'description': 'Middle Names Truncation'
-        }, {
-            'abbreviation': 'DDH',
-            'description': 'Under 18 Until'
-        }, {
-            'abbreviation': 'DDI',
-            'description': 'Under 19 Until'
-        }, {
-            'abbreviation': 'DDJ',
-            'description': 'Under 21 Until'
-        }, {
-            'abbreviation': 'DDK',
-            'description': 'Organ Donor Indicator'
-        }, {
-            'abbreviation': 'DDL',
-            'description': 'Veteran Indicator'
-        }, {
-            'abbreviation': 'PAA',
-            'description': 'Permit Classification Code'
-        }, {
-            'abbreviation': 'PAB',
-            'description': 'Permit Expiration Date'
-        }, {
-            'abbreviation': 'PAC',
-            'description': 'Permit Identifier'
-        }, {
-            'abbreviation': 'PAD',
-            'description': 'Permit IssueDate'
-        }, {
-            'abbreviation': 'PAE',
-            'description': 'Permit Restriction Code'
-        }, {
-            'abbreviation': 'PAF',
-            'description': 'Permit Endorsement Code'
-        }, {
-            'abbreviation': 'ZVA',
-            'description': 'Court Restriction Code'
-        }];
     </script>
 </body>
 <style>
@@ -442,184 +323,250 @@
         justify-content: center;
         overflow: hidden;
         width: 100vw;
-        height: 100vh;
-        margin: 0;
-    }
-
-    .hintMSG {
-        position: absolute;
-        font-size: 1rem;
-        color: #5e35b1;
-        top: 1vh;
+        height: 90vh;
+        color: #455A64;
     }
 
     h1 {
         font-size: 1.5em;
     }
 
-    .UIElement {
+    button {
+        font-size: 0.8rem;
+        margin: 2vh;
+    }
+
+    .externalControls {
+        text-align: center;
+    }
+
+    .selector_container {
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        margin: calc(1vh + 25px) 0 0 0;
     }
 
-    .UIElement button {
-        width: 50%;
-        margin: 2vmin;
-        padding: 2vmin;
-        font-size: xx-large;
+    .selector {
+        margin: 10px;
     }
 
-    .UIElement img {
-        height: 15vmin;
-        float: left;
-        margin: 15vmin;
-        cursor: pointer;
-    }
-
-    .UIElement img:hover {
-        background-color: #fe8d14a1;
-    }
-
-    .show {
-        position: absolute;
-        height: 100vh;
-        width: 100vw;
-        top: 0;
-    }
-
-    .div-ui-container,
-    .dce-video-container {
-        position: relative;
-        width: 100%;
-        height: 100%;
-    }
-
-    .divNoteMessage {
-        font-size: small;
-        height: 80vh;
-        width: 90vw;
-        overflow-y: auto;
-        z-index: 10;
-        color: white;
-        background: rgba(34, 34, 34, .8);
-        margin-top: 30px;
-    }
-
-    .divNoteMessage p {
-        padding: 5px;
-        margin: 0;
-    }
-
-    strong {
-        color: rgb(254, 142, 20);
-    }
-
-    .dialog {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        text-align: center;
-        z-index: 9999;
-        background-color: rgba(0, 0, 0, 0.7);
-    }
-
-    .dialog:after {
-        content: "";
-        display: inline-block;
-        height: 100%;
-        width: 0;
-        vertical-align: middle;
-    }
-
-    /* MessageBox */
-    .message_box {
-        display: inline-block;
-        width: 500px;
-        padding-bottom: 10px;
-        vertical-align: middle;
-        background-color: #fff;
-        font-size: 18px;
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
-        text-align: left;
-        overflow: hidden;
-        backface-visibility: hidden;
-        font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
-        z-index: 10000;
-    }
-
+    /* Small devices */
     @media only screen and (max-width: 545px) {
-        .message_box {
-            width: 80vw;
+        .selector_container {
+            flex-direction: column;
         }
     }
 
-    .message_box_header {
+    .selector_switch {
         position: relative;
-        padding: 15px 15px 10px;
-        background-color: #000;
-    }
-
-    .message_box_title {
-        padding-left: 0;
-        margin-bottom: 0;
-        font-size: 18px;
-        line-height: 1;
-        color: #fff;
-    }
-
-    .message_box_content {
-        padding: 10px 15px;
-        color: #000;
-        font-size: 16px;
-    }
-
-    .message_box_btns {
-        padding: 5px 15px 0;
-        text-align: right;
-    }
-
-    .message_box_btn {
-        display: inline-block;
-        line-height: 1;
-        white-space: nowrap;
+        width: 250px;
+        height: 30px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        line-height: 30px;
         cursor: pointer;
-        background: #fff;
-        border: 1px solid #dcdfe6;
-        color: #606266;
-        -webkit-appearance: none;
-        text-align: center;
-        box-sizing: border-box;
-        outline: none;
+        transition: all 200ms;
+    }
+
+    .selector_switch:hover {
+        border: 1px solid #b4b4b4;
+    }
+
+    .selector_input {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 30px;
         margin: 0;
-        transition: .1s;
-        font-weight: 500;
+        padding: 0 30px 0 15px;
+        box-sizing: border-box;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        border-radius: 5px;
+        color: #606266;
+    }
+
+    .selector_switch svg {
+        height: 30px;
+        position: absolute;
+        right: 5px;
+    }
+
+    .arrow {
+        transform: rotate(0deg);
+        transition: all 200ms;
+    }
+
+    .trans {
+        transform: rotate(-180deg);
+    }
+
+    .options {
+        position: absolute;
+        width: 250px;
+        max-height: 0;
+        margin: 3px 0 10px 0;
+        transition: max-height 200ms;
+        overflow: hidden;
+        border-radius: 5px;
+        overflow: auto;
+        z-index: 2000;
+        background-color: #fff;
+    }
+
+    .show {
+        border: 1px solid #e4e7ed;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        max-height: 200px;
+    }
+
+    .unshow {
+        border: none;
+        box-shadow: none;
+    }
+
+    .noheight {
+        max-height: 0;
+    }
+
+    ul {
+        list-style: none;
+        margin: 5px auto;
+        padding: 0;
+    }
+
+    ul li {
+        height: 30px;
+        line-height: 30px;
+        text-align: left;
+        cursor: pointer;
+        color: #606266;
+        font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+        font-size: 14px;
+    }
+
+    ul li:hover {
+        background-color: #f5f7fa;
+    }
+
+    .selected {
+        color: #fe8e14;
+        font-weight: bold;
+    }
+
+    ul li span {
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 20px;
+        height: 30px;
+    }
+
+    /* The switch - the box around the slider */
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 30px;
+        height: 17px;
+        margin: 10px;
+    }
+
+    /* Hide default HTML checkbox */
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    /* The slider */
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 13px;
+        width: 13px;
+        left: 2px;
+        bottom: 2px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked+.slider {
+        background-color: #fe8e14;
+    }
+
+    input:focus+.slider {
+        box-shadow: 0 0 1px #fe8e14;
+    }
+
+    input:checked+.slider:before {
+        -webkit-transform: translateX(13px);
+        -ms-transform: translateX(13px);
+        transform: translateX(13px);
+    }
+
+    /* Rounded sliders */
+
+    .slider.round {
+        border-radius: 17px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+    .UIElement {
+        margin: 2vmin auto;
+        text-align: center;
+        font-size: medium;
+        width: 80vw;
+        height: 40vh;
+        max-width: 600px;
+    }
+
+    .div-ui-container {
+        width: 100%;
+        height: 100%;
+        min-width: 100px;
+        min-height: 100px;
+        position: relative;
+    }
+
+    .dce-video-container,
+    .dce-scanarea {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    .dce-scanlight {
+        width: 100%;
+        height: 3%;
+        position: absolute;
+        animation: 3s infinite dce-scanlight;
+        border-radius: 50%;
+        box-shadow: 0px 0px 2vw 1px #00e5ff;
+        background: #fff;
         user-select: none;
-        padding: 9px 15px;
-        font-size: 12px;
-        border-radius: 3px;
-    }
-
-    .message_box_btn:hover {
-        color: #ff9422;
-        border-color: #ffe4c7;
-        background-color: #ffe4c7;
-    }
-
-    .message_box_btn_color {
-        color: #fff;
-        background-color: #fe8d14;
-        border-color: #fe8d14;
-    }
-
-    .message_box_btn_color:hover {
-        background: #ffa13c;
-        border-color: #ffa13c;
-        color: #fff;
     }
 </style>
 
