@@ -288,10 +288,11 @@
                 settings.furtherModes.imagePreprocessingModes[3] = Dynamsoft.DBR.EnumImagePreprocessingMode.IPM_SHARPEN_SMOOTH;
 
                 settings.furtherModes.deformationResistingModes[0] = Dynamsoft.DBR.EnumDeformationResistingMode.DRM_GENERAL;
-                settings.localizationModes[0] = Dynamsoft.DBR.EnumLocalizationMode.LM_CONNECTED_BLOCKS;
+                /*settings.localizationModes[0] = Dynamsoft.DBR.EnumLocalizationMode.LM_CONNECTED_BLOCKS;
                 settings.localizationModes[1] = Dynamsoft.DBR.EnumLocalizationMode.LM_SCAN_DIRECTLY;
                 settings.localizationModes[2] = Dynamsoft.DBR.EnumLocalizationMode.LM_STATISTICS;
-                settings.localizationModes[3] = Dynamsoft.DBR.EnumLocalizationMode.LM_LINES;
+                settings.localizationModes[3] = Dynamsoft.DBR.EnumLocalizationMode.LM_LINES;*/
+                settings.localizationModes = [16, 8, 2, 0, 0, 0, 0, 0];
 
                 await scanner.updateRuntimeSettings(settings);
                 console.log(settings);
