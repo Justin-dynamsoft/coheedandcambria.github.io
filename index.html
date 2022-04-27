@@ -12,7 +12,7 @@
 <body>
     <h1 style="font-size: 1.5em;">Read Barcodes from a Camera</h1>
     <button id="btn-show-scanner">Show Barcode Scanner</button>
-    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.0.0/dist/dbr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.0.1/dist/dbr.js"></script>
     <script>
         /** LICENSE ALERT - README 
          * To use the library, you need to first specify a license key using the API "license" as shown below.
@@ -31,8 +31,9 @@
         document.getElementById('btn-show-scanner').onclick = async function() {
             try {
                 const scanner = await (pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance());
-                //scanner.regionMaskFillStyle = 'rgba(0, 255, 0, 0.5)';
-                Dynamsoft.DBR.BarcodeScanner.regionMaskFillStyle = 'rgba(255, 0, 0, 0.8)';
+                scanner.regionMaskFillStyle = 'rgba(0, 255, 0, 0.5)';
+                scanner.regionMaskLineWidth = 5;
+                //Dynamsoft.DBR.BarcodeScanner.regionMaskFillStyle = 'rgba(255, 0, 0, 0.6)';
 
                 let settings = await scanner.getRuntimeSettings();
                 /*
@@ -44,7 +45,7 @@
                 settings.region.regionRight = 75;
                 settings.region.regionBottom = 75;
                 await scanner.updateRuntimeSettings(settings);
-                
+
                 /* 
                  * onFrameRead is triggered after the library finishes reading a frame.
                  * There can be multiple barcodes on one frame.
