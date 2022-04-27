@@ -32,7 +32,19 @@
             try {
                 const scanner = await (pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance());
                 //scanner.regionMaskFillStyle = 'rgba(0, 255, 0, 0.5)';
-                Dynamsoft.DBR.BarcodeScanner.regionMaskFillStyle = 'rgba(0, 255, 0, 0.5)';
+                Dynamsoft.DBR.BarcodeScanner.regionMaskFillStyle = 'rgba(255, 0, 0, 0.8)';
+
+                let settings = await scanner.getRuntimeSettings();
+                /*
+                * The following code shrinks the decoding region by 25% on all sides
+                */
+                settings.region.regionMeasuredByPercentage = 1;
+                settings.region.regionLeft = 25;
+                settings.region.regionTop = 25;
+                settings.region.regionRight = 75;
+                settings.region.regionBottom = 75;
+                await scanner.updateRuntimeSettings(settings);
+                
                 /* 
                  * onFrameRead is triggered after the library finishes reading a frame.
                  * There can be multiple barcodes on one frame.
