@@ -30,10 +30,10 @@
         let pScanner = null;
         document.getElementById('btn-show-scanner').onclick = async function() {
             try {
+                Dynamsoft.DBR.BarcodeScanner.regionMaskStrokeStyle = 'rgb(125, 236, 20)';
                 const scanner = await (pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance());
                 //scanner.regionMaskStrokeStyle = 'rgb(125, 236, 20)';
                 
-                Dynamsoft.DBR.BarcodeScanner.regionMaskStrokeStyle = 'rgb(125, 236, 20)';
                 //scanner.regionMaskLineWidth = 5;
                 //Dynamsoft.DBR.BarcodeScanner.regionMaskFillStyle = 'rgba(255, 0, 0, 0.6)';
 
