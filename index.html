@@ -31,9 +31,9 @@
         document.getElementById('btn-show-scanner').onclick = async function() {
             try {
                 const scanner = await (pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance());
-                scanner.regionMaskStrokeStyle = 'rgb(254, 225, 20)';
+                scanner.regionMaskStrokeStyle = 'rgb(125, 236, 20)';
                 
-                //Dynamsoft.DBR.BarcodeReader.regionMaskFillStyle = 'rgba(0, 255, 0, 0.5)';
+                //Dynamsoft.DBR.BarcodeScanner.regionMaskStrokeStyle = 'rgb(125, 236, 20)';
                 //scanner.regionMaskLineWidth = 5;
                 //Dynamsoft.DBR.BarcodeScanner.regionMaskFillStyle = 'rgba(255, 0, 0, 0.6)';
 
