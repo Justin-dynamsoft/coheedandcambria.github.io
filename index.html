@@ -6,7 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/dynamsoft-code-parser@1.0.2/dist/dcp.js"></script>
   <script>
         // Specifies a license 
-        Dynamsoft.DBR.BarcodeReader.license = 'DLS2eyJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSJ9';
+        Dynamsoft.DBR.BarcodeReader.license = 'DLS2eyJoYW5kc2hha2VDb2RlIjoiMzE0NTQwLVRYbFhaV0pRY205cSIsIm9yZ2FuaXphdGlvbklEIjoiMzE0NTQwIn0=';
         Dynamsoft.DCP.CodeParser.license =
             't0068lQAAAIkK/J98hFlGuR23+WYADkNElcVBif3GpdrcU/KkcU4eEvYHEopVEHGmxqEF2L+XTTJ/DNFYnrKm5RQlvCXNAX8=';
         // Initializes and uses the SDK
@@ -19,7 +19,7 @@
 
                 // Decode the driver license with BarcodeReader
                 let results = await reader.decode(
-                    "https://demo.dynamsoft.com/samples/dbr/js/4.use-case/SampleDriversLicense.jpg");
+                    "../assets/SampleDriversLicense.jpeg");
 
                 let info = "";
                 for (let result of results) {
