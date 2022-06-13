@@ -19,11 +19,13 @@
 
                 // Decode the driver license with BarcodeReader
                 let results = await reader.decode(
-                    "../assets/dl3.jpg");
+                    "../assets/dlFL1.jpg");
+                
 
                 let info = "";
                 for (let result of results) {
                     // Parse the "code" retrieved from the barcode
+                    console.log(result);
                     info = await parser.parseData(result.barcodeBytes);
                     // Show the information
                     alert(JSON.stringify(info));
