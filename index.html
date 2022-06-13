@@ -17,6 +17,8 @@
 
                 parser.setCodeFormat(Dynamsoft.DCP.EnumCodeFormat.CF_AUTO);
 
+                await reader.updateRuntimeSettings('coverage');
+
                 // Decode the driver license with BarcodeReader
                 let results = await reader.decode(
                     "../assets/dlFL1.jpg");
