@@ -1,35 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <title>DBRJS - UI Customization</title>
-</head>
+<html>
 
 <body>
-    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.6.10/dist/dbr.js"></script>
-    <div id="UIElement">
-        <div id="div-ui-container" style="width:100%;height:100%;position:relative;">
-            <div class="dce-video-container" style="position:absolute;width:100%;height:100%;"></div>
-        </div>
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.0.0/dist/dbr.js"></script>
     <script>
-        let pScanner = null;
+        // Specifies a license, you can visit https://www.dynamsoft.com/customer/license/trialLicense?ver=9.6.11&utm_source=guide&product=dbr&package=js to get your own trial license good for 30 days. 
+        Dynamsoft.DBR.BarcodeScanner.license = 'DLS2eyJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSJ9';
+        // Initializes and uses the SDK
         (async () => {
-            let scanner = await (pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance());
-            await scanner.setUIElement(document.getElementById('div-ui-container'));
+            let scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
+            scanner.onFrameRead = results => {
+                if (results.length > 0) console.log(results);
+            };
+            scanner.onUniqueRead = (txt, result) => {
+                alert(txt);
+            };
             await scanner.show();
         })();
     </script>
-    <style>
-        #UIElement {
-            width: 80vw;
-            height: 60vh;
-            max-width: 600px;
-            margin: 2vmin auto;
-            text-align: center;
-            font-size: medium;
-        }
-    </style>
 </body>
 
 </html>
