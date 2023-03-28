@@ -2,63 +2,34 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Quickly read barcodes with Dynamsoft Barcode Reader from a live camera stream.">
-    <meta name="keywords" content="camera based barcode reading">
-    <title>Dynamsoft Barcode Reader Sample - Hello World (Decoding via Camera)</title>
+    <title>DBRJS - UI Customization</title>
 </head>
 
 <body>
-    <h1 style="font-size: 1.5em;">Read Barcodes from a Camera</h1>
-    <button id="btn-show-scanner">Show Barcode Scanner</button>
-    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@8.8.7/dist/dbr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.6.10/dist/dbr.js"></script>
+    <div id="UIElement">
+        <div id="div-ui-container" style="width:100%;height:100%;position:relative;">
+            <div class="dce-video-container" style="position:absolute;width:100%;height:100%;"></div>
+        </div>
+    </div>
     <script>
-        /** LICENSE ALERT - README
-         *
-         * The library requires a license to work.
-         * If the license is not specified, a free public trial license will be used by default which is the case in this sample.
-         * Note that network connection is required for the public license to work.
-         * For more info, please check https://www.dynamsoft.com/barcode-reader/programming/javascript/user-guide/?ver=8.8.7&utm_source=zip#specify-the-license or contact support@dynamsoft.com.
-         */
-
-        /* When using your own license, uncomment the following line and specify your license. */
-
-        // Dynamsoft.DBR.BarcodeReader.license = "YOUR-ORGANIZATION-ID or YOUR-HANDSHAKECODE or AN-OFFLINE-LICENSE or ANY-OTHER-TYPE-OF-SUPPORTED-LICENSE-STRING";
-        Dynamsoft.DBR.BarcodeReader.license = "t0068NQAAAIhepGVSEpNwN8N7D9FqwRDUG/Fpx+D90wZsD0UI2POJsKT8XPVy8zEs5PgKdrPyHH4TLGGczJBrXw8f/THWceM="; // 30-day-offline-license
-
-        /** LICENSE ALERT - THE END */
-
         let pScanner = null;
-        document.getElementById('btn-show-scanner').onclick = async function() {
-            try {
-                const scanner = await (pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance());
-                /* 
-                 * onFrameRead is triggered after the library finishes reading a frame.
-                 * There can be multiple barcodes on one frame.
-                 */
-                scanner.onFrameRead = results => {
-                    console.log("Barcodes on one frame:");
-                    for (let result of results) {
-                        console.log(result.barcodeFormatString + ": " + result.barcodeText);
-                    }
-                };
-                /*
-                 * onUnduplicatdRead is triggered only when a 'new' barcode is found.
-                 * The amount of time that the library 'remembers' a barcode is defined by 
-                 * "duplicateForgetTime" in "ScanSettings". By default it is set to 3000 ms.
-                 */
-                scanner.onUnduplicatedRead = (txt, result) => {
-                    alert(txt);
-                    console.log("Unique Code Found: ", result);
-                }
-                await scanner.show();
-            } catch (ex) {
-                alert(ex.message);
-                throw ex;
-            }
-        };
+        (async () => {
+            let scanner = await (pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance());
+            await scanner.setUIElement(document.getElementById('div-ui-container'));
+            await scanner.show();
+        })();
     </script>
+    <style>
+        #UIElement {
+            width: 80vw;
+            height: 60vh;
+            max-width: 600px;
+            margin: 2vmin auto;
+            text-align: center;
+            font-size: medium;
+        }
+    </style>
 </body>
 
 </html>
