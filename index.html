@@ -16,8 +16,8 @@
         <button id="normalizeWithConfirmedQuad">Normalize and Capture</button>
         <div id="div-ui-container" style="margin-top: 10px;height: 70vh;"></div>
         <div id="normalized-result"></div>
-    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@3.2.0/dist/dce.js"></script>
-    <script src="npm_scannerproxy_com_cdn_@scannerproxy_ddnjs@0_20230817135300_0_dist_ddn.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@3.2.0/dist/dce.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-document-normalizer@1.0.12-iv-202308241831/dist/ddn.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.6.20/dist/dbr.js"></script>
 
     <script>
@@ -44,12 +44,14 @@
             const scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
             scanner.maxCvsSideLength = 4096;
             normalizer.maxCvsSideLength = 4096;
-            await scanner.setResolution(1080, 1920);
+            await scanner.setResolution(4032, 3024);
             onProcess =false;
-            
+
             scanner.onFrameRead = async results => {
                 console.log("Barcodes on one frame:");
-
+                if(onProcess==false & results.length > 0){
+                    onProcess=true
+                    console.log(onProcess)
                 for (let res of results) {
                             console.log("Unique Code Found: ", res);
                             image = scanner.getOriginalImageInACanvas();
@@ -73,7 +75,9 @@
 
                             
                     }
-
+                    onProcess=false
+                    console.log(onProcess)
+                }
             };
 
                 /**
@@ -82,7 +86,7 @@
                  */
                 scanner.ifSaveOriginalImageInACanvas = true;
                 await scanner.show();
-                await scanner.setFrameRate(5);
+
                 rate =await scanner.getFrameRate();
                 console.log(rate)
         })();
