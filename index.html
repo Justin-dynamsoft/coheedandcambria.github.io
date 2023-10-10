@@ -140,7 +140,8 @@
           Dynamsoft.Core.EnumCapturedResultItemType.CRIT_DETECTED_QUAD |
           Dynamsoft.Core.EnumCapturedResultItemType.CRIT_ORIGINAL_IMAGE;
         await router.updateSettings("detect-document-boundaries", newSettings);
-
+            
+        cameraViewContainer.setAttribute("style", "position:absolute;width:100%;height:100%");
         let realView = view.getUIElement();
         realView.setAttribute("style", "position:absolute;width:100%;height:100%");
         cameraViewContainer.append(realView);
