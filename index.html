@@ -1,31 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Quickly detect document boundaries from a live camera stream and crop the document out before normalizing it further through perspective correction, deskewing, and more." />
-    <meta name="keywords" content="camera based quadrilateral detection and normalization" />
+    <meta
+      name="description"
+      content="Quickly detect document boundaries from a live camera stream and crop the document out before normalizing it further through perspective correction, deskewing, and more."
+    />
+    <meta
+      name="keywords"
+      content="camera based quadrilateral detection and normalization"
+    />
     <title>Detect the boundary of a document and normalize it</title>
     <script src="https://cdn.jsdelivr.net/npm/dynamsoft-core@3.0.10/dist/core.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dynamsoft-document-normalizer@2.0.11/dist/ddn.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dynamsoft-capture-vision-router@2.0.11/dist/cvr.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@4.0.0/dist/dce.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1 style="font-size: 1.5em">
-        Detect the boundary of a document and normalize it
+      Detect the boundary of a document and normalize it
     </h1>
     <button id="start-detecting" onclick="startDetecting()">
       Start Detecting
     </button>
-    <button id="restart-detecting" onclick="restartDetecting()" style="display: none">
+    <button
+      id="restart-detecting"
+      onclick="restartDetecting()"
+      style="display: none"
+    >
       Restart Detecting
     </button>
     <button id="confirm-quad-for-normalization">Confirm the Boundary</button>
     <button id="normalize-with-confirmed-quad" disabled>Normalize</button><br />
-    <input type="checkbox" style="vertical-align: middle" id="ipt-checkbox" /><label style="vertical-align: middle" for="ipt-checkbox">Normalize Automatically</label
+    <input
+      type="checkbox"
+      style="vertical-align: middle"
+      id="ipt-checkbox"
+    /><label style="vertical-align: middle" for="ipt-checkbox"
+      >Normalize Automatically</label
     >
     <div id="div-ui-container" style="margin-top: 10px; height: 500px"></div>
     <div
@@ -44,6 +58,13 @@
       let imageEditorView;
       let promiseCVRReady;
       let frameCount = 0;
+
+      let resultItems = {
+        image: null,
+        points: null,
+        offsetT: 0,
+        offsetL: 0,
+      };
 
       const btnStart = document.querySelector("#start-detecting");
       const btnRestart = document.querySelector("#restart-detecting");
@@ -84,14 +105,14 @@
         cameraEnhancer = await Dynamsoft.DCE.CameraEnhancer.createInstance(
           view
         );
-        /*let scanRegion = {
-            x: 10,
-            y: 15,
-            width: 80,
-            height: 70,
-            isMeasuredInPercentage: true
+        let scanRegion = {
+          x: 10,
+          y: 15,
+          width: 80,
+          height: 70,
+          isMeasuredInPercentage: true,
         };
-        cameraEnhancer.setScanRegion(scanRegion); */
+        cameraEnhancer.setScanRegion(scanRegion);
         imageEditorView = await Dynamsoft.DCE.ImageEditorView.createInstance(
           imageEditorViewContainer
         );
@@ -132,9 +153,40 @@
        */
       async function handleCapturedResult(result) {
         /* Do something with the result */
-        
+
         /* Saves the image data of the current frame for subsequent image editing. */
-        image = result.items.filter((item) => item.type === 1)[0].imageData;
+        resultItems.image = result.items.filter(
+          (item) => item.type === 1
+        )[0].imageData;
+        let cropRegion = resultItems.image.tag.cropRegion;
+        let offsetL, offsetR, offsetB, offsetT, _points;
+        if (cropRegion.isMeasuredInPercentage) {
+          // Do something about it when it is percentage
+          console.warn(
+            "Code missing here when cropRegion is measured in percentage"
+          );
+        } else {
+          offsetL = cropRegion.left;
+          offsetR = cropRegion.right;
+          offsetB = cropRegion.bottom;
+          offsetT = cropRegion.top;
+        }
+        resultItems.offsetL = offsetL;
+        resultItems.offsetT = offsetT;
+
+        let detectedQuads = result.items.filter(
+          (item) =>
+            item.type ===
+            Dynamsoft.Core.EnumCapturedResultItemType.CRIT_DETECTED_QUAD
+        );
+        if (detectedQuads.length > 0) {
+          _points = detectedQuads[0].location.points;
+          for (let o = 0; o < _points.length; o++) {
+            _points[o].x -= offsetL;
+            _points[o].y -= offsetT;
+          }
+          resultItems.points = _points;
+        } else resultItems.points = null;
         if (!iptCheckbox.checked) {
           items = result.items;
         } else {
@@ -229,29 +281,21 @@
       });
 
       btnEdit.addEventListener("click", async () => {
-        if (!cameraEnhancer.isOpen() || items.length <= 1) return;
+        if (!cameraEnhancer.isOpen() || resultItems.points == null) return;
         /* Stops the detection task since we assume we have found a good boundary. */
         router.stopCapturing();
         /* Hides the cameraView and shows the imageEditorView. */
         cameraViewContainer.style.display = "none";
         imageEditorViewContainer.style.display = "block";
         /* Draws the image on the imageEditorView first. */
-        imageEditorView.setOriginalImage(image);
+        imageEditorView.setOriginalImage(resultItems.image);
         quads = [];
         /* Draws the document boundary (quad) over the image. */
-        for (let i = 0; i < items.length; i++) {
-          if (
-            items[i].type ===
-            Dynamsoft.Core.EnumCapturedResultItemType.CRIT_ORIGINAL_IMAGE
-          )
-            continue;
-          const points = items[i].location.points;
-          const quad = new Dynamsoft.DCE.DrawingItem.QuadDrawingItem({
-            points,
-          });
-          quads.push(quad);
-          layer.addDrawingItems(quads);
-        }
+        const quad = new Dynamsoft.DCE.DrawingItem.QuadDrawingItem({
+          points: resultItems.points,
+        });
+        quads.push(quad);
+        layer.addDrawingItems(quads);
         btnStart.style.display = "none";
         btnRestart.style.display = "inline";
         btnNormalize.disabled = false;
@@ -265,12 +309,14 @@
         normalizedImageContainer.innerHTML = "";
         /* Gets the selected quadrilateral. */
         let seletedItems = imageEditorView.getSelectedDrawingItems();
-        let quad;
+        let _points;
         if (seletedItems.length) {
-          quad = seletedItems[0].getQuad();
+          _points = seletedItems[0].getQuad().points;
         } else {
-          quad = items[1].location;
+          _points = resultItems.points;
         }
+
+
         /**
          * Sets the coordinates of the ROI (region of interest)
          * in the built-in template "normalize-document".
@@ -279,10 +325,10 @@
           "normalize-document"
         );
         newSettings.roiMeasuredInPercentage = 0;
-        newSettings.roi.points = quad.points;
+        newSettings.roi.points = _points  ;
         await router.updateSettings("normalize-document", newSettings);
         /* Executes the normalization and shows the result on the page. */
-        let normalizeResult = await router.capture(image, "normalize-document");
+        let normalizeResult = await router.capture(resultItems.image, "normalize-document");
         normalizedImageContainer.append(normalizeResult.items[0].toCanvas());
         layer.clearDrawingItems();
         /**
