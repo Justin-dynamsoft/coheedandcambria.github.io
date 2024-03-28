@@ -2,77 +2,196 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Quickly read barcodes with Dynamsoft Barcode Reader from a live camera stream.">
-    <meta name="keywords" content="camera based barcode reading">
-    <link rel="canonical" href="https://demo.dynamsoft.com/Samples/DBR/JS/1.hello-world/1.hello-world.html">
-    <title>Dynamsoft Barcode Reader Sample - Hello World (Decoding via Camera)</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sample-dlr-3.2.10</title>
+    <script src="./dlr-3.2.10/core/core.js"></script>
+    <script src="./dlr-3.2.10/utility/utility.js"></script>
+    <script src="./dlr-3.2.10/license/license.js"></script>
+    <script src="./dlr-3.2.10/dlr/dlr.js"></script>
+    <script src="./dlr-3.2.10/cvr/cvr.js"></script>
 </head>
 
 <body>
-    Loading...
-    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.6.33/dist/dbr.js"></script>
+    <input type="file">
     <script>
-        if(location.protocol === "file:") {
-            const message = `The page is opened via file:// and "BarcodeScanner" may not work properly. Please open the page via https:// or host it on "http://localhost/".`;
-            console.warn(message);
-            alert(message);
-        }
-    </script>
-    <script>
-        /** LICENSE ALERT - README 
-         * To use the library, you need to first specify a license key using the API "license" as shown below.
-         */
+        Object.assign(Dynamsoft.Core.CoreModule.engineResourcePaths, {
+            std: './dlr-3.2.10/std/',
+            dip: './dlr-3.2.10/dip/',
+            dnn: './dlr-3.2.10/dnn/',
+            dlrData: './dlr-3.2.10/dlrData/'
+        });
 
-        Dynamsoft.DBR.BarcodeReader.license = 'DLS2eyJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSJ9';
+        Dynamsoft.Core.CoreModule.loadWasm(["DIP", "CVR", "DLR"]);
 
-        /** 
-         * You can visit https://www.dynamsoft.com/customer/license/trialLicense?utm_source=github&product=dbr&package=js to get your own trial license good for 30 days. 
-         * Note that if you downloaded this sample from Dynamsoft while logged in, the above license key may already be your own 30-day trial license.
-         * For more information, see https://www.dynamsoft.com/barcode-reader/programming/javascript/user-guide/?ver=9.6.33&utm_source=github#specify-the-license or contact support@dynamsoft.com.
-         * LICENSE ALERT - THE END 
-         */
+        let ipt = document.querySelector("input");
+        let cvr;
+        let contoursArrayLength = 0;
 
-        (async function() {
-            try {
-                const scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
-                /** 
-                 * 'onFrameRead' is triggered after the library finishes reading a frame image.
-                 * There can be multiple barcodes on one image.
-                 */
-                scanner.onFrameRead = results => {
-                    console.log("Barcodes on one frame:");
-                    for (let result of results) {
-                        const format = result.barcodeFormatString;
-                        console.log(format + ": " + result.barcodeText);
+        let pCvrReady = (async () => {
+            cvr = await Dynamsoft.CVR.CaptureVisionRouter.createInstance();
+            const settings = {
+                "CaptureVisionTemplates": [
+                    {
+                        "Name": "cv0",
+                        "OutputOriginalImage": 1,
+                        "ImageROIProcessingNameArray": [
+                            "roi-detect-signature"//,
+                            //"roi-recognize-labels"
+                        ],
+                        "Timeout": 10000
                     }
-                };
-                /**
-                 * 'onUniqueRead' is  triggered only when a 'new' barcode is found.
-                 * The amount of time that the library 'remembers' a barcode is defined by 
-                 * "duplicateForgetTime" in "ScanSettings". By default it is set to 3000 ms.
-                 */
-                scanner.onUniqueRead = (txt, result) => {
-                    //alert(txt);
-                    console.log("Unique Code Found: ", result);
-                }
-                /**
-                 * 'show()' opens the camera and shows the video stream on the page. 
-                 * After that, the library starts to scan the frame images continuously.
-                 */
-                await scanner.show();
-            } catch (ex) {
-                let errMsg;
-                if (ex.message?.includes("network connection error")) {
-                    errMsg = "Failed to connect to Dynamsoft License Server: network connection error. Check your Internet connection or contact Dynamsoft Support (support@dynamsoft.com) to acquire an offline license.";
+                ],
+                "TargetROIDefOptions": [
+                    {
+                        "Name": "roi-recognize-labels",
+                        "TaskSettingNameArray": [
+                            "task-recognize-labels"
+                        ]
+                    },
+                    {
+                        "Name": "roi-detect-signature",
+                        "TaskSettingNameArray": [
+                            "task-detect-signature"
+                        ],
+                        "Location": {
+                            "ReferenceObjectFilter": {
+                                "ReferenceTargetROIDefNameArray": ["roi-recognize-labels"],
+                                "TextLineFilteringCondition": {
+                                    "LineStringRegExPattern": ".*Signature.*"
+                                }
+                            },
+                            "Offset": {
+                                "MeasuredByPercentage": 1,
+                                "FirstPoint": [100, -120],
+                                "SecondPoint": [300, -120],
+                                "ThirdPoint": [300, 120],
+                                "FourthPoint": [100, 120]
+                            }
+                        }
+                    }
+                ],
+                "LabelRecognizerTaskSettingOptions": [
+                    {
+                        "Name": "task-detect-signature",
+                        "TextLineSpecificationNameArray": [
+                            "tls-textlines"
+                        ],
+                        "SectionImageParameterArray": [
+                            {
+                                "Section": "ST_REGION_PREDETECTION",
+                                "ImageParameterName": "ip-recognize"
+                            },
+                            {
+                                "Section": "ST_TEXT_LINE_LOCALIZATION",
+                                "ImageParameterName": "ip-recognize"
+                            },
+                            {
+                                "Section": "ST_TEXT_LINE_RECOGNITION",
+                                "ImageParameterName": "ip-recognize"
+                            }
+                        ]
+                    },
+                    {
+                        "Name": "task-recognize-labels",
+                        "TextLineSpecificationNameArray": [
+                            "tls-textlines"
+                        ],
+                        "StringLengthRange": [3, 10000],
+                        "SectionImageParameterArray": [
+                            {
+                                "Section": "ST_REGION_PREDETECTION",
+                                "ImageParameterName": "ip-recognize"
+                            },
+                            {
+                                "Section": "ST_TEXT_LINE_LOCALIZATION",
+                                "ImageParameterName": "ip-recognize"
+                            },
+                            {
+                                "Section": "ST_TEXT_LINE_RECOGNITION",
+                                "ImageParameterName": "ip-recognize"
+                            }
+                        ]
+                    }
+                ],
+                "ImageParameterOptions": [
+                    {
+                        "Name": "ip-recognize",
+                        "TextDetectionMode": {
+                            "Mode": "TTDM_LINE",
+                            "Direction": "HORIZONTAL",
+                            "Sensitivity": 7
+                        } //,
+                        //"BinarizationModes": [
+                        //  {
+                        //    "Mode": "BM_LOCAL_BLOCK",
+                        //    "BlockSizeX": 15,
+                        //    "BlockSizeY": 15,
+                        //    "EnableFillBinaryVacancy": 1
+                        //  }
+                        //]
+                    }
+                ],
+                "CharacterModelOptions": [
+                    {
+                        "Name": "Letter"
+                    }
+                ],
+                "TextLineSpecificationOptions": [
+                    {
+                        "Name": "tls-textlines",
+                        "CharacterModelName": "Letter",
+                        "OutputResults": 1,
+                        "StringLengthRange": [3, 500],
+                        "CharHeightRange": [
+                            5,
+                            1000,
+                            1
+                        ],
+                        "BinarizationModes": [
+                            {
+                                "Mode": "BM_LOCAL_BLOCK",
+                                "BlockSizeX": 11,
+                                "BlockSizeY": 11,
+                                "EnableFillBinaryVacancy": 1
+                            }
+                        ]
+                    }
+                ]
+            };
+            await cvr.initSettings(settings);
+
+            let irr = new Dynamsoft.CVR.IntermediateResultReceiver();
+            intermediateManager = cvr.getIntermediateResultManager();
+            irr.onContoursUnitReceived = (result, info) => {
+                if(info.taskName !== "task-detect-signature") {
+                    return
                 } else {
-                    errMsg = ex.message||ex;
+                    if (result.contours.length > contoursArrayLength){
+                        contoursArrayLength = result.contours.length;
+                    }
+                    console.log(result, info);
                 }
-                console.error(errMsg);
-                alert(errMsg);
             }
+            intermediateManager.addResultReceiver(irr);
         })();
+
+        ipt.addEventListener("change", async (e) => {
+            await pCvrReady;
+            let file = e.target.files[0];
+            let result = await cvr.capture(file, "cv0");
+            // console.log(result.items);
+            // let t = result.items.filter((item)=>{
+            //     return item.text && item.text.includes("Signature");
+            // })
+            // console.log(t);
+            if(contoursArrayLength > 10) {
+                alert("signed")
+            } else {
+                alert("unsigned")
+            }
+            contoursArrayLength = 0;
+        })
     </script>
 </body>
 
