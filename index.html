@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <input type="file" value = "Process" id ="dlrProcess" onclick="ProcessImage();" />
+    <input type="button" value = "Process" id ="dlrProcess" onclick="ProcessImage();" />
     <input type="button" value="Load" id="dwtProcess" onclick="LoadImage();" />
 
     <!-- dwtcontrolContainer is the default div id for Dynamic Web TWAIN control.
@@ -245,23 +245,22 @@
                     DWObject.ConvertToBlob(
                         [DWObject.CurrentImageIndexInBuffer],
                         Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
-                        function (result, indices, type) {
+                        async function (result, indices, type) {
                             console.log(result.size);
-                            blobResult = result;
+                            // now take the blob result and feed it to capture method
+                            let dlrResult = await cvr.capture(result, "cv0");
+                            if(contoursArrayLength > 10) {
+                                alert("signed")
+                            } else {
+                                alert("unsigned")
+                            }
+                            contoursArrayLength = 0;
                         },
                         function (errorCode, errorString) {
                             console.log(errorString);
                         }
                     );
 
-                    // now that the blob is in the dlrResult, let's process it
-                    let dlrResult = await cvr.capture(blobResult, "cv0");
-                    if(contoursArrayLength > 10) {
-                        alert("signed")
-                    } else {
-                        alert("unsigned")
-                    }
-                    contoursArrayLength = 0;
                 }
             }
         }

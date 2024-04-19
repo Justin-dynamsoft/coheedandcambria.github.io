@@ -28,7 +28,7 @@ Dynamsoft.DWT.Containers = [{ WebTwainId: '', ContainerId: 'dwtcontrolContainer'
 Dynamsoft.DWT.ProductKey = 't0113NwEAAJM6moOBaJO30GboxqrcaKukMCqAU64aofy7gXvEXbZVXntrxUhVc/Ohhdg203P7o8KqrVusEdiVk/mOXIYqeNquBQP2YX4HxlWeuD4AtzqTiA65BkL5ZramsfPx47HkweirM14ZcNSwHGuvPa0=';
 
 ///
-//Dynamsoft.DWT.ResourcesPath = 'Resources';
+Dynamsoft.DWT.ResourcesPath = 'dlr-3.2.10/dwt/Resources';
 
 ///
 Dynamsoft.DWT.IfAddMD5InUploadHeader = false;
