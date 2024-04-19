@@ -10,11 +10,41 @@
     <script src="./dlr-3.2.10/license/license.js"></script>
     <script src="./dlr-3.2.10/dlr/dlr.js"></script>
     <script src="./dlr-3.2.10/cvr/cvr.js"></script>
+    <script type="text/javascript" src="./dlr-3.2.10/dwt/Resources/dynamsoft.webtwain.initiate.js"></script>
+    <script type="text/javascript" src="./dlr-3.2.10/dwt/Resources/dynamsoft.webtwain.config.js"></script>
 </head>
 
 <body>
-    <input type="file">
+    <input type="file" id ="dlrProcess" onclick="ProcessImage();">
+    <input type="button" value="Load" id="dwtProcess" onclick="LoadImage();" />
+
+    <!-- dwtcontrolContainer is the default div id for Dynamic Web TWAIN control.
+     If you need to rename the id, you should also change the id in dynamsoft.webtwain.config.js accordingly. -->
+    <div id="dwtcontrolContainer" style="width: 350px; height: 380px;"></div>
+
     <script>
+
+        var DWObject;
+        function Dynamsoft_OnReady() {
+            DWObject = Dynamsoft.DWT.GetWebTwain('dwtcontrolContainer'); // Get the Dynamic Web TWAIN object that is embeded in the div with id 'dwtcontrolContainer'
+        }
+
+        //Callback functions for async APIs
+        function OnSuccess() {
+            console.log('successful');
+        }
+        function OnFailure(errorCode, errorString) {
+            if(errorCode != -2326)
+			alert(errorString);
+        }
+
+        function LoadImage() {
+            if (DWObject) {
+                DWObject.IfShowFileDialog = true; // Open the system's file dialog to load image
+                DWObject.LoadImageEx("", Dynamsoft.DWT.EnumDWT_ImageType.IT_ALL, OnSuccess, OnFailure); // Load images in all supported formats (.bmp, .jpg, .tif, .png, .pdf). OnSuccess or OnFailure will be called after the operation
+            }
+        }
+
         Object.assign(Dynamsoft.Core.CoreModule.engineResourcePaths, {
             std: './dlr-3.2.10/std/',
             dip: './dlr-3.2.10/dip/',
@@ -23,11 +53,12 @@
         });
 
         Dynamsoft.Core.CoreModule.loadWasm(["DIP", "CVR", "DLR"]);
-        
-        // initialize license key here. To initialize, uncomment the line below and replace the input parameter with your own trial key
-        Dynamsoft.License.LicenseManager.initLicense("f0068MgAAALspKpTXbgkbnHRs4AsybTEDVmTB371wyDHsc+OgAUe/3HUSlJrCAlfkavSBRQD2Mx7IKfdzGpIHRoNYtEeSYCk=");
 
-        let ipt = document.querySelector("input");
+        // initialize license key here. To initialize, uncomment the line below and replace the input parameter with your own trial key
+        Dynamsoft.License.LicenseManager.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMzE0NTQwLVRYbFhaV0pRY205cSIsIm1haW5TZXJ2ZXJVUkwiOiJodHRwczovL21sdHMuZHluYW1zb2Z0LmNvbSIsIm9yZ2FuaXphdGlvbklEIjoiMzE0NTQwIiwic3RhbmRieVNlcnZlclVSTCI6Imh0dHBzOi8vc2x0cy5keW5hbXNvZnQuY29tIiwiY2hlY2tDb2RlIjoxOTY5OTM3NTcyfQ==");
+
+        //let ipt = document.querySelector("input");
+        let blobResult;
         let cvr;
         let contoursArrayLength = 0;
 
@@ -179,7 +210,7 @@
             intermediateManager.addResultReceiver(irr);
         })();
 
-        ipt.addEventListener("change", async (e) => {
+        /*ipt.addEventListener("change", async (e) => {
             await pCvrReady;
             let file = e.target.files[0];
             let result = await cvr.capture(file, "cv0");
@@ -194,7 +225,43 @@
                 alert("unsigned")
             }
             contoursArrayLength = 0;
-        })
+        })*/
+
+        function LoadImage() {
+            if (DWObject) {
+                DWObject.IfShowFileDialog = true; // Open the system's file dialog to load image
+                DWObject.LoadImageEx("", Dynamsoft.DWT.EnumDWT_ImageType.IT_ALL, OnSuccess, OnFailure); // Load images in all supported formats (.bmp, .jpg, .tif, .png, .pdf). OnSuccess or OnFailure will be called after the operation
+            }
+        }
+
+        async function ProcessImage() {
+            await pCvrReady;
+            if(DWObject) {
+                if(DWObject.HowManyImagesInBuffer > 0){
+                    DWObject.ConvertToBlob(
+                        [DWObject.CurrentImageIndexInBuffer],
+                        Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
+                        function (result, indices, type) {
+                            console.log(result.size);
+                            blobResult = result;
+                        },
+                        function (errorCode, errorString) {
+                            console.log(errorString);
+                        }
+                    );
+
+                    // now that the blob is in the dlrResult, let's process it
+                    let dlrResult = await cvr.capture(blobResult, "cv0");
+                    if(contoursArrayLength > 10) {
+                        alert("signed")
+                    } else {
+                        alert("unsigned")
+                    }
+                    contoursArrayLength = 0;
+                }
+            }
+        }
+
     </script>
 </body>
 
