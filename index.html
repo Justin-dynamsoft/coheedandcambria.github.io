@@ -97,16 +97,16 @@
                         "Name": "roi-detect-signature",
                         "TaskSettingNameArray": [
                             "task-detect-signature"
-                        ],
-                        "Location": {
-                            "Offset": {
-                                "MeasuredByPercentage": 0,
-                                "FirstPoint": [680, 1226],
-                                "SecondPoint": [1314, 1226],
-                                "ThirdPoint": [680, 1246],
-                                "FourthPoint": [1314, 1246]
-                            }
-                        }
+                        ]
+                        //"Location": {
+                            //"Offset": {
+                                //"MeasuredByPercentage": 0,
+                                //"FirstPoint": [680, 1226],
+                                //"SecondPoint": [1314, 1226],
+                                //"ThirdPoint": [680, 1246],
+                                //"FourthPoint": [1314, 1246]
+                           // }
+                        //}
                     }
                 ],
                 "LabelRecognizerTaskSettingOptions": [
@@ -177,6 +177,16 @@
                 ]
             };
             await cvr.initSettings(settings);
+
+            let cvrSettings = await cvr.getSimplifiedSettings("cv0");
+            cvrSettings.roiMeasuredInPercentage = false;
+            cvrSettings.roi.points = [
+                { x: 680, y: 1226 },
+                { x: 1314, y: 1226 },
+                { x: 680, y: 1246 },
+                { x: 1314, y: 1246 },
+            ];
+            await cvr.updateSettings("cv0", cvrSettings);
 
             let irr = new Dynamsoft.CVR.IntermediateResultReceiver();
             intermediateManager = cvr.getIntermediateResultManager();
