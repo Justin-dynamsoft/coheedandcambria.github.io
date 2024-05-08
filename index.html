@@ -12,6 +12,8 @@
     <script src="./dlr-3.2.10/cvr/cvr.js"></script>
     <script src="./dlr-3.2.10/dwt/Resources/dynamsoft.webtwain.initiate.js"></script>
     <script src="./dlr-3.2.10/dwt/Resources/dynamsoft.webtwain.config.js"></script>
+    <script src="./dlr-3.2.10/dwt/Resources/addon/dynamsoft.webtwain.addon.pdf.js"></script>
+
 </head>
 
 <body>
@@ -23,6 +25,13 @@
     <div id="dwtcontrolContainer" style="width: 350px; height: 380px;"></div>
 
     <script>
+
+        let loc_1025002 = [
+            {x: 680, y: 1226, width: 634, height: 20},
+            {x: 421, y: 1645, width: 710, height: 20},
+            {x: 428, y: 1701, width: 701, height: 22}
+        ];
+        console.log(loc_1025002.length);
 
         var DWObject;
         function Dynamsoft_OnReady() {
@@ -41,6 +50,13 @@
         function LoadImage() {
             if (DWObject) {
                 DWObject.IfShowFileDialog = true; // Open the system's file dialog to load image
+                // PDF Addon is used here to ensure text-based PDF support
+                DWObject.Addon.PDF.SetReaderOptions({
+                    convertMode: Dynamsoft.DWT.EnumDWT_ConvertMode.CM_RENDERALL,
+                    renderOptions:{
+                        renderAnnotations: true;
+                    }
+                });
                 DWObject.LoadImageEx("", Dynamsoft.DWT.EnumDWT_ImageType.IT_ALL, OnSuccess, OnFailure); // Load images in all supported formats (.bmp, .jpg, .tif, .png, .pdf). OnSuccess or OnFailure will be called after the operation
             }
         }
@@ -78,23 +94,11 @@
                 ],
                 "TargetROIDefOptions": [
                     {
-                        "Name": "roi-recognize-labels",
-                        "TaskSettingNameArray": [
-                            "task-recognize-labels"
-                        ]
-                    },
-                    {
                         "Name": "roi-detect-signature",
                         "TaskSettingNameArray": [
                             "task-detect-signature"
                         ],
                         "Location": {
-                            "ReferenceObjectFilter": {
-                                "ReferenceTargetROIDefNameArray": ["roi-recognize-labels"],
-                                "TextLineFilteringCondition": {
-                                    "LineStringRegExPattern": ".*Signature.*"
-                                }
-                            },
                             "Offset": {
                                 "MeasuredByPercentage": 1,
                                 "FirstPoint": [100, -120],
@@ -111,27 +115,6 @@
                         "TextLineSpecificationNameArray": [
                             "tls-textlines"
                         ],
-                        "SectionImageParameterArray": [
-                            {
-                                "Section": "ST_REGION_PREDETECTION",
-                                "ImageParameterName": "ip-recognize"
-                            },
-                            {
-                                "Section": "ST_TEXT_LINE_LOCALIZATION",
-                                "ImageParameterName": "ip-recognize"
-                            },
-                            {
-                                "Section": "ST_TEXT_LINE_RECOGNITION",
-                                "ImageParameterName": "ip-recognize"
-                            }
-                        ]
-                    },
-                    {
-                        "Name": "task-recognize-labels",
-                        "TextLineSpecificationNameArray": [
-                            "tls-textlines"
-                        ],
-                        "StringLengthRange": [3, 10000],
                         "SectionImageParameterArray": [
                             {
                                 "Section": "ST_REGION_PREDETECTION",
