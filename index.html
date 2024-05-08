@@ -100,11 +100,11 @@
                         ],
                         "Location": {
                             "Offset": {
-                                "MeasuredByPercentage": 1,
-                                "FirstPoint": [100, -120],
-                                "SecondPoint": [300, -120],
-                                "ThirdPoint": [300, 120],
-                                "FourthPoint": [100, 120]
+                                "MeasuredByPercentage": 0,
+                                "FirstPoint": [680, 1226],
+                                "SecondPoint": [1314, 1226],
+                                "ThirdPoint": [680, 1246],
+                                "FourthPoint": [1314, 1246]
                             }
                         }
                     }
@@ -209,13 +209,6 @@
             }
             contoursArrayLength = 0;
         })*/
-
-        function LoadImage() {
-            if (DWObject) {
-                DWObject.IfShowFileDialog = true; // Open the system's file dialog to load image
-                DWObject.LoadImageEx("", Dynamsoft.DWT.EnumDWT_ImageType.IT_ALL, OnSuccess, OnFailure); // Load images in all supported formats (.bmp, .jpg, .tif, .png, .pdf). OnSuccess or OnFailure will be called after the operation
-            }
-        }
 
         async function ProcessImage() {
             await pCvrReady;
