@@ -54,7 +54,7 @@
                 DWObject.Addon.PDF.SetReaderOptions({
                     convertMode: Dynamsoft.DWT.EnumDWT_ConvertMode.CM_RENDERALL,
                     renderOptions:{
-                        renderAnnotations: true;
+                        renderAnnotations: true
                     }
                 });
                 DWObject.LoadImageEx("", Dynamsoft.DWT.EnumDWT_ImageType.IT_ALL, OnSuccess, OnFailure); // Load images in all supported formats (.bmp, .jpg, .tif, .png, .pdf). OnSuccess or OnFailure will be called after the operation
