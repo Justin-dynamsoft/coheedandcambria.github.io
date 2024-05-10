@@ -180,11 +180,18 @@
 
             let cvrSettings = await cvr.getSimplifiedSettings("cv0");
             cvrSettings.roiMeasuredInPercentage = false;
-            cvrSettings.roi.points = [
+            // first one for 1025002
+            /*cvrSettings.roi.points = [
                 { x: 680, y: 1226 },
                 { x: 1314, y: 1226 },
-                { x: 680, y: 1246 },
                 { x: 1314, y: 1246 },
+                { x: 680, y: 1246 },
+            ];*/
+            cvrSettings.roi.points = [
+                { x: 421, y: 1615 },
+                { x: 1131, y: 1615 },
+                { x: 1131, y: 1685 },
+                { x: 421, y: 1685 },
             ];
             await cvr.updateSettings("cv0", cvrSettings);
 
