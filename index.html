@@ -26,13 +26,17 @@
 
     <script>
 
+        // I want to have a struct like this for each form
         let loc_1025002 = [
             {x: 680, y: 1226, width: 634, height: 20},
             {x: 421, y: 1645, width: 710, height: 20},
             {x: 428, y: 1701, width: 701, height: 22}
         ];
 
-        function createPoints(params){
+        // this function takes ONE set of the struct above and turns it into a struct with four Points, which can then be made into a quadrilateral and fed to the roi property
+        // currently this function doesn't work because I'm unable to instantiate a Point since it's an interface.
+        // Ideally in each if statement, a Point is created and then assigned to the ptsArr array, and the final ptsArr can then be used to make a Quadrilateral
+        /*function createPoints(params){
             let ptsArr = [];
             if(params != null){
                 for(let i = 0; i < 4; i++){
@@ -57,7 +61,7 @@
         }
 
         let loc_1025002_points_0 = createPoints(loc_1025002[0]);
-        console.log(loc_1025002_points_0);
+        console.log(loc_1025002_points_0);*/
 
         var DWObject;
         function Dynamsoft_OnReady() {
