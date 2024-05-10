@@ -37,8 +37,10 @@
             if(params != null){
                 for(let i = 0; i < 4; i++){
                     if(i == 0) {
-                        ptsArr[i].x = params.x;
-                        ptsArr[i].y = params.y;  
+                        let point = new Dynamsoft.Core.Point();
+                        point.x = params.x;
+                        point.y = params.y; 
+                        ptsArr[i] = point; 
                     } else if (i == 1){
                         ptsArr[i].x = params.x + params.width;
                         ptsArr[i].y = params.y;   
