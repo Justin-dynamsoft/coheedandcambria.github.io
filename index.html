@@ -31,7 +31,31 @@
             {x: 421, y: 1645, width: 710, height: 20},
             {x: 428, y: 1701, width: 701, height: 22}
         ];
-        console.log(loc_1025002.length);
+
+        function createPoints(params){
+            let ptsArr = [];
+            if(params != null){
+                for(let i = 0; i < 4; i++){
+                    if(i == 0) {
+                        ptsArr[i].x = params.x;
+                        ptsArr[i].y = params.y;  
+                    } else if (i == 1){
+                        ptsArr[i].x = params.x + params.width;
+                        ptsArr[i].y = params.y;   
+                    } else if (i == 2){
+                        ptsArr[i].x = params.x + params.width;
+                        ptsArr[i].y = params.y + params.height;
+                    } else if (i == 3){
+                        ptsArr[i].x = params.x;
+                        ptsArr[i].y = params.y + params.height;
+                    }
+                }
+            }
+            return ptsArr;
+        }
+
+        let loc_1025002_points_0 = createPoints(loc_1025002[0]);
+        console.log(loc_1025002_points_0);
 
         var DWObject;
         function Dynamsoft_OnReady() {
