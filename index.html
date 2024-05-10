@@ -188,7 +188,7 @@
             ];
             await cvr.updateSettings("cv0", cvrSettings);
 
-            const outputSettings = await router.outputSettings("cv0");
+            const outputSettings = await cvr.outputSettings("cv0");
             console.log(outputSettings);
 
             let irr = new Dynamsoft.CVR.IntermediateResultReceiver();
