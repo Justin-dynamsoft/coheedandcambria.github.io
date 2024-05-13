@@ -20,18 +20,46 @@
     <input type="button" value = "Process" id ="dlrProcess" onclick="ProcessImage();" />
     <input type="button" value="Load" id="dwtProcess" onclick="LoadImage();" />
 
+    <select name="forms" id="forms">
+        <option value="1025002">1025002</option>
+        <option value="1080003">1080003</option>
+        <option value="2130002">2130002</option>
+        <option value="2140001">2140001</option>
+        <option value="2150003">2150003</option>
+        <option value="10400030">10400030</option>
+        <option value="50000100">50000100</option>
+    </select>
+
     <!-- dwtcontrolContainer is the default div id for Dynamic Web TWAIN control.
      If you need to rename the id, you should also change the id in dynamsoft.webtwain.config.js accordingly. -->
     <div id="dwtcontrolContainer" style="width: 350px; height: 380px;"></div>
 
     <script>
 
-        // I want to have a struct like this for each form
-        let loc_1025002 = [
-            {x: 680, y: 1226, width: 634, height: 20},
-            {x: 421, y: 1645, width: 710, height: 20},
-            {x: 428, y: 1701, width: 701, height: 22}
+        // A struct to contain all the points, with the id corresponding to the form ID
+        let loc_points = [
+            {x: 680, y: 1226, width: 634, height: 20, id:"1025002"},
+            {x: 421, y: 1645, width: 710, height: 20, id:"1025002"},
+            {x: 428, y: 1701, width: 701, height: 22, id:"1025002"},
+            {x: 648, y: 1043, width: 815, height: 36, id:"1080003"},
+            {x: 658, y: 1334, width: 801, height: 35, id:"1080003"},
+            {x: 311, y: 827, width: 353, height: 25, id:"2130002"},
+            {x: 334, y: 1009, width: 486, height: 26, id:"2130002"},
+            {x: 1000, y: 1291, width: 501, height: 24, id:"2140001"},
+            {x: 1010, y: 1478, width: 489, height: 25, id:"2140001"},
+            {x: 263, y: 1870, width: 510, height: 20, id:"2150003"},
+            {x: 228, y: 1923, width: 509, height: 20, id:"2150003"},
+            {x: 922, y: 1795, width: 634, height: 25, id:"10400030"},
+            {x: 929, y: 1880, width: 621, height: 26, id:"10400030"},
+            {x: 151, y: 1976, width: 513, height: 24, id:"10400030"},
+            {x: 196, y: 1488, width: 377, height: 28, id:"50000100"},
+            {x: 199, y: 1631, width: 395, height: 26, id:"50000100"},
+            {x: 194, y: 1766, width: 414, height: 31, id:"50000100"}
         ];
+
+        let pts = [];
+        let loc = null;
+        let results_temp = [];
 
         function Point(x, y) {
             this.x = x;
@@ -39,8 +67,7 @@
         }
 
         // this function takes ONE set of the struct above and turns it into a struct with four Points, which can then be made into a quadrilateral and fed to the roi property
-        // currently this function doesn't work because I'm unable to instantiate a Point since it's an interface.
-        // Ideally in each if statement, a Point is created and then assigned to the ptsArr array, and the final ptsArr can then be used to make a Quadrilateral
+        // a Point is created and then assigned to the ptsArr array, and the final ptsArr can then be used to make a single Quadrilateral used for the roi
         function createPoints(params){
             let ptsArr = [];
             if(params != null){
@@ -63,8 +90,15 @@
             return ptsArr;
         }
 
-        let loc_1025002_0 = createPoints(loc_1025002[0]);
-        console.log(loc_1025002_0);
+        function areSame(arr)
+        {
+            // Put all array elements in a HashSet
+            let s = new Set(arr);
+    
+            // If all elements are same, size of
+            // HashSet should be 1. As HashSet contains only distinct values.
+            return (s.size == 1);
+        }
 
         var DWObject;
         function Dynamsoft_OnReady() {
@@ -211,18 +245,11 @@
             };
             await cvr.initSettings(settings);
 
-            let cvrSettings = await cvr.getSimplifiedSettings("cv0");
+            /*let cvrSettings = await cvr.getSimplifiedSettings("cv0");
             cvrSettings.roiMeasuredInPercentage = false;
             // first one for 1025002
             cvrSettings.roi.points = loc_1025002_0;
-            // second one for 1025002
-            /*cvrSettings.roi.points = [
-                { x: 421, y: 1615 },
-                { x: 1131, y: 1615 },
-                { x: 1131, y: 1685 },
-                { x: 421, y: 1685 },
-            ];*/
-            await cvr.updateSettings("cv0", cvrSettings);
+            await cvr.updateSettings("cv0", cvrSettings);*/
 
             const outputSettings = await cvr.outputSettings("cv0");
             console.log(outputSettings);
@@ -242,25 +269,81 @@
             intermediateManager.addResultReceiver(irr);
         })();
 
-        /*ipt.addEventListener("change", async (e) => {
-            await pCvrReady;
-            let file = e.target.files[0];
-            let result = await cvr.capture(file, "cv0");
-            // console.log(result.items);
-            // let t = result.items.filter((item)=>{
-            //     return item.text && item.text.includes("Signature");
-            // })
-            // console.log(t);
-            if(contoursArrayLength > 10) {
-                alert("signed")
-            } else {
-                alert("unsigned")
-            }
-            contoursArrayLength = 0;
-        })*/
-
         async function ProcessImage() {
             await pCvrReady;
+
+            let formID = document.getElementById("forms");
+            switch(formID.value) {
+                case "1080003":
+                    loc = loc_points.filter(function (el){
+                        return el.id == "1080003";
+                    })
+                    pts = [];
+                    for (let i = 0; i++; i < loc.length){
+                        pts[i] = createPoints(loc[i]);
+                    }
+                    console.log(pts);
+                    break;
+                case "2130002":
+                    loc = loc_points.filter(function (el){
+                        return el.id == "2130002";
+                    })
+                    pts = [];
+                    for (let i = 0; i++; i < loc.length){
+                        pts[i] = createPoints(loc[i]);
+                    }
+                    console.log(pts);
+                    break;
+                case "2140001":
+                    loc = loc_points.filter(function (el){
+                        return el.id == "2140001";
+                    })
+                    pts = [];
+                    for (let i = 0; i++; i < loc.length){
+                        pts[i] = createPoints(loc[i]);
+                    }
+                    console.log(pts);
+                    break;
+                case "2150003":
+                    loc = loc_points.filter(function (el){
+                        return el.id == "2150003";
+                    })
+                    pts = [];
+                    for (let i = 0; i++; i < loc.length){
+                        pts[i] = createPoints(loc[i]);
+                    }
+                    console.log(pts);
+                    break;
+                case "10400030":
+                    loc = loc_points.filter(function (el){
+                        return el.id == "10400030";
+                    })
+                    pts = [];
+                    for (let i = 0; i++; i < loc.length){
+                        pts[i] = createPoints(loc[i]);
+                    }
+                    console.log(pts);
+                    break;
+                case "50000100":
+                    loc = loc_points.filter(function (el){
+                        return el.id == "50000100";
+                    })
+                    pts = [];
+                    for (let i = 0; i++; i < loc.length){
+                        pts[i] = createPoints(loc[i]);
+                    }
+                    console.log(pts);
+                    break;
+                default:
+                    loc = loc_points.filter(function (el){
+                        return el.id == "1025002";
+                    })
+                    pts = [];
+                    for (let i = 0; i++; i < loc.length){
+                        pts[i] = createPoints(loc[i]);
+                    }
+                    console.log(pts);
+            }
             if(DWObject) {
                 if(DWObject.HowManyImagesInBuffer > 0){
                     // convert the latest image in the buffer to a blob
@@ -273,13 +356,18 @@
                         async function (result, indices, type) {
                             console.log(result.size);
                             // now take the blob result and feed it to capture method
-                            let dlrResult = await cvr.capture(result, "cv0");
-                            if(contoursArrayLength > 10) {
-                                alert("signed")
-                            } else {
-                                alert("unsigned")
+                            for (let i = 0; i++; i < pts.length){
+                                let dlrResult = await cvr.capture(result, "cv0");
+                                if(contoursArrayLength > 10) {
+                                    results_temp[i] = "signed";
+                                } else {
+                                    results_temp[i] = "unsigned";
+                                }
                             }
                             contoursArrayLength = 0;
+                            if(areSame(results_temp)){
+                                alert(results_temp[0]);
+                            }
                         },
                         function (errorCode, errorString) {
                             console.log(errorString);
