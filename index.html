@@ -33,35 +33,38 @@
             {x: 428, y: 1701, width: 701, height: 22}
         ];
 
+        function Point(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+
         // this function takes ONE set of the struct above and turns it into a struct with four Points, which can then be made into a quadrilateral and fed to the roi property
         // currently this function doesn't work because I'm unable to instantiate a Point since it's an interface.
         // Ideally in each if statement, a Point is created and then assigned to the ptsArr array, and the final ptsArr can then be used to make a Quadrilateral
-        /*function createPoints(params){
+        function createPoints(params){
             let ptsArr = [];
             if(params != null){
                 for(let i = 0; i < 4; i++){
                     if(i == 0) {
-                        let point = new Dynamsoft.Core.Point();
-                        point.x = params.x;
-                        point.y = params.y; 
-                        ptsArr[i] = point; 
+                        let p0 = new Point(params.x, params.y);
+                        ptsArr[i] = p0; 
                     } else if (i == 1){
-                        ptsArr[i].x = params.x + params.width;
-                        ptsArr[i].y = params.y;   
+                        let p1 = new Point(params.x + params.width, params.y);
+                        ptsArr[i]= p1;  
                     } else if (i == 2){
-                        ptsArr[i].x = params.x + params.width;
-                        ptsArr[i].y = params.y + params.height;
+                        let p2 = new Point(params.x + params.width, params.y + params.height);
+                        ptsArr[i] = p2;
                     } else if (i == 3){
-                        ptsArr[i].x = params.x;
-                        ptsArr[i].y = params.y + params.height;
+                        let p3 = new Point(params.x, params.y + params.height);
+                        ptsArr[i] = p3;
                     }
                 }
             }
             return ptsArr;
         }
 
-        let loc_1025002_points_0 = createPoints(loc_1025002[0]);
-        console.log(loc_1025002_points_0);*/
+        let loc_1025002_0 = createPoints(loc_1025002[0]);
+        console.log(loc_1025002_points_0);
 
         var DWObject;
         function Dynamsoft_OnReady() {
