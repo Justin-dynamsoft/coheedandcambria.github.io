@@ -335,13 +335,13 @@
                     console.log(pts);
                     break;
                 default:
-                    loc = loc_points.filter(function (el){
+                    const loc_1025002 = loc_points.filter(function (el){
                         return el.id == "1025002";
                     })
-                    console.log(loc);
+                    console.log(loc_1025002);
                     pts = [];
-                    for (let i = 0; i++; i < loc.length){
-                        pts[i] = createPoints(loc[i]);
+                    for (let i = 0; i++; i < loc_1025002.length){
+                        pts[i] = createPoints(loc_1025002[i]);
                     }
                     console.log(pts);
             }
