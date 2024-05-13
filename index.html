@@ -58,7 +58,7 @@
         ];
 
         let pts = [];
-        let loc = null;
+        const loc = null;
         let results_temp = [];
 
         function Point(x, y) {
@@ -252,7 +252,7 @@
             await cvr.updateSettings("cv0", cvrSettings);*/
 
             const outputSettings = await cvr.outputSettings("cv0");
-            console.log(outputSettings);
+            //console.log(outputSettings);
 
             let irr = new Dynamsoft.CVR.IntermediateResultReceiver();
             intermediateManager = cvr.getIntermediateResultManager();
@@ -338,6 +338,7 @@
                     loc = loc_points.filter(function (el){
                         return el.id == "1025002";
                     })
+                    console.log(loc);
                     pts = [];
                     for (let i = 0; i++; i < loc.length){
                         pts[i] = createPoints(loc[i]);
