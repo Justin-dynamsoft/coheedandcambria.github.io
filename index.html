@@ -130,16 +130,16 @@
                         "Name": "roi-detect-signature",
                         "TaskSettingNameArray": [
                             "task-detect-signature"
-                        ],
-                        "Location": {
-                            "Offset": {
-                                "MeasuredByPercentage": 0,
-                                "FirstPoint": [421, 1645],
-                                "SecondPoint": [1131, 1645],
-                                "ThirdPoint": [1131, 1665],
-                                "FourthPoint": [421, 1665]
-                            }
-                        }
+                        ]
+                        //"Location": {
+                            //"Offset": {
+                                //"MeasuredByPercentage": 0,
+                                //"FirstPoint": [421, 1645],
+                                //"SecondPoint": [1131, 1645],
+                                //"ThirdPoint": [1131, 1665],
+                                //"FourthPoint": [421, 1665]
+                            //}
+                        //}
                     }
                 ],
                 "LabelRecognizerTaskSettingOptions": [
@@ -211,23 +211,18 @@
             };
             await cvr.initSettings(settings);
 
-            /*let cvrSettings = await cvr.getSimplifiedSettings("cv0");
+            let cvrSettings = await cvr.getSimplifiedSettings("cv0");
             cvrSettings.roiMeasuredInPercentage = false;
             // first one for 1025002
-            /*cvrSettings.roi.points = [
-                { x: 680, y: 1226 },
-                { x: 1314, y: 1226 },
-                { x: 1314, y: 1246 },
-                { x: 680, y: 1246 },
-            ];
+            cvrSettings.roi.points = loc_1025002_0;
             // second one for 1025002
-            cvrSettings.roi.points = [
+            /*cvrSettings.roi.points = [
                 { x: 421, y: 1615 },
                 { x: 1131, y: 1615 },
                 { x: 1131, y: 1685 },
                 { x: 421, y: 1685 },
-            ];
-            await cvr.updateSettings("cv0", cvrSettings);*/
+            ];*/
+            await cvr.updateSettings("cv0", cvrSettings);
 
             const outputSettings = await cvr.outputSettings("cv0");
             console.log(outputSettings);
