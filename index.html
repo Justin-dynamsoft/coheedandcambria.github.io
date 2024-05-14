@@ -66,10 +66,6 @@
             this.y = y;
         }
 
-        function Quadrilateral(points){
-            this.points = points;
-        }
-
         // this function takes ONE set of the struct above and turns it into a struct with four Points, which can then be made into a quadrilateral and fed to the roi property
         // a Point is created and then assigned to the ptsArr array, and the final ptsArr can then be used to make a single Quadrilateral used for the roi
         function createPoints(params){
@@ -346,6 +342,7 @@
                     pts = Array.from(Array(loc_1025002.length), () => new Array(4));
                     console.log(createPoints(loc_1025002[0]));
                     for (let i = 0; i++; i < loc_1025002.length){
+                        pts[i] = [];
                         pts[i] = createPoints(loc_1025002[i]);
                     }
                     console.log(pts);
