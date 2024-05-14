@@ -57,7 +57,7 @@
             {x: 194, y: 1766, width: 414, height: 31, id:"50000100"}
         ];
 
-        let pts = [];
+        let pts = null;
         const loc = null;
         let results_temp = [];
 
@@ -343,12 +343,13 @@
                         return el.id == "1025002";
                     })
                     console.log(loc_1025002);
-                    console.log(createPoints(loc_1025002[0]));
+                    pts = Array.from(Array(loc_1025002.length), () => new Array(4));
+                    //console.log(createPoints(loc_1025002[0]));
                     for (let i = 0; i++; i < loc_1025002.length){
-                        let quad_temp = new Quadrilateral(createPoints(loc_1025002[i]));
-                        pts[i] = quad_temp;
+                        pts[i] = createPoints(loc_1025002[i]);
                     }
                     console.log(pts);
+                    console.log(pts.length);
             }
             if(DWObject) {
                 if(DWObject.HowManyImagesInBuffer > 0){
@@ -362,7 +363,7 @@
                         async function (result, indices, type) {
                             console.log(result.size);
                             // now take the blob result and feed it to capture method
-                            for (let i = 0; i++; i < pts.length){
+                            /*for (let i = 0; i++; i < pts.length){
                                 let dlrResult = await cvr.capture(result, "cv0");
                                 if(contoursArrayLength > 10) {
                                     results_temp[i] = "signed";
@@ -373,7 +374,7 @@
                             contoursArrayLength = 0;
                             if(areSame(results_temp)){
                                 alert(results_temp[0]);
-                            }
+                            }*/
                         },
                         function (errorCode, errorString) {
                             console.log(errorString);
