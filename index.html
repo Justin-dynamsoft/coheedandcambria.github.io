@@ -66,6 +66,10 @@
             this.y = y;
         }
 
+        function Quadrilateral(points){
+            this.points = points;
+        }
+
         // this function takes ONE set of the struct above and turns it into a struct with four Points, which can then be made into a quadrilateral and fed to the roi property
         // a Point is created and then assigned to the ptsArr array, and the final ptsArr can then be used to make a single Quadrilateral used for the roi
         function createPoints(params){
@@ -271,7 +275,7 @@
 
         async function ProcessImage() {
             await pCvrReady;
-
+            
             let formID = document.getElementById("forms");
             switch(formID.value) {
                 case "1080003":
@@ -339,9 +343,10 @@
                         return el.id == "1025002";
                     })
                     console.log(loc_1025002);
-                    pts = [];
+                    console.log(createPoints(loc_1025002[0]));
                     for (let i = 0; i++; i < loc_1025002.length){
-                        pts[i] = createPoints(loc_1025002[i]);
+                        let quad_temp = new Quadrilateral(createPoints(loc_1025002[i]));
+                        pts[i] = quad_temp;
                     }
                     console.log(pts);
             }
