@@ -280,12 +280,6 @@
             };
             await cvr.initSettings(settings);
 
-            let cvrSettings = await cvr.getSimplifiedSettings("cv0");
-            cvrSettings.roiMeasuredInPercentage = false;
-            // first one for 1025002
-            cvrSettings.roi.points = loc_1025002_0;
-            await cvr.updateSettings("cv0", cvrSettings);
-
             const outputSettings = await cvr.outputSettings("cv0");
             //console.log(outputSettings);
 
