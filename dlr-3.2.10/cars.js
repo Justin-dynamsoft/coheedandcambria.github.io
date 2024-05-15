@@ -21,7 +21,7 @@ let loc_points = [
 ];
 
 const loc = null;
-let results_temp = [];
+//let results_temp = [];
 
 function Point(x, y) {
     this.x = x;
@@ -95,6 +95,7 @@ function LoadImage() {
 }
 
 async function recognizeSignature(pts) {
+    let res = null;
     // setting the points to the quad of pts
     let cvrSettings = await cvr.getSimplifiedSettings("cv0");
     cvrSettings.roiMeasuredInPercentage = false;
@@ -115,9 +116,9 @@ async function recognizeSignature(pts) {
                     // now take the blob result and feed it to capture method
                     let dlrResult = await cvr.capture(result, "cv0");
                     if(contoursArrayLength > 10) {
-                        results_temp.push("signed");
+                        res = "signed";
                     } else {
-                        results_temp.push("unsigned");
+                        res = "unsigned";
                     }
                     contoursArrayLength = 0;
                 },
@@ -125,9 +126,9 @@ async function recognizeSignature(pts) {
                     console.log(errorString);
                 }
             );
-
         }
     }
+    return res;
 }
 
 Object.assign(Dynamsoft.Core.CoreModule.engineResourcePaths, {
@@ -331,24 +332,23 @@ async function ProcessImage() {
             console.log(pts);
             break;
         default:
-            results_temp = [];
+            let res_arr = [];
             const loc_1025002 = loc_points.filter(function (el){
                 return el.id == "1025002";
             })
             console.log(loc_1025002);
-            //console.log(createPoints(loc_1025002[0]));
             for (let i = 0; i < loc_1025002.length; i++){
                 let pts = createPoints(loc_1025002[i]);
                 console.log(pts);
-                await recognizeSignature(pts);
-                if(i == loc_1025002.length-1){
+                let res_string = await recognizeSignature(pts);
+                res_arr.push(res_string);
+                /*if(i == loc_1025002.length-1){
                     console.log(results_temp);
-                }
+                }*/
             }
-            /*if(await areSame(results_temp)){
-                alert(results_temp[0]);
-            }*/
-            //console.log(results_temp)
+            if(areSame(res_arr)){
+                alert(res_arr[0]);
+            }
     }
     /*if(DWObject) {
         if(DWObject.HowManyImagesInBuffer > 0){
