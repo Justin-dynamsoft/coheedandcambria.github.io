@@ -21,6 +21,7 @@ let loc_points = [
 ];
 
 const loc = null;
+let results_temp = [];
 
 function Point(x, y) {
     this.x = x;
@@ -94,7 +95,6 @@ function LoadImage() {
 }
 
 async function recognizeSignature(pts) {
-    let results_temp = [];
     // setting the points to the quad of pts
     let cvrSettings = await cvr.getSimplifiedSettings("cv0");
     cvrSettings.roiMeasuredInPercentage = false;
@@ -128,7 +128,6 @@ async function recognizeSignature(pts) {
 
         }
     }
-    return results_temp;
 }
 
 Object.assign(Dynamsoft.Core.CoreModule.engineResourcePaths, {
@@ -332,6 +331,7 @@ async function ProcessImage() {
             console.log(pts);
             break;
         default:
+            results_temp = [];
             const loc_1025002 = loc_points.filter(function (el){
                 return el.id == "1025002";
             })
@@ -340,10 +340,10 @@ async function ProcessImage() {
             for (let i = 0; i < loc_1025002.length; i++){
                 let pts = createPoints(loc_1025002[i]);
                 console.log(pts);
-                let res_signatures = await recognizeSignature(pts);
+                await recognizeSignature(pts);
             }
-            if(areSame(res_signatures)){
-                alert(res_signatures[0]);
+            if(areSame(results_temp)){
+                alert(results_temp[0]);
             }
     }
     /*if(DWObject) {
