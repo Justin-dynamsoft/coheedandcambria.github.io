@@ -341,14 +341,14 @@ async function ProcessImage() {
                 let pts = createPoints(loc_1025002[i]);
                 console.log(pts);
                 await recognizeSignature(pts);
-                /*if(i == loc_1025002-1){
+                if(i == loc_1025002-1){
                     console.log(results_temp);
-                }*/
+                }
             }
             /*if(await areSame(results_temp)){
                 alert(results_temp[0]);
             }*/
-            console.log(results_temp)
+            //console.log(results_temp)
     }
     /*if(DWObject) {
         if(DWObject.HowManyImagesInBuffer > 0){
