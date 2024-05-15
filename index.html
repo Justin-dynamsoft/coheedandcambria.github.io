@@ -57,7 +57,6 @@
             {x: 194, y: 1766, width: 414, height: 31, id:"50000100"}
         ];
 
-        let pts = null;
         const loc = null;
         let results_temp = [];
 
@@ -125,6 +124,42 @@
                     }
                 });
                 DWObject.LoadImageEx("", Dynamsoft.DWT.EnumDWT_ImageType.IT_ALL, OnSuccess, OnFailure); // Load images in all supported formats (.bmp, .jpg, .tif, .png, .pdf). OnSuccess or OnFailure will be called after the operation
+            }
+        }
+
+        async function recognizeSignature(pts) {
+            // setting the points to the quad of pts
+            let cvrSettings = await cvr.getSimplifiedSettings("cv0");
+            cvrSettings.roiMeasuredInPercentage = false;
+            cvrSettings.roi.points = pts;
+            await cvr.updateSettings("cv0", cvrSettings);
+
+            if(DWObject) {
+                if(DWObject.HowManyImagesInBuffer > 0){
+                    // convert the latest image in the buffer to a blob
+                    // if working with a multi-page PDF and uncertain on which page the signature is on, then you will need to loop through the images that are added to the buffer.
+                    // once the PDF is loaded into the DWT buffer, they are turned into images, so when converting to a blob, the IT_JPG format needs to be selected because PDF will not work with DLR JS
+                    // In this sample, we just take the latest image in the buffer and then convert that to a blob and then process that using DLR 
+                    DWObject.ConvertToBlob(
+                        [DWObject.CurrentImageIndexInBuffer],
+                        Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
+                        async function (result, indices, type) {
+                            console.log(result.size);
+                            // now take the blob result and feed it to capture method
+                            let dlrResult = await cvr.capture(result, "cv0");
+                            if(contoursArrayLength > 10) {
+                                results_temp.push("signed");
+                            } else {
+                                results_temp.push("unsigned");
+                            }
+                            contoursArrayLength = 0;
+                        },
+                        function (errorCode, errorString) {
+                            console.log(errorString);
+                        }
+                    );
+
+                }
             }
         }
 
@@ -245,11 +280,11 @@
             };
             await cvr.initSettings(settings);
 
-            /*let cvrSettings = await cvr.getSimplifiedSettings("cv0");
+            let cvrSettings = await cvr.getSimplifiedSettings("cv0");
             cvrSettings.roiMeasuredInPercentage = false;
             // first one for 1025002
             cvrSettings.roi.points = loc_1025002_0;
-            await cvr.updateSettings("cv0", cvrSettings);*/
+            await cvr.updateSettings("cv0", cvrSettings);
 
             const outputSettings = await cvr.outputSettings("cv0");
             //console.log(outputSettings);
@@ -335,20 +370,21 @@
                     console.log(pts);
                     break;
                 default:
+                    results_temp = [];
                     const loc_1025002 = loc_points.filter(function (el){
                         return el.id == "1025002";
                     })
                     console.log(loc_1025002);
-                    pts = Array.from(Array(loc_1025002.length), () => new Array(4));
-                    console.log(createPoints(loc_1025002[0]));
                     for (let i = 0; i++; i < loc_1025002.length){
-                        pts[i] = [];
-                        pts[i] = createPoints(loc_1025002[i]);
+                        let pts = createPoints(loc_1025002[i]);
+                        console.log(pts);
+                        recognizeSignature(pts);
                     }
-                    console.log(pts);
-                    console.log(pts.length);
+                    if(areSame(results_temp)){
+                        alert(results_temp[0]);
+                    }
             }
-            if(DWObject) {
+            /*if(DWObject) {
                 if(DWObject.HowManyImagesInBuffer > 0){
                     // convert the latest image in the buffer to a blob
                     // if working with a multi-page PDF and uncertain on which page the signature is on, then you will need to loop through the images that are added to the buffer.
@@ -371,7 +407,7 @@
                             contoursArrayLength = 0;
                             if(areSame(results_temp)){
                                 alert(results_temp[0]);
-                            }*/
+                            }
                         },
                         function (errorCode, errorString) {
                             console.log(errorString);
@@ -379,7 +415,7 @@
                     );
 
                 }
-            }
+            }*/
         }
 
     </script>
