@@ -341,7 +341,7 @@ async function ProcessImage() {
                 let pts = createPoints(loc_1025002[i]);
                 console.log(pts);
                 await recognizeSignature(pts);
-                if(i == loc_1025002-1){
+                if(i == loc_1025002.length-1){
                     console.log(results_temp);
                 }
             }
