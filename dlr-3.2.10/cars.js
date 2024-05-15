@@ -339,48 +339,16 @@ async function ProcessImage() {
             console.log(loc_1025002);
             for (let i = 0; i < loc_1025002.length; i++){
                 let pts = createPoints(loc_1025002[i]);
-                console.log(pts);
                 let res_string = await recognizeSignature(pts);
+                if(res_string === "unsigned"){
+                    alert("unsigned on box" + i);
+                    break;
+                }
                 res_arr.push(res_string);
-                /*if(i == loc_1025002.length-1){
-                    console.log(results_temp);
-                }*/
             }
             if(areSame(res_arr)){
                 alert(res_arr[0]);
             }
     }
-    /*if(DWObject) {
-        if(DWObject.HowManyImagesInBuffer > 0){
-            // convert the latest image in the buffer to a blob
-            // if working with a multi-page PDF and uncertain on which page the signature is on, then you will need to loop through the images that are added to the buffer.
-            // once the PDF is loaded into the DWT buffer, they are turned into images, so when converting to a blob, the IT_JPG format needs to be selected because PDF will not work with DLR JS
-            // In this sample, we just take the latest image in the buffer and then convert that to a blob and then process that using DLR 
-            DWObject.ConvertToBlob(
-                [DWObject.CurrentImageIndexInBuffer],
-                Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
-                async function (result, indices, type) {
-                    console.log(result.size);
-                    // now take the blob result and feed it to capture method
-                    /*for (let i = 0; i++; i < pts.length){
-                        let dlrResult = await cvr.capture(result, "cv0");
-                        if(contoursArrayLength > 10) {
-                            results_temp[i] = "signed";
-                        } else {
-                            results_temp[i] = "unsigned";
-                        }
-                    }
-                    contoursArrayLength = 0;
-                    if(areSame(results_temp)){
-                        alert(results_temp[0]);
-                    }
-                },
-                function (errorCode, errorString) {
-                    console.log(errorString);
-                }
-            );
-
-        }
-    }*/
 }
 
