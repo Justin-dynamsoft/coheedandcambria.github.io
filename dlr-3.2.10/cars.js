@@ -126,9 +126,9 @@ async function recognizeSignature(pts) {
                     console.log(errorString);
                 }
             );
+            return res;
         }
     }
-    return res;
 }
 
 Object.assign(Dynamsoft.Core.CoreModule.engineResourcePaths, {
