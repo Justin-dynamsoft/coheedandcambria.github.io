@@ -337,7 +337,7 @@ async function ProcessImage() {
             })
             console.log(loc_1025002);
             //console.log(createPoints(loc_1025002[0]));
-            for (let i = 0; i++; i < loc_1025002.length){
+            for (let i = 0; i < loc_1025002.length; i++){
                 let pts = createPoints(loc_1025002[i]);
                 console.log(pts);
                 let res_signatures = await recognizeSignature(pts);
