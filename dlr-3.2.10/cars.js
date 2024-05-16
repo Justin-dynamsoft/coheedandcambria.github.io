@@ -273,9 +273,9 @@ async function ProcessImage() {
             const loc_1080003 = loc_points.filter(function (el){
                 return el.id == "1080003";
             })
-            console.log(loc_1080003);
             for (let i = 0; i < loc_1080003.length; i++){
                 let pts = createPoints(loc_1080003[i]);
+                console.log(pts);
                 let res_string = await recognizeSignature(pts);
                 if(res_string === "unsigned"){
                     res_arr1.push(res_string);
@@ -293,9 +293,9 @@ async function ProcessImage() {
             const loc_2130002 = loc_points.filter(function (el){
                 return el.id == "2130002";
             })
-            console.log(loc_2130002);
             for (let i = 0; i < loc_2130002.length; i++){
                 let pts = createPoints(loc_2130002[i]);
+                console.log(pts);
                 let res_string = await recognizeSignature(pts);
                 if(res_string === "unsigned"){
                     res_arr2.push(res_string);
@@ -313,9 +313,9 @@ async function ProcessImage() {
             const loc_2140001 = loc_points.filter(function (el){
                 return el.id == "2140001";
             })
-            console.log(loc_2140001);
             for (let i = 0; i < loc_2140001.length; i++){
                 let pts = createPoints(loc_2140001[i]);
+                console.log(pts);
                 let res_string = await recognizeSignature(pts);
                 if(res_string === "unsigned"){
                     res_arr3.push(res_string);
@@ -333,9 +333,9 @@ async function ProcessImage() {
             const loc_2150003 = loc_points.filter(function (el){
                 return el.id == "2150003";
             })
-            console.log(loc_2150003);
             for (let i = 0; i < loc_2150003.length; i++){
                 let pts = createPoints(loc_2150003[i]);
+                console.log(pts);
                 let res_string = await recognizeSignature(pts);
                 if(res_string === "unsigned"){
                     res_arr4.push(res_string);
@@ -353,9 +353,9 @@ async function ProcessImage() {
             const loc_10400030 = loc_points.filter(function (el){
                 return el.id == "10400030";
             })
-            console.log(loc_10400030);
             for (let i = 0; i < loc_10400030.length; i++){
                 let pts = createPoints(loc_10400030[i]);
+                console.log(pts);
                 let res_string = await recognizeSignature(pts);
                 if(res_string === "unsigned"){
                     res_arr5.push(res_string);
@@ -373,9 +373,9 @@ async function ProcessImage() {
             const loc_50000100 = loc_points.filter(function (el){
                 return el.id == "50000100";
             })
-            console.log(loc_50000100);
             for (let i = 0; i < loc_50000100.length; i++){
                 let pts = createPoints(loc_50000100[i]);
+                console.log(pts);
                 let res_string = await recognizeSignature(pts);
                 if(res_string === "unsigned"){
                     res_arr6.push(res_string);
@@ -396,6 +396,7 @@ async function ProcessImage() {
             console.log(loc_1025002);
             for (let i = 0; i < loc_1025002.length; i++){
                 let pts = createPoints(loc_1025002[i]);
+                console.log(pts);
                 let res_string = await recognizeSignature(pts);
                 if(res_string === "unsigned"){
                     res_arr0.push(res_string);
