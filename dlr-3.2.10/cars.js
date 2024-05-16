@@ -109,7 +109,7 @@ async function recognizeSignature(pts) {
             let dlrResult = await cvr.capture(imageURL, "cv0");
             // using the intermediate results (and the intermediate result receiver) the contours are counted and that 
             // will determine whether the area is signed or unsigned
-            if(contoursArrayLength > 10) {
+            if(contoursArrayLength >= 10) {
                 res = "signed";
             } else {
                 res = "unsigned";
