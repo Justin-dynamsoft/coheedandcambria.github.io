@@ -104,28 +104,7 @@ async function recognizeSignature(pts) {
         await cvr.updateSettings("cv0", cvrSettings);
 
         if(DWObject.HowManyImagesInBuffer > 0){
-            // convert the latest image in the buffer to a blob
-            // if working with a multi-page PDF and uncertain on which page the signature is on, then you will need to loop through the images that are added to the buffer.
-            // once the PDF is loaded into the DWT buffer, they are turned into images, so when converting to a blob, the IT_JPG format needs to be selected because PDF will not work with DLR JS
-            // In this sample, we just take the latest image in the buffer and then convert that to a blob and then process that using DLR 
-            /*DWObject.ConvertToBlob(
-                [DWObject.CurrentImageIndexInBuffer],
-                Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
-                async function (result, indices, type) {
-                    console.log(result.size);
-                    // now take the blob result and feed it to capture method
-                    let dlrResult = await cvr.capture(result, "cv0");
-                    if(contoursArrayLength > 10) {
-                        res = "signed";
-                    } else {
-                        res = "unsigned";
-                    }
-                    contoursArrayLength = 0;
-                },
-                function (errorCode, errorString) {
-                    console.log(errorString);
-                }
-            );*/
+            // Instead of converting to a blob, use the ImageURL DWT API and feed that to the capture method
             let imageURL = DWObject.GetImageURL(DWObject.CurrentImageIndexInBuffer);
             let dlrResult = await cvr.capture(imageURL, "cv0");
             if(contoursArrayLength > 10) {
@@ -271,6 +250,14 @@ let pCvrReady = (async () => {
     intermediateManager.addResultReceiver(irr);
 })();
 
+/*
+For each case, the array of coordinates for each form will be retrieved from the overall coordinates struct.
+Once the coordinates set is taken, go in a loop and run the recognizeSignature method based on each coordinates.
+The result string (signed or unsigned) for each coordinate set is returned and then put in an array. If a string
+is unsigned, make an alert with which box it is. If all the boxes are signed and none of them are unsigned, then the alert will just say "signed" in the end.
+
+Currently done for the default case which is 1025002, just the same needs to be applied to all the other cases.
+*/
 async function ProcessImage() {
     await pCvrReady;
     
@@ -348,7 +335,6 @@ async function ProcessImage() {
                 if(res_string === "unsigned"){
                     res_arr.push(res_string);
                     alert("unsigned on box " + i);
-                    continue;
                 } else {
                     res_arr.push(res_string);
                 }
