@@ -347,7 +347,7 @@ async function ProcessImage() {
                 let res_string = await recognizeSignature(pts);
                 if(res_string === "unsigned"){
                     alert("unsigned on box" + i);
-                    break;
+                    continue;
                 }
                 res_arr.push(res_string);
             }
