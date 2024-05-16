@@ -351,7 +351,7 @@ async function ProcessImage() {
                 }
                 res_arr.push(res_string);
             }
-            if(areSame(res_arr)){
+            if(areSame(res_arr) && !(res_arr.includes("unsigned"))){
                 alert(res_arr[0]);
             }
     }
