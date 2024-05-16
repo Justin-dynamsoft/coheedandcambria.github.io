@@ -95,20 +95,20 @@ function LoadImage() {
 }
 
 async function recognizeSignature(pts) {
-    let res = null;
-    // setting the points to the quad of pts
-    let cvrSettings = await cvr.getSimplifiedSettings("cv0");
-    cvrSettings.roiMeasuredInPercentage = false;
-    cvrSettings.roi.points = pts;
-    await cvr.updateSettings("cv0", cvrSettings);
-
     if(DWObject) {
+        let res = null;
+        // setting the points to the quad of pts
+        let cvrSettings = await cvr.getSimplifiedSettings("cv0");
+        cvrSettings.roiMeasuredInPercentage = false;
+        cvrSettings.roi.points = pts;
+        await cvr.updateSettings("cv0", cvrSettings);
+
         if(DWObject.HowManyImagesInBuffer > 0){
             // convert the latest image in the buffer to a blob
             // if working with a multi-page PDF and uncertain on which page the signature is on, then you will need to loop through the images that are added to the buffer.
             // once the PDF is loaded into the DWT buffer, they are turned into images, so when converting to a blob, the IT_JPG format needs to be selected because PDF will not work with DLR JS
             // In this sample, we just take the latest image in the buffer and then convert that to a blob and then process that using DLR 
-            DWObject.ConvertToBlob(
+            /*DWObject.ConvertToBlob(
                 [DWObject.CurrentImageIndexInBuffer],
                 Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
                 async function (result, indices, type) {
@@ -125,7 +125,15 @@ async function recognizeSignature(pts) {
                 function (errorCode, errorString) {
                     console.log(errorString);
                 }
-            );
+            );*/
+            let imageURL = DWObject.GetImageURL(DWObject.CurrentImageIndexInBuffer);
+            let dlrResult = await cvr.capture(imageURL, "cv0");
+            if(contoursArrayLength > 10) {
+                res = "signed";
+            } else {
+                res = "unsigned";
+            }
+            contoursArrayLength = 0;
             return res;
         }
     }
@@ -247,9 +255,6 @@ let pCvrReady = (async () => {
         ]
     };
     await cvr.initSettings(settings);
-
-    const outputSettings = await cvr.outputSettings("cv0");
-    //console.log(outputSettings);
 
     let irr = new Dynamsoft.CVR.IntermediateResultReceiver();
     intermediateManager = cvr.getIntermediateResultManager();
