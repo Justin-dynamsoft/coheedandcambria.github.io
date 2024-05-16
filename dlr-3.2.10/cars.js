@@ -346,10 +346,12 @@ async function ProcessImage() {
                 let pts = createPoints(loc_1025002[i]);
                 let res_string = await recognizeSignature(pts);
                 if(res_string === "unsigned"){
-                    alert("unsigned on box" + i);
+                    res_arr.push(res_string);
+                    alert("unsigned on box " + i);
                     continue;
+                } else {
+                    res_arr.push(res_string);
                 }
-                res_arr.push(res_string);
             }
             if(areSame(res_arr) && !(res_arr.includes("unsigned"))){
                 alert(res_arr[0]);
