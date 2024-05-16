@@ -107,6 +107,8 @@ async function recognizeSignature(pts) {
             // Instead of converting to a blob, use the ImageURL DWT API and feed that to the capture method
             let imageURL = DWObject.GetImageURL(DWObject.CurrentImageIndexInBuffer);
             let dlrResult = await cvr.capture(imageURL, "cv0");
+            // using the intermediate results (and the intermediate result receiver) the contours are counted and that 
+            // will determine whether the area is signed or unsigned
             if(contoursArrayLength > 10) {
                 res = "signed";
             } else {
@@ -137,6 +139,7 @@ let contoursArrayLength = 0;
 
 let pCvrReady = (async () => {
     cvr = await Dynamsoft.CVR.CaptureVisionRouter.createInstance();
+    // setting up the CVR template settings
     const settings = {
         "CaptureVisionTemplates": [
             {
@@ -235,6 +238,8 @@ let pCvrReady = (async () => {
     };
     await cvr.initSettings(settings);
 
+    // setting up the intermediate result receiver in order to set up the countours counting which is essential
+    // to the signature detection process
     let irr = new Dynamsoft.CVR.IntermediateResultReceiver();
     intermediateManager = cvr.getIntermediateResultManager();
     irr.onContoursUnitReceived = (result, info) => {
@@ -264,67 +269,127 @@ async function ProcessImage() {
     let formID = document.getElementById("forms");
     switch(formID.value) {
         case "1080003":
-            loc = loc_points.filter(function (el){
+            let res_arr1 = [];
+            const loc_1080003 = loc_points.filter(function (el){
                 return el.id == "1080003";
             })
-            pts = [];
-            for (let i = 0; i++; i < loc.length){
-                pts[i] = createPoints(loc[i]);
+            console.log(loc_1080003);
+            for (let i = 0; i < loc_1080003.length; i++){
+                let pts = createPoints(loc_1080003[i]);
+                let res_string = await recognizeSignature(pts);
+                if(res_string === "unsigned"){
+                    res_arr1.push(res_string);
+                    alert("unsigned on box " + i);
+                } else {
+                    res_arr1.push(res_string);
+                }
             }
-            console.log(pts);
+            if(areSame(res_arr1) && !(res_arr1.includes("unsigned"))){
+                alert(res_arr1[0]);
+            }
             break;
         case "2130002":
-            loc = loc_points.filter(function (el){
+            let res_arr2 = [];
+            const loc_2130002 = loc_points.filter(function (el){
                 return el.id == "2130002";
             })
-            pts = [];
-            for (let i = 0; i++; i < loc.length){
-                pts[i] = createPoints(loc[i]);
+            console.log(loc_2130002);
+            for (let i = 0; i < loc_2130002.length; i++){
+                let pts = createPoints(loc_2130002[i]);
+                let res_string = await recognizeSignature(pts);
+                if(res_string === "unsigned"){
+                    res_arr2.push(res_string);
+                    alert("unsigned on box " + i);
+                } else {
+                    res_arr2.push(res_string);
+                }
             }
-            console.log(pts);
+            if(areSame(res_arr2) && !(res_arr2.includes("unsigned"))){
+                alert(res_arr2[0]);
+            }
             break;
         case "2140001":
-            loc = loc_points.filter(function (el){
+            let res_arr3 = [];
+            const loc_2140001 = loc_points.filter(function (el){
                 return el.id == "2140001";
             })
-            pts = [];
-            for (let i = 0; i++; i < loc.length){
-                pts[i] = createPoints(loc[i]);
+            console.log(loc_2140001);
+            for (let i = 0; i < loc_2140001.length; i++){
+                let pts = createPoints(loc_2140001[i]);
+                let res_string = await recognizeSignature(pts);
+                if(res_string === "unsigned"){
+                    res_arr3.push(res_string);
+                    alert("unsigned on box " + i);
+                } else {
+                    res_arr3.push(res_string);
+                }
             }
-            console.log(pts);
+            if(areSame(res_arr3) && !(res_arr3.includes("unsigned"))){
+                alert(res_arr3[0]);
+            }
             break;
         case "2150003":
-            loc = loc_points.filter(function (el){
+            let res_arr4 = [];
+            const loc_2150003 = loc_points.filter(function (el){
                 return el.id == "2150003";
             })
-            pts = [];
-            for (let i = 0; i++; i < loc.length){
-                pts[i] = createPoints(loc[i]);
+            console.log(loc_2150003);
+            for (let i = 0; i < loc_2150003.length; i++){
+                let pts = createPoints(loc_2150003[i]);
+                let res_string = await recognizeSignature(pts);
+                if(res_string === "unsigned"){
+                    res_arr4.push(res_string);
+                    alert("unsigned on box " + i);
+                } else {
+                    res_arr4.push(res_string);
+                }
             }
-            console.log(pts);
+            if(areSame(res_arr4) && !(res_arr4.includes("unsigned"))){
+                alert(res_arr4[0]);
+            }
             break;
         case "10400030":
-            loc = loc_points.filter(function (el){
+            let res_arr5 = [];
+            const loc_10400030 = loc_points.filter(function (el){
                 return el.id == "10400030";
             })
-            pts = [];
-            for (let i = 0; i++; i < loc.length){
-                pts[i] = createPoints(loc[i]);
+            console.log(loc_10400030);
+            for (let i = 0; i < loc_10400030.length; i++){
+                let pts = createPoints(loc_10400030[i]);
+                let res_string = await recognizeSignature(pts);
+                if(res_string === "unsigned"){
+                    res_arr5.push(res_string);
+                    alert("unsigned on box " + i);
+                } else {
+                    res_arr5.push(res_string);
+                }
             }
-            console.log(pts);
+            if(areSame(res_arr5) && !(res_arr5.includes("unsigned"))){
+                alert(res_arr5[0]);
+            }
             break;
         case "50000100":
-            loc = loc_points.filter(function (el){
+            let res_arr6 = [];
+            const loc_50000100 = loc_points.filter(function (el){
                 return el.id == "50000100";
             })
-            pts = [];
-            for (let i = 0; i++; i < loc.length){
-                pts[i] = createPoints(loc[i]);
+            console.log(loc_50000100);
+            for (let i = 0; i < loc_50000100.length; i++){
+                let pts = createPoints(loc_50000100[i]);
+                let res_string = await recognizeSignature(pts);
+                if(res_string === "unsigned"){
+                    res_arr6.push(res_string);
+                    alert("unsigned on box " + i);
+                } else {
+                    res_arr6.push(res_string);
+                }
             }
-            console.log(pts);
+            if(areSame(res_arr6) && !(res_arr6.includes("unsigned"))){
+                alert(res_arr6[0]);
+            }
             break;
         default:
-            let res_arr = [];
+            let res_arr0 = [];
             const loc_1025002 = loc_points.filter(function (el){
                 return el.id == "1025002";
             })
@@ -333,14 +398,14 @@ async function ProcessImage() {
                 let pts = createPoints(loc_1025002[i]);
                 let res_string = await recognizeSignature(pts);
                 if(res_string === "unsigned"){
-                    res_arr.push(res_string);
+                    res_arr0.push(res_string);
                     alert("unsigned on box " + i);
                 } else {
-                    res_arr.push(res_string);
+                    res_arr0.push(res_string);
                 }
             }
-            if(areSame(res_arr) && !(res_arr.includes("unsigned"))){
-                alert(res_arr[0]);
+            if(areSame(res_arr0) && !(res_arr0.includes("unsigned"))){
+                alert(res_arr0[0]);
             }
     }
 }
