@@ -20,16 +20,9 @@ let loc_points = [
     {x: 194, y: 1766, width: 414, height: 31, id:"50000100"}
 ];
 
-const loc = null;
-//let results_temp = [];
-
 function Point(x, y) {
     this.x = x;
     this.y = y;
-}
-
-function Quadrilateral(points){
-    this.points = points;
 }
 
 // this function takes ONE set of the struct above and turns it into a struct with four Points, which can then be made into a quadrilateral and fed to the roi property
@@ -249,7 +242,7 @@ let pCvrReady = (async () => {
             if (result.contours.length > contoursArrayLength){
                 contoursArrayLength = result.contours.length;
             }
-            console.log(result, info);
+            //console.log(result, info);
         }
     }
     intermediateManager.addResultReceiver(irr);
