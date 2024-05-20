@@ -179,13 +179,13 @@ const settings = {
     }
   }
   
-    Object.assign(Dynamsoft.Core.CoreModule.engineResourcePaths, {
+    /*Object.assign(Dynamsoft.Core.CoreModule.engineResourcePaths, {
         std: './dlr-3.2.10/std/',
         dip: './dlr-3.2.10/dip/',
         dnn: './dlr-3.2.10/dnn/',
         dlrData: './dlr-3.2.10/dlrData/',
         utility: './dlr-3.2.10/utility/'
-    });
+    });*/
   
   Dynamsoft.Core.CoreModule.loadWasm(["DIP", "CVR", "DLR"]);
   
