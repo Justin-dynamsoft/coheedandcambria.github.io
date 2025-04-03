@@ -48,7 +48,7 @@
             cvRouter = await Dynamsoft.CVR.CaptureVisionRouter.createInstance();
             await cvRouter.initSettings("./Resources/mrz-template.json");
 
-            appendMessage("<b> MRZ Initialized Successfully <br>");
+            console.log("MRZ Initialized Successfully");
         }
 
 		function AcquireImage() {
@@ -82,7 +82,7 @@
 
         function checkIfImagesInBuffer() {
             if (DWTObject.HowManyImagesInBuffer == 0) {
-                appendMessage("<span style='color:#cE5E04'><b>There is no image in the buffer.</b></span><br />")
+                console.log("There is no image in the buffer.")
                 return false;
             }
             else
@@ -95,7 +95,7 @@
                 return;
             }
             if (!cvRouter) {
-                appendMessage("<span style='color:#cE5E04'><b>cvRouter is not initialized.</b></span><br />");
+                console.log("cvRouter is not initialized.");
                 return;
             }
             console.log("Reading MRZ on Index " + DWTObject.CurrentImageIndexInBuffer);
@@ -109,19 +109,17 @@
 
                     console.log(parsedResults);
                     if (!parsedResults || !parsedResults.length) {
-                        appendMessage("<span style='color:#cE5E04'><b>No Result</b></span><br />");
+                        console.log("No Result");
                         return;
                     }
                     
                     extractedResults = extractDocumentFields(parsedResults[0]);
                     console.log(recognizedResults);
                     console.log(extractedResults);
-                    appendMessage("<b> Document Number: " + extractedResults['Document Number'].text + " <br>");
-                    appendMessage("<b> Please See Detailed MRZ Result in Console <br>");
+                    console.log("Please See Detailed MRZ Result in Console");
                 },
                 function (errorCode, errorString) {
                     console.log(errorString);
-                    appendMessage("<span style='color:#cE5E04'><b>" + errorString + "</b></span><br />");
                 }
             );
             
