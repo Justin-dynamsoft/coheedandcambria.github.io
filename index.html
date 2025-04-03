@@ -99,7 +99,22 @@
                 return;
             }
             console.log("Reading MRZ on Index " + DWTObject.CurrentImageIndexInBuffer);
-            await DWTObject.ConvertToBlob(
+            let imgURL = DWTObject.GetImageURL(DWTObject.CurrentImageIndexInBuffer);
+            let capturedResults = await cvRouter.capture(imgURL, "ReadPassportAndId");
+            const recognizedResults = capturedResults.textLineResultItems;
+            const parsedResults = capturedResults.parsedResultItems;
+            console.log(parsedResults);
+            if (!parsedResults || !parsedResults.length) {
+                console.log("No Result");
+                return;
+            }
+            
+            extractedResults = extractDocumentFields(parsedResults[0]);
+            console.log(recognizedResults);
+            console.log(extractedResults);
+            console.log("Please See Detailed MRZ Result in Console");
+
+            /*DWTObject.ConvertToBlob(
                 [DWTObject.CurrentImageIndexInBuffer],
                 Dynamsoft.DWT.EnumDWT_ImageType.IT_PNG,
                 async function (result, indices, type) {
@@ -121,7 +136,7 @@
                 function (errorCode, errorString) {
                     console.log(errorString);
                 }
-            );
+            );*/
             
         }
 
@@ -142,19 +157,19 @@
             });
         
             const parseDate = (yearField, monthField, dayField) => {
-            const year = result.getFieldValue(yearField);
-            const currentYear = new Date().getFullYear() % 100;
-            const baseYear =
-                yearField === "expiryYear" ? (parseInt(year) >= 60 ? "19" : "20") : parseInt(year) > currentYear ? "19" : "20";
-        
-            return {
-                text: `${baseYear}${year}-${result.getFieldValue(monthField)}-${result.getFieldValue(dayField)}`,
-                status: [yearField, monthField, dayField].every(
-                (field) => result.getFieldValidationStatus(field) === Dynamsoft.DCP.EnumValidationStatus.VS_SUCCEEDED
-                )
-                ? Dynamsoft.DCP.EnumValidationStatus.VS_SUCCEEDED
-                : Dynamsoft.DCP.EnumValidationStatus.VS_FAILED,
-            };
+                const year = result.getFieldValue(yearField);
+                const currentYear = new Date().getFullYear() % 100;
+                const baseYear =
+                    yearField === "expiryYear" ? (parseInt(year) >= 60 ? "19" : "20") : parseInt(year) > currentYear ? "19" : "20";
+            
+                return {
+                    text: `${baseYear}${year}-${result.getFieldValue(monthField)}-${result.getFieldValue(dayField)}`,
+                    status: [yearField, monthField, dayField].every(
+                    (field) => result.getFieldValidationStatus(field) === Dynamsoft.DCP.EnumValidationStatus.VS_SUCCEEDED
+                    )
+                    ? Dynamsoft.DCP.EnumValidationStatus.VS_SUCCEEDED
+                    : Dynamsoft.DCP.EnumValidationStatus.VS_FAILED,
+                };
             };
         
             // Add special case for Spanish IDs
