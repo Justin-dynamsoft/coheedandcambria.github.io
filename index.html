@@ -13,15 +13,9 @@
     <input type="button" value="Load" onclick="LoadImage();" />
     <input type="button" value="Read MRZ" onclick="readMRZ();" />
     <div id="dwtcontrolContainer" style="width: 350px; height: 380px;"></div>
-	<div style="margin-top: 30px;letter-spacing: 0px;color: #323234;font-size: 14px;">
-		<div style="font: normal normal 600 14px/27px Open Sans;">About: </div>
-		<div style="font: normal normal normal 14px/24px Open Sans;">This sample uses the Core Module of Dynamic Web TWAIN.</div>
-		<div style="margin-top: 10px;font: normal normal 600 14px/27px Open Sans;">Learn More:</div>
-		<div style="font: normal normal normal 14px/28px Open Sans;color: #FE8E14;">
-			<a style="color: #FE8E14;text-decoration: none;" target="_blank" href="https://www.dynamsoft.com/web-twain/docs/faq/download-virtual-scanner-for-testing.html?product=dwt&utm_source=installer">Download virtual scanner for testing ></a><br/>
-			<a style="color: #FE8E14;text-decoration: none;" target="_blank" href="https://www.dynamsoft.com/web-twain/docs/indepth/features/initialize.html#dynamsoftdwtload?product=dwt&utm_source=installer">How to initialize Dynamic Web TWAIN instance on demand ></a>        
-		</div>
-	</div>
+	
+    <p>Result:</p>
+	<div id="divNoteMessage" style="width: 250px;height: 225px;border: 1px solid #ccc;overflow: auto;"> </div>
 
 
     <script type="text/javascript">
@@ -110,34 +104,8 @@
             }
             
             extractedResults = extractDocumentFields(parsedResults[0]);
-            console.log(recognizedResults);
-            console.log(extractedResults);
-            console.log("Please See Detailed MRZ Result in Console");
-
-            /*DWTObject.ConvertToBlob(
-                [DWTObject.CurrentImageIndexInBuffer],
-                Dynamsoft.DWT.EnumDWT_ImageType.IT_PNG,
-                async function (result, indices, type) {
-                    let capturedResults = await cvRouter.capture(result, "ReadPassportAndId");
-                    const recognizedResults = capturedResults.textLineResultItems;
-                    const parsedResults = capturedResults.parsedResultItems;
-
-                    console.log(parsedResults);
-                    if (!parsedResults || !parsedResults.length) {
-                        console.log("No Result");
-                        return;
-                    }
-                    
-                    extractedResults = extractDocumentFields(parsedResults[0]);
-                    console.log(recognizedResults);
-                    console.log(extractedResults);
-                    console.log("Please See Detailed MRZ Result in Console");
-                },
-                function (errorCode, errorString) {
-                    console.log(errorString);
-                }
-            );*/
-            
+            console.log(extractedResults); // print the result to the console
+            document.getElementById("divNoteMessage").innerHTML = extractedResults; // print the result to the result div
         }
 
         /**
