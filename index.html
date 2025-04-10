@@ -125,7 +125,7 @@
         
             const fieldWithStatus = (fieldName, raw=false) => ({
             text: raw ? result.getFieldRawValue(fieldName) : result.getFieldValue(fieldName),
-            status: result.getFieldValidationStatus(fieldName),
+            //status: result.getFieldValidationStatus(fieldName),
             });
         
             const parseDate = (yearField, monthField, dayField) => {
@@ -165,11 +165,11 @@
             return {
             Surname: fieldWithStatus("primaryIdentifier"),
             "Given Name": fieldWithStatus("secondaryIdentifier"),
-            Nationality: fieldWithStatus("nationality", false),
+            Nationality: fieldWithStatus("nationality", true),
             "Document Number": getDocumentNumber(codeType),
             "Document Type": documentTypeLabel(codeType),
-            "Issuing State": fieldWithStatus("issuingState", false),
-            Sex: fieldWithStatus("sex", false),
+            "Issuing State": fieldWithStatus("issuingState", true),
+            Sex: fieldWithStatus("sex", true),
             "Date of Birth (YYYY-MM-DD)": parseDate("birthYear", "birthMonth", "birthDay"),
             "Date of Expiry (YYYY-MM-DD)": parseDate("expiryYear", "expiryMonth", "expiryDay"),
             "Document Type": JSON.parse(result.jsonString).CodeType,
