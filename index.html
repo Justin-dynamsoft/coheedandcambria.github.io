@@ -105,7 +105,10 @@
             
             extractedResults = extractDocumentFields(parsedResults[0]);
             console.log(extractedResults); // print the result to the console
-            document.getElementById("divNoteMessage").innerHTML = JSON.stringify(extractedResults); // print the result to the result div
+            let extractedResultsString = JSON.stringify(extractedResults);
+            let resultContent = extractedResultsString.split(",");
+            console.log(resultContent);
+            document.getElementById("divNoteMessage").innerHTML = resultContent.join("\n"); // print the result to the result div
         }
 
         /**
