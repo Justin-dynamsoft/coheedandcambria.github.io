@@ -107,9 +107,9 @@
             console.log(extractedResults); // print the result to the console
             let extractedResultsString = JSON.stringify(extractedResults);
             let resultContent = extractedResultsString.split(",");
-            resultContent = resultContent.replace(/[":]+/g, "");
-            console.log(resultContent);
-            console.log(resultContent.join("\n"));
+            let resultContentString = resultContent.join("\n");
+            resultContentString = resultContentString.replace(/[":]+/g, "");
+            console.log(resultContentString);
             document.getElementById("divNoteMessage").innerHTML = resultContent.join("\n"); // print the result to the result div
         }
 
