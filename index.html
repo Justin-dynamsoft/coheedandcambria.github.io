@@ -103,13 +103,11 @@
                 return;
             }
             
-            extractedResults = JSON.stringify(extractDocumentFields(parsedResults[0]));
+            let extractedResults = JSON.stringify(extractDocumentFields(parsedResults[0]));
             console.log(extractedResults); // print the result to the console
-            let resultContent = extractedResults.split(",").join("\n");
-            //let resultContentString = resultContent.join("\n");
-            //resultContentString = resultContentString.replace(/{"text":|[{"}]/g, "");
-            resultContent = resultContent.replace(/{"text":|[{"}]/g, "");
-            document.getElementById("divNoteMessage").innerHTML = resultContent; // print the result to the result div
+            extractedResults = extractedResults.split(",").join("\n");
+            extractedResults = extractedResults.replace(/{"text":|[{"}]/g, "");
+            document.getElementById("divNoteMessage").innerHTML = extractedResults; // print the result to the result div
         }
 
         /**
