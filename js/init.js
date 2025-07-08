@@ -7,7 +7,9 @@ import { createPendingPromise, extractDocumentFields, resultToHTMLElement } from
 /** LICENSE ALERT - README
  * To use the library, you need to first specify a license key using the API "initLicense" as shown below.
  */
-Dynamsoft.License.LicenseManager.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMzE0NTQwLU16RTBOVFF3TFhkbFlpMVVjbWxoYkZCeWIybyIsIm1haW5TZXJ2ZXJVUkwiOiJodHRwczovL21sdHMuZHluYW1zb2Z0LmNvbSIsIm9yZ2FuaXphdGlvbklEIjoiMzE0NTQwIiwic3RhbmRieVNlcnZlclVSTCI6Imh0dHBzOi8vc2x0cy5keW5hbXNvZnQuY29tIiwiY2hlY2tDb2RlIjoyMDc0MDIyMDAyfQ==");
+Dynamsoft.License.LicenseManager.initLicense(
+  "DLS2eyJoYW5kc2hha2VDb2RlIjoiMzE0NTQwLU16RTBOVFF3TFhkbFlpMVVjbWxoYkZCeWIybyIsIm1haW5TZXJ2ZXJVUkwiOiJodHRwczovL21sdHMuZHluYW1zb2Z0LmNvbSIsIm9yZ2FuaXphdGlvbklEIjoiMzE0NTQwIiwic3RhbmRieVNlcnZlclVSTCI6Imh0dHBzOi8vc2x0cy5keW5hbXNvZnQuY29tIiwiY2hlY2tDb2RlIjoyMDc0MDIyMDAyfQ=="
+);
 /**
  * You can visit https://www.dynamsoft.com/customer/license/trialLicense/?product=mrz&utm_source=samples&package=js to get your own trial license good for 30 days.
  * For more information, see https://www.dynamsoft.com/capture-vision/docs/web/programming/javascript/user-guide/mrz-scanner.html#specify-the-license or contact support@dynamsoft.com.
@@ -98,8 +100,8 @@ let init = (async () => {
   /* Defines the result receiver for the solution.*/
   const resultReceiver = new Dynamsoft.CVR.CapturedResultReceiver();
   resultReceiver.onCapturedResultReceived = (result) => {
-    const recognizedResults = result.textLineResultItems;
-    const parsedResults = result.parsedResultItems;
+    const recognizedResults = result.recognizedTextLinesResult.textLineResultItems;
+    const parsedResults = result.parsedResult.parsedResultItems;
     const originalImage = result.items?.[0]?.imageData;
 
     if (recognizedResults?.length) {
