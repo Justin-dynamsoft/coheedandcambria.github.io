@@ -27,7 +27,7 @@ Dynamsoft.Core.CoreModule.loadWasm(["DLR", "DCP"]);
 Dynamsoft.DCP.CodeParserModule.loadSpec("MRTD_TD3_PASSPORT");
 Dynamsoft.DCP.CodeParserModule.loadSpec("MRTD_TD1_ID");
 Dynamsoft.DCP.CodeParserModule.loadSpec("MRTD_TD2_ID");
-Dynamsoft.DLR.LabelRecognizerModule.loadRecognitionData("MRZ");
+//Dynamsoft.DLR.LabelRecognizerModule.loadRecognitionData("MRZ");
 
 /**
  * Creates a CameraEnhancer instance as the image source
