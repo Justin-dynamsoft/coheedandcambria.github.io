@@ -92,7 +92,7 @@ async function initDCE() {
 let init = (async () => {
   await initDCE();
   cvRouter = await Dynamsoft.CVR.CaptureVisionRouter.createInstance();
-  await cvRouter.initSettings("./template.json");
+  await cvRouter.initSettings("./mrz-scanner.template.json");
   cvRouter.setInput(cameraEnhancer);
 
   /* Defines the result receiver for the solution.*/
