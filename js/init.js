@@ -98,8 +98,10 @@ let init = (async () => {
   /* Defines the result receiver for the solution.*/
   const resultReceiver = new Dynamsoft.CVR.CapturedResultReceiver();
   resultReceiver.onCapturedResultReceived = (result) => {
-    const recognizedResults = result.recognizedTextLinesResult.textLinesResultItems;
-    const parsedResults = result.parsedResult.parsedResultItems;
+    //const recognizedResults = result.recognizedTextLinesResult.textLinesResultItems;
+    //const parsedResults = result.parsedResult.parsedResultItems;
+    const recognizedResults = result?.recognizedTextLinesResult?.textLinesResultItems ?? [];
+    const parsedResults = result?.parsedResult?.parsedResultItems ?? [];
     const originalImage = result.items?.[0]?.imageData;
 
     if (recognizedResults?.length) {
