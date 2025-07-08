@@ -1,4 +1,4 @@
-import { init, pDataLoad } from "./init.js";
+import { init } from "./init.js";
 import { judgeCurResolution, shouldShowScanModeContainer, showNotification } from "./util.js";
 import { checkOrientation, getVisibleRegionOfVideo } from "./util.js";
 
@@ -9,7 +9,7 @@ async function startCapturing(mode) {
 
     // Open the camera after the model and .wasm files have loaded
     pInit = pInit || (await init);
-    await pDataLoad.promise;
+    //await pDataLoad.promise;
 
     // Starts streaming the video
     if (cameraEnhancer.isOpen()) {

@@ -2,7 +2,7 @@ import { changeMobileLayout, judgeCurResolution, showNotification } from "./util
 import { createPendingPromise, extractDocumentFields, resultToHTMLElement } from "./util.js";
 
 // Promise variable used to control model loading state
-const pDataLoad = createPendingPromise();
+// const pDataLoad = createPendingPromise();
 
 /** LICENSE ALERT - README
  * To use the library, you need to first specify a license key using the API "initLicense" as shown below.
@@ -14,11 +14,11 @@ Dynamsoft.License.LicenseManager.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMzE0NT
  * LICENSE ALERT - THE END
  */
 
-Dynamsoft.DLR.LabelRecognizerModule.onDataLoadProgressChanged = (modelPath, tag, progress) => {
+/*Dynamsoft.DLR.LabelRecognizerModule.onDataLoadProgressChanged = (modelPath, tag, progress) => {
   if (tag === "completed") {
     pDataLoad.resolve();
   }
-};
+};*/
 
 /**
  * Preloads the resources
@@ -154,4 +154,4 @@ function dispose() {
   cameraView.clearAllInnerDrawingItems();
 }
 
-export { pDataLoad, init };
+export { init };
