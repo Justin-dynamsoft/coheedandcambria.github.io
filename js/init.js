@@ -111,6 +111,7 @@ let init = (async () => {
       scannedImage.append(originalImage.toCanvas());
 
       const parseSuccess = displayResults(recognizedResults[0]?.text, parsedResults?.[0]);
+      console.log(parsedResults);
 
       if (!parseSuccess) {
         alert(`Failed to parse the content.`);
