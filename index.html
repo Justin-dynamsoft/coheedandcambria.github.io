@@ -160,7 +160,8 @@
         }
       }
 
-      // Call function on page load and window resize
+      // Call function immediately, on page load and window resize
+      detectDeviceAndSetView();
       window.addEventListener("load", detectDeviceAndSetView);
       window.addEventListener("resize", detectDeviceAndSetView);
 
