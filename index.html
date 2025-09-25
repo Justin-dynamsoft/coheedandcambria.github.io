@@ -1,350 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Google Tag Manager -->
-    <noscript>
-      <iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-538F83"
-        height="0"
-        width="0"
-        style="display: none; visibility: hidden"
-      ></iframe>
-    </noscript>
-    <script>
-      if (!navigator.webdriver) {
-        setTimeout(() => {
-          (function (w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-              "gtm.start": new Date().getTime(),
-              event: "gtm.js",
-            });
-            var f = d.getElementsByTagName(s)[0],
-              j = d.createElement(s),
-              dl = l != "dataLayer" ? "&l=" + l : "";
-            j.async = true;
-            j.src = "//www.googletagmanager.com/gtm.js?id=" + i + dl;
-            f.parentNode.insertBefore(j, f);
-          })(window, document, "script", "dataLayer", "GTM-538F83");
-        }, 0);
-      }
-    </script>
-    <!-- End Google Tag Manager -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dynamsoft MRZ Scanner</title>
-    <link rel="stylesheet" href="./css/index.css" />
-    <!-- <script src="https://cdn.jsdelivr.net/npm/dynamsoft-mrz-scanner@3.0.1/dist/mrz-scanner.bundle.js"></script> -->
+    <title>Dynamsoft MRZ Scanner - Hello World</title>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/dynamsoft-mrz-scanner@3.0.3/dist/mrz-scanner.bundle.js"></script> -->
     <!-- To use locally: -->
-    <!-- <script src="../../dist/mrz-scanner.bundle.js"></script> -->
-    <!-- DEMO specific -->
-    <script src="./dist/mrz-scanner.bundle.js"></script>
+    <script src="../dist/mrz-scanner.bundle.js"></script>
   </head>
 
   <body>
-    <div class="logo">
-      <!-- Logo -->
-      <a class="logo-container" href="https://www.dynamsoft.com" target="_blank">
-        <img class="logo-img" src="./assets/dynamsoftLogo.png" alt="dynamsoft-logo" />
-      </a>
-    </div>
-
-    <!-- Mobile View -->
-    <div id="mobile-view" class="container">
-      <!-- Mobile Live Chat -->
-      <button type="button" class="mobile-livechat-container">
-        <div class="livechat-icon">
-          <svg data-v-2a1e9ed8="" width="24" height="24" viewBox="0 0 24 24">
-            <g data-v-2a1e9ed8="" transform="translate(-319 -816.551)">
-              <g data-v-2a1e9ed8="">
-                <g data-v-2a1e9ed8="" id="conversation-chat-2">
-                  <path
-                    data-v-2a1e9ed8=""
-                    d="M333.5,817.051h-10a4,4,0,0,0-4,4v5a4,4,0,0,0,4,4h1v4l4.5-4h4.5a4,4,0,0,0,4-4v-5A4,4,0,0,0,333.5,817.051Z"
-                    fill="#fe8e14"
-                    stroke="#fe8e14"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1"
-                  ></path>
-                  <path
-                    data-v-2a1e9ed8=""
-                    d="M330.5,833.051v1.5a2.5,2.5,0,0,0,2.5,2.5h2.5l3,3v-3H340a2.5,2.5,0,0,0,2.5-2.5v-3a2.5,2.5,0,0,0-2.5-2.5h-.5"
-                    fill="none"
-                    stroke="#fe8e14"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1"
-                  ></path>
-                </g>
-              </g>
-            </g>
-          </svg>
-        </div>
-        <div class="livechat-label">Chat with us</div>
-      </button>
-      <!-- End of Mobile Live Chat -->
-      <div class="header">MRZ Scanner</div>
-      <div class="description">
-        Supports Passport <span class="sub-description">(TD3)</span>, IDs
-        <span class="sub-description">(TD1, TD2)</span>
-      </div>
-      <div class="scan-options">
-        <div class="scan-with-camera">
-          <div class="icon-text-container">
-            <span>
-              <img src="./assets/live_camera.svg" alt="live-camera-icon" />
-            </span>
-            With Live Camera
-          </div>
-          <img src="./assets/go.svg" alt="go-icon" />
-        </div>
-        <div class="scan-with-image-gallery">
-          <div class="icon-text-container">
-            <span> <img src="./assets/gallery_import.svg" alt="live-camera-icon" /></span> Scan from your image gallery
-          </div>
-          <img src="./assets/go.svg" alt="go-icon" />
-        </div>
-        <input type="file" id="initialFile" accept="image/png,image/jpeg" style="display: none" />
-      </div>
-    </div>
-
-    <!-- Desktop View (initially hidden) -->
-    <div id="desktop-view" class="container" style="display: none">
-      <div class="header">MRZ Scanner</div>
-
-      <div class="description">
-        Dynamsoft MRZ Scanner recognizes the Machine-Readable Zone (MRZ) on a passport or ID card and converts the
-        encoded strings into human-readable fields
-      </div>
-
-      <div class="qr-container">
-        <div>Scan to Open on Mobile</div>
-        <img src="./assets/mrz-scanner-qr-code.svg" alt="https://demo.dynamsoft.com/mrz-scanner" class="qr-code" />
-      </div>
-
-      <div class="quick-start">
-        <div class="quick-start-header">
-          <div>Quick Start Option:</div>
-          <button class="desktop-button" id="desktop-proceed">Continue on Desktop</button>
-        </div>
-        <div class="note">
-          Note: Desktop cameras may have limited performance. Mobile scanning is recommended for best results.
-        </div>
-      </div>
-    </div>
-
-    <div class="footer">Powered by Dynamsoft</div>
+    <h1 style="font-size: large">Dynamsoft MRZ Scanner</h1>
+    <div
+      id="results"
+      style="display: flex; flex-direction: column; width: 100%; height: 100%; word-wrap: break-word"
+    ></div>
 
     <script>
-      const mobileView = document.getElementById("mobile-view");
-      const desktopView = document.getElementById("desktop-view");
-      const resultsView = document.getElementById("results-view");
-
-      const scanWithCameraButton = document.querySelector(".scan-with-camera");
-      const scanWithGalleryButton = document.querySelector(".scan-with-image-gallery");
-      const desktopProceedButton = document.getElementById("desktop-proceed");
-
-      let result = null;
-      let firstLoad = true;
-
-      // Handle view switching based on device type
-      function detectDeviceAndSetView() {
-        // Check if mobile or desktop based on screen width
-        if (window.innerWidth < 1024 || !firstLoad) {
-          mobileView.style.display = "flex";
-          desktopView.style.display = "none";
-        } else {
-          mobileView.style.display = "none";
-          desktopView.style.display = "flex";
-        }
-      }
-
-      // Call function immediately, on page load and window resize
-      detectDeviceAndSetView();
-      window.addEventListener("load", detectDeviceAndSetView);
-      window.addEventListener("resize", detectDeviceAndSetView);
+      const resultContainer = document.querySelector("#results");
 
       // Initialize the Dynamsoft MRZ Scanner
       const mrzscanner = new Dynamsoft.MRZScanner({
-        license:
-          "DLS2eyJoYW5kc2hha2VDb2RlIjoiMzE0NTQwLU16RTBOVFF3TFhkbFlpMVVjbWxoYkZCeWIybyIsIm1haW5TZXJ2ZXJVUkwiOiJodHRwczovL21sdHMuZHluYW1zb2Z0LmNvbSIsIm9yZ2FuaXphdGlvbklEIjoiMzE0NTQwIiwic3RhbmRieVNlcnZlclVSTCI6Imh0dHBzOi8vc2x0cy5keW5hbXNvZnQuY29tIiwiY2hlY2tDb2RlIjoyMDc0MDIyMDAyfQ==",
-        resultViewConfig: {
-          toolbarButtonsConfig: {
-            done: {
-              label: "Return Home",
-            },
-          },
-        },
-        scannerViewConfig: {
-          cameraEnhancerUIPath: "./dist/mrz-scanner.ui.html",
-        },
-        templateFilePath: "./dist/mrz-scanner.template.json",
-      });
-
-      // Scan with camera
-      scanWithCameraButton.addEventListener("click", async function () {
-        mobileView.style.display = "none";
-        desktopView.style.display = "none";
-
-        try {
-          // Launch the scanner and wait for the result
-          result = await mrzscanner.launch();
-          console.log(result);
-
-          detectDeviceAndSetView(); // Return to appropriate view based on device
-        } catch (error) {
-          console.error("Error scanning:", error);
-          detectDeviceAndSetView();
+        license: "DLS2eyJoYW5kc2hha2VDb2RlIjoiMzE0NTQwLU16RTBOVFF3TFhkbFlpMVVjbWxoYkZCeWIybyIsIm1haW5TZXJ2ZXJVUkwiOiJodHRwczovL21sdHMuZHluYW1zb2Z0LmNvbSIsIm9yZ2FuaXphdGlvbklEIjoiMzE0NTQwIiwic3RhbmRieVNlcnZlclVSTCI6Imh0dHBzOi8vc2x0cy5keW5hbXNvZnQuY29tIiwiY2hlY2tDb2RlIjoyMDc0MDIyMDAyfQ==",
+        engineResourcePaths: {
+          dcvBundle: "https://npm.scannerproxy.com:802/cdn/@dynamsoft/dynamsoft-capture-vision-bundle@3.2.1000-dev-20250924143419/dist/",
+          dcvData: "https://npm.scannerproxy.com:802/cdn/@dynamsoft/dynamsoft-capture-vision-data@1.1.0-dev-20250917110120/"
+          //rootDirectory: "dcv-resources/",
+          //dcvBundle: "dcv-resources/dynamsoft-capture-vision-bundle/dist/",
+          //dcvData: "dcv-resources/dynamsoft-capture-vision-data/"
         }
       });
 
+      (async () => {
+        // Launch the scanner and wait for the result
+        const result = await mrzscanner.launch();
+        console.log(result);
 
-      const fileInput = document.getElementById("initialFile");
-      // Scan with gallery
-      scanWithGalleryButton.addEventListener("click", function () {
-        fileInput.click();
-      });
-      fileInput.addEventListener("change", async function () {
-        mobileView.style.display = "none";
-        desktopView.style.display = "none";
+        if (result?.data) {
+          resultContainer.innerHTML = ""; // Clear placeholder content
 
-        const files = Array.from(this.files || []);
+          if (result.originalImageResult?.toCanvas) {
+            const canvas = result.originalImageResult?.toCanvas();
 
-        if (files.length) {
-          try {
-            let fileToProcess = files[0];
-
-            // Handle PDF conversion if needed
-            if (fileToProcess.type === "application/pdf") {
-              fileToProcess = await convertPDFToImage(fileToProcess);
-            }
-
-            const result = await mrzscanner.launch(fileToProcess);
-          } catch (error) {
-            console.error("Error processing file:", error);
+            canvas.style.objectFit = "contain";
+            canvas.style.width = "100%";
+            canvas.style.height = "100%";
+            resultContainer.appendChild(canvas);
           }
+
+          let resultHTML = ``;
+          Object.entries(result.data).forEach(([key, value]) => {
+            const label = Dynamsoft.MRZDataLabel[key];
+
+            const container = document.createElement("div");
+            container.className = "mrz-result-container";
+            const labelContainer = document.createElement("div");
+            const valueContainer = document.createElement("div");
+
+            labelContainer.textContent = label;
+            valueContainer.textContent = `${JSON.stringify(value)}`;
+
+            container.appendChild(labelContainer);
+            container.appendChild(valueContainer);
+            resultContainer.appendChild(container);
+          });
+        } else {
+          resultContainer.innerHTML = "<p>No MRZ scanned. Please try again.</p>";
         }
-
-        detectDeviceAndSetView();
-        this.value = "";
-      });
-
-      // Desktop proceed button handler
-      desktopProceedButton.addEventListener("click", async function () {
-        desktopView.style.display = "none";
-        mobileView.style.display = "flex";
-
-        firstLoad = false;
-      });
+      })();
     </script>
-
-    <div style="background-repeat: no-repeat; background-position: 0px 0px; margin: 0; padding: 0px 0px 0px 0px">
-      <!--Begin Comm100 Live Chat Code-->
-
-      <div id="comm100-button-20242b05-3781-4d86-9b7f-fab63ddcdde3"></div>
-
-      <script type="text/javascript">
-        var Comm100API = Comm100API || {};
-        (function (t) {
-          function e(e) {
-            var a = document.createElement("script"),
-              c = document.getElementsByTagName("script")[0];
-            (a.type = "text/javascript"), (a.async = !0), (a.src = e + t.site_id), c.parentNode.insertBefore(a, c);
-          }
-          (t.chat_buttons = t.chat_buttons || []),
-            t.chat_buttons.push({
-              code_plan: "20242b05-3781-4d86-9b7f-fab63ddcdde3",
-              div_id: "comm100-button-20242b05-3781-4d86-9b7f-fab63ddcdde3",
-            }),
-            (t.site_id = 90003305),
-            (t.main_code_plan = "20242b05-3781-4d86-9b7f-fab63ddcdde3"),
-            e("https://vue.comm100.com/livechat.ashx?siteId="),
-            setTimeout(function () {
-              t.loaded || e("https://standby.comm100vue.com/livechat.ashx?siteId=");
-            }, 5e3);
-        })(Comm100API || {});
-
-        // Mobile Live Chat Function Bind
-        const mobileLiveChatButton = document.querySelector(".mobile-livechat-container");
-        mobileLiveChatButton.addEventListener("click", (event) => {
-          event.stopPropagation();
-          window.Comm100API.do("livechat.button.click");
-        });
-      </script>
-
-      <!--End Comm100 Live Chat Code-->
-    </div>
   </body>
   <style>
-    /* Comm100 hide livechat button on mobile*/
-    .mobile-livechat-container {
-      width: 50px;
-      border: 1px solid #fe8e14;
-      text-align: center;
-      font-size: 12px;
-      box-shadow: 0px 2px 4px #00000029;
-
-      position: absolute;
-      z-index: 5;
-      right: 0.5rem;
-      bottom: 10%;
-      top: unset;
-
-      display: none;
-
-      cursor: pointer;
-      background: white;
-      padding: 0;
-      margin: 0;
-    }
-
-    .mobile-livechat-container .livechat-icon {
-      padding: 0.5rem;
+    .mrz-result-container {
       display: flex;
-      justify-content: center;
-      align-items: center;
+      flex-direction: column;
+      padding-bottom: 1rem;
     }
 
-    .mobile-livechat-container .livechat-icon svg {
-      width: 24px;
-      height: 24px;
+    .mrz-result-container:first-of-type {
+      padding-top: 1rem;
     }
-
-    .mobile-livechat-container .livechat-label {
-      background-color: #fe8e14; /* orange-yellow */
-      color: white;
-      padding: 5px 0;
-      font-weight: bold;
-    }
-
-    @media screen and (max-width: 1024px) and (orientation: landscape) {
-      [id*="comm100-float-button"] {
-        display: none !important;
-        width: 1px !important;
-        height: 1px !important;
-        overflow: hidden !important;
-      }
-
-      .mobile-livechat-container {
-        display: block;
-        top: 0.5rem;
-        bottom: unset;
-      }
-    }
-
-    @media screen and (max-width: 980px) and (orientation: portrait) {
-      [id*="comm100-float-button"] {
-        display: none !important;
-        width: 1px !important;
-        height: 1px !important;
-        overflow: hidden !important;
-      }
-
-      .mobile-livechat-container {
-        display: block;
-      }
-    }
-    /* Comm100 hide livechat button on mobile end */
   </style>
 </html>

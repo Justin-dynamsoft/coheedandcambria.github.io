@@ -1,4 +1,4 @@
-import { CapturedResult } from "dynamsoft-capture-vision-bundle";
+import { CapturedResult } from "@dynamsoft/dynamsoft-capture-vision-bundle";
 import { SharedResources } from "../MRZScanner";
 import { UtilizedTemplateNames, EnumMRZDocumentType } from "./utils/types";
 import { MRZResult } from "./utils/MRZParser";

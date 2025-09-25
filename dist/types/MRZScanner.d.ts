@@ -1,4 +1,4 @@
-import { DSImageData, EngineResourcePaths, CaptureVisionRouter, CameraEnhancer, CameraView } from "dynamsoft-capture-vision-bundle";
+import { DSImageData, EngineResourcePaths, CaptureVisionRouter, CameraEnhancer, CameraView } from "@dynamsoft/dynamsoft-capture-vision-bundle";
 import { EnumMRZDocumentType, UtilizedTemplateNames } from "./views/utils/types";
 import MRZScannerView, { MRZScannerViewConfig } from "./views/MRZScannerView";
 import { MRZResult } from "./views/utils/MRZParser";
@@ -57,7 +57,7 @@ declare class MRZScanner {
      * @returns Promise with the document result
      */
     private processUploadedFile;
-    launch(imageOrFile: Blob | string | DSImageData | HTMLImageElement | HTMLVideoElement | HTMLCanvasElement): Promise<MRZResult>;
+    launch(imageOrFile?: Blob | string | DSImageData | HTMLImageElement | HTMLVideoElement | HTMLCanvasElement): Promise<MRZResult>;
 }
 export default MRZScanner;
 //# sourceMappingURL=MRZScanner.d.ts.map

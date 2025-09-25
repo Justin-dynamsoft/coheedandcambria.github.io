@@ -1,5 +1,5 @@
-import { DSImageData, CapturedResult, CaptureVisionRouter, CameraEnhancer, CameraView, EngineResourcePaths } from 'dynamsoft-capture-vision-bundle';
-import * as dynamsoftCaptureVisionBundle from 'dynamsoft-capture-vision-bundle';
+import { DSImageData, CapturedResult, EngineResourcePaths, CaptureVisionRouter, CameraEnhancer, CameraView } from '@dynamsoft/dynamsoft-capture-vision-bundle';
+import * as dynamsoftCaptureVisionBundle from '@dynamsoft/dynamsoft-capture-vision-bundle';
 export { dynamsoftCaptureVisionBundle as Dynamsoft };
 
 declare enum EnumMRZScanMode {
@@ -94,7 +94,7 @@ interface MRZDate {
     month: number;
     day: number;
 }
-declare const MRZDataLabel: Record<EnumMRZData, string>;
+declare const MRZDataLabel: Record<EnumMRZData, string> & Record<string, string>;
 declare function displayMRZDate(date: MRZDate): string;
 
 interface MRZScannerViewConfig {
@@ -247,7 +247,7 @@ declare class MRZScanner {
      * @returns Promise with the document result
      */
     private processUploadedFile;
-    launch(imageOrFile: Blob | string | DSImageData | HTMLImageElement | HTMLVideoElement | HTMLCanvasElement): Promise<MRZResult>;
+    launch(imageOrFile?: Blob | string | DSImageData | HTMLImageElement | HTMLVideoElement | HTMLCanvasElement): Promise<MRZResult>;
 }
 
 declare const DynamsoftMRZScanner: {
@@ -256,4 +256,5 @@ declare const DynamsoftMRZScanner: {
     MRZResultView: typeof MRZResultView;
 };
 
-export { DEFAULT_TEMPLATE_NAMES, DynamsoftMRZScanner, EnumMRZData, EnumMRZDocumentType, EnumMRZScanMode, EnumMRZScannerViews, EnumResultStatus, MRZData, MRZDataLabel, MRZDate, MRZResult, MRZResultView, MRZResultViewConfig, MRZResultViewToolbarButtonsConfig, MRZScanner, MRZScannerView, MRZScannerViewConfig, ResultStatus, ToolbarButton, ToolbarButtonConfig, UtilizedTemplateNames, displayMRZDate };
+export { DEFAULT_TEMPLATE_NAMES, DynamsoftMRZScanner, EnumMRZData, EnumMRZDocumentType, EnumMRZScanMode, EnumMRZScannerViews, EnumResultStatus, MRZDataLabel, MRZResultView, MRZScanner, MRZScannerView, displayMRZDate };
+export type { MRZData, MRZDate, MRZResult, MRZResultViewConfig, MRZResultViewToolbarButtonsConfig, MRZScannerViewConfig, ResultStatus, ToolbarButton, ToolbarButtonConfig, UtilizedTemplateNames };
