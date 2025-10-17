@@ -1,7 +1,7 @@
 {
   "CaptureVisionTemplates": [
     {
-      "Name": "ReadPassportAndId12",
+      "Name": "ReadPassportAndId",
       "OutputOriginalImage": 1,
       "ImageROIProcessingNameArray": ["roi-passport-and-id"],
       "SemanticProcessingNameArray": ["sp-passport-and-id"],
