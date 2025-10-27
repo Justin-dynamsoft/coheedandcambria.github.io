@@ -271,7 +271,23 @@
         },
         {
           "Section": "ST_TEXT_LINE_LOCALIZATION",
-          "ImageParameterName": "ip-mrz"
+          "ImageParameterName": "ip-mrz",
+                    "StageArray": [
+                        {
+                            "Stage": "SST_LOCALIZE_TEXT_LINES",
+                            "LocalizationModes": [
+                                {
+                                    "Mode": "LM_NEURAL_NETWORK",
+                                    "ModelNameArray": [
+                                        "MRZLocalization"
+                                    ]
+                                },
+                                {
+                                    "Mode": "LM_GENERAL"
+                                }
+                            ]
+                        }
+                    ]
         },
         {
           "Section": "ST_TEXT_LINE_RECOGNITION",
@@ -301,7 +317,23 @@
         },
         {
           "Section": "ST_TEXT_LINE_LOCALIZATION",
-          "ImageParameterName": "ip-mrz"
+          "ImageParameterName": "ip-mrz",
+                    "StageArray": [
+                        {
+                            "Stage": "SST_LOCALIZE_TEXT_LINES",
+                            "LocalizationModes": [
+                                {
+                                    "Mode": "LM_NEURAL_NETWORK",
+                                    "ModelNameArray": [
+                                        "MRZLocalization"
+                                    ]
+                                },
+                                {
+                                    "Mode": "LM_GENERAL"
+                                }
+                            ]
+                        }
+                    ]
         },
         {
           "Section": "ST_TEXT_LINE_RECOGNITION",
@@ -331,7 +363,23 @@
         },
         {
           "Section": "ST_TEXT_LINE_LOCALIZATION",
-          "ImageParameterName": "ip-mrz"
+          "ImageParameterName": "ip-mrz",
+                    "StageArray": [
+                        {
+                            "Stage": "SST_LOCALIZE_TEXT_LINES",
+                            "LocalizationModes": [
+                                {
+                                    "Mode": "LM_NEURAL_NETWORK",
+                                    "ModelNameArray": [
+                                        "MRZLocalization"
+                                    ]
+                                },
+                                {
+                                    "Mode": "LM_GENERAL"
+                                }
+                            ]
+                        }
+                    ]
         },
         {
           "Section": "ST_TEXT_LINE_RECOGNITION",
@@ -368,7 +416,23 @@
         },
         {
           "Section": "ST_TEXT_LINE_LOCALIZATION",
-          "ImageParameterName": "ip-mrz"
+          "ImageParameterName": "ip-mrz",
+                    "StageArray": [
+                        {
+                            "Stage": "SST_LOCALIZE_TEXT_LINES",
+                            "LocalizationModes": [
+                                {
+                                    "Mode": "LM_NEURAL_NETWORK",
+                                    "ModelNameArray": [
+                                        "MRZLocalization"
+                                    ]
+                                },
+                                {
+                                    "Mode": "LM_GENERAL"
+                                }
+                            ]
+                        }
+                    ]
         },
         {
           "Section": "ST_TEXT_LINE_RECOGNITION",
@@ -398,7 +462,23 @@
         },
         {
           "Section": "ST_TEXT_LINE_LOCALIZATION",
-          "ImageParameterName": "ip-mrz"
+          "ImageParameterName": "ip-mrz",
+                    "StageArray": [
+                        {
+                            "Stage": "SST_LOCALIZE_TEXT_LINES",
+                            "LocalizationModes": [
+                                {
+                                    "Mode": "LM_NEURAL_NETWORK",
+                                    "ModelNameArray": [
+                                        "MRZLocalization"
+                                    ]
+                                },
+                                {
+                                    "Mode": "LM_GENERAL"
+                                }
+                            ]
+                        }
+                    ]
         },
         {
           "Section": "ST_TEXT_LINE_RECOGNITION",
@@ -434,7 +514,23 @@
         },
         {
           "Section": "ST_TEXT_LINE_LOCALIZATION",
-          "ImageParameterName": "ip-mrz"
+          "ImageParameterName": "ip-mrz",
+                    "StageArray": [
+                        {
+                            "Stage": "SST_LOCALIZE_TEXT_LINES",
+                            "LocalizationModes": [
+                                {
+                                    "Mode": "LM_NEURAL_NETWORK",
+                                    "ModelNameArray": [
+                                        "MRZLocalization"
+                                    ]
+                                },
+                                {
+                                    "Mode": "LM_GENERAL"
+                                }
+                            ]
+                        }
+                    ]
         },
         {
           "Section": "ST_TEXT_LINE_RECOGNITION",
@@ -469,7 +565,23 @@
         },
         {
           "Section": "ST_TEXT_LINE_LOCALIZATION",
-          "ImageParameterName": "ip-mrz"
+          "ImageParameterName": "ip-mrz",
+                    "StageArray": [
+                        {
+                            "Stage": "SST_LOCALIZE_TEXT_LINES",
+                            "LocalizationModes": [
+                                {
+                                    "Mode": "LM_NEURAL_NETWORK",
+                                    "ModelNameArray": [
+                                        "MRZLocalization"
+                                    ]
+                                },
+                                {
+                                    "Mode": "LM_GENERAL"
+                                }
+                            ]
+                        }
+                    ]
         },
         {
           "Section": "ST_TEXT_LINE_RECOGNITION",
@@ -490,16 +602,16 @@
     }
   ],
   "CaptureVisionModelOptions": [
-    {
-      "Name": "MRZCharRecognition",
-      "DirectoryPath": "",
-      "MaxModelInstances": 4
-    },
-    {
-      "Name": "MRZTextLineRecognition",
-      "DirectoryPath": "",
-      "MaxModelInstances": 1
-    }
+        {
+            "Name": "MRZCharRecognition",
+            "MaxModelInstances": 4
+        },
+        {
+            "Name": "MRZLocalization",
+            "ModelArgs": {
+                "InputImageLongerEdge": 640 
+            }
+        }
   ],
 
   "ImageParameterOptions": [
